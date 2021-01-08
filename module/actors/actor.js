@@ -3,6 +3,7 @@
  * @extends {Actor}
  */
 import {Stats} from "../system/stats.js";
+import {COF} from "../config.js";
 
 export class CofActor extends Actor {
 
@@ -136,6 +137,10 @@ export class CofActor extends Actor {
     }
 
     /* -------------------------------------------- */
+    getPaths(items) {
+        return items.filter(i => i.type === "path")        
+    }
+    /* -------------------------------------------- */
 
     getActiveCapacities(items) {
         return items.filter(i => i.type === "capacity" && i.data.rank)
@@ -243,6 +248,33 @@ export class CofActor extends Actor {
 
     /* -------------------------------------------- */
 
+    computePathRank(path, capacites) {       
+        let rank = 0;
+        for (const capacity of path.data.capacities) {
+            const cap = game.cof.config.capacities.find(c => c._id == capacity);
+            const activeCapacity = capacites.find(i => i.data.key === cap.data.key);
+            if (!activeCapacity) {
+                continue;
+            }
+            if (activeCapacity.data.rank > rank) {
+                rank = activeCapacity.data.rank;
+            }
+        }
+        return rank;
+    }
+
+    updatePathRanks(capacities){        
+        const paths = this.getPaths(this.data.items);
+        this.data.data.paths = {};  // important, paths needs to be an object in order to be able to call @paths.0.rank in chat macros.
+        for (let index = 0; index < paths.length; index++) {
+            const path = paths[index];
+            const rank = this.computePathRank(path, capacities);
+            this.data.data.paths[index] = {_id: path._id, rank: rank};       
+        }
+    }
+
+    /* -------------------------------------------- */
+
     computeXP(actorData) {
         let items = actorData.items;
         let lvl = actorData.data.level.value;
@@ -253,17 +285,25 @@ export class CofActor extends Actor {
         // UPDATE XP
         actorData.data.xp.max = maxxp;
         actorData.data.xp.value = maxxp - currxp;
+
+        if (game.cof.config.capacities.length) {
+            this.updatePathRanks(capacities);            
+        }
+       
         if (maxxp - currxp < 0) {
             const diff = currxp - maxxp;
-            alert.msg = (diff == 1) ? `Vous avez dépensé ${diff} point de capacité en trop !` : `Vous avez dépensé ${diff} points de capacité en trop !`;
+            alert.msg =  `${actorData.name} a dépensé ${diff} point${(diff == 1) ?'':'s'} de capacité en trop !`;
             alert.type = "error";
+            ui.notifications.error(alert.msg);
         } else if (maxxp - currxp > 0) {
             const diff = maxxp - currxp;
-            alert.msg = (diff == 1) ? `Il vous reste ${diff} point de capacité à dépenser !` : `Il vous reste ${diff} points de capacité à dépenser !`;
+            alert.msg = `Il reste ${diff} point${(diff == 1) ?'':'s'} de capacité à dépenser à ${actorData.name}!`;
             alert.type = "info";
+            ui.notifications.info(alert.msg);
         } else {
             alert.msg = null;
             alert.type = null;
         }
+        
     }
 }

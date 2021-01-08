@@ -27,7 +27,9 @@ Hooks.once("ready", async () => {
     // UpdateUtils.updateSpecies();
     // await UpdateUtils.createEncounterAbilities();
     // await UpdateUtils.updateEncounters();
-
+    
+    UpdateUtils.updateActorsPathRank();
+    console.log(game.actors);
     console.info("System Initialized.");
 
 });

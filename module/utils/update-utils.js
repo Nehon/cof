@@ -40,6 +40,20 @@ export class UpdateUtils {
         });
     }
 
+    static updateActorsPathRank() {
+        for(let actor of game.actors.entries){            
+            actor.updatePathRanks(actor.getActiveCapacities(actor.data.items));
+            console.log(actor);
+        }        
+        // update tokens actor in case of unlinked tokens
+        for(let token of canvas.tokens.objects.children){            
+            if(token.actor.data.data.paths){
+                continue;
+            }
+            token.actor.updatePathRanks(token.actor.getActiveCapacities(token.actor.data.items));
+        }
+    }
+
     static updateSpecies() {
         game.packs.get("cof.species").getContent().then(index => {
             index.forEach(entity => {
