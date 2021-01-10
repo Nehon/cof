@@ -385,6 +385,7 @@
       "spell": false,      
       "effects":[{
         "rank": 1,
+        "maxRank": 5,
         "type": null,
         "target": null,
         "stat": null,

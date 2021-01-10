@@ -1,6 +1,13 @@
 <style>
-    .cell{
-        padding:1px;
+    .cell{        
+        padding:5px;
+         {{!-- border: 1px solid #999; --}}
+    }
+    .cof input:disabled{
+        color: #aaaaaa
+    }
+    .disabled{
+        color: #aaaaaa
     }
 </style>
 <h3 class="form-header">{{localize "COF.ui.properties"}}</h3>
@@ -21,50 +28,32 @@
     {{/if}}
 
     </div>
-<h3 class="form-header">{{localize "COF.ui.effects"}}
-    <div class="item-controls" style="display: inline;">
-            <a class="item-control item-create capacity-effect-add" title="{{localize "COF.ui.addCapacity"}}"><i class="fas fa-plus"></i>&nbsp;</a>
-    </div>
-</h3> 
- {{#each data.effects as |effect key|}}     
-        
+    <h3 class="form-header">{{localize "COF.ui.effects"}}
+        <div class="item-controls" style="display: inline;">
+                <a class="item-control item-create capacity-effect-add" title="{{localize "COF.ui.addEffect"}}"><i class="fas fa-plus"></i>&nbsp;</a>
+        </div>
+    </h3> 
+ {{#each data.effects as |effect key|}} 
     <div class="form-fields  flexrow flex-between">
-        <div class='flex4 cell flexrow'>
-        <label class="checkbox"> 
-            From rank
-            {{!-- {{localize "COF.ui.fromRank"}}  --}}
-        </label>
-          <select name="data.effects.{{@key}}.rank" data-type="String" >
-                {{#select effect.rank}}
-                    <option value="1">1</option>
-                    <option value="2">2</option>
-                    <option value="3">3</option>
-                    <option value="4">4</option>
-                    <option value="5">5</option>
-                {{/select}}
-            </select>    
+        <div class='flex3 cell'>
+            <label class="checkbox">
+                <input type="checkbox" name="data.effects.{{@key}}.activable" {{checked effect.activable}}>  {{localize "COF.ui.activable"}} 
+            </label>            
+        </div>       
+        <div class='flex3 cell'>
+            <label class="checkbox {{disabled (not effect.activable)}}">
+                <input type="checkbox" name="data.effects.{{@key}}.testRoll" {{checked effect.testRoll}}  {{disabled (not effect.activable)}}> {{localize "COF.ui.testRoll"}} 
+            </label>
         </div>
-        <div class='flex4 cell'>
-        <label class="checkbox">
-        <input type="checkbox" name="data.effects.{{@key}}.activable" {{checked effect.activable}}> {{localize "COF.ui.activable"}} 
-        </label>
+        <div class='flex5 cell'>
+            <input type="text" value="{{effect.testMod}}" name="data.effects.{{@key}}.testMod" data-dtype="String" {{disabled (or (not effect.testRoll) (not effect.activable))}} placeholder="{{localize "COF.ui.formula"}}"/>
         </div>
-        <div class='flex4 cell'>
-        <label class="checkbox">
-            <input type="checkbox" name="data.effects.{{@key}}.testRoll" {{checked effect.testRoll}}> {{localize "COF.ui.testRoll"}} 
-        </label>
-        </div>
-        <div class='flex6 cell'>
-            {{#if effect.testRoll}}     
-                <input type="text" value="{{effect.testMod}}" name="data.effects.{{@key}}.testMod" data-dtype="String"/>
-            {{/if}}  
-        </div>
-          <div class='flex1 cell right' >
-        <a class="item-control capacity-effect-delete" title="{{localize "COF.ui.deleteCapacity"}}" data-key="{{@key}}"><i class="fas fa-minus"></i>&nbsp;</a>
-          </div>
-    </div>
-    <div class="form-fields flexrow flex-between" style="border-bottom:1px #999 solid;padding-bottom:3px">        
-        <div class='flex4 cell'>
+        <div class='flex1 cell right' >
+            <a class="item-control capacity-effect-delete" title="{{localize "COF.ui.deleteEffect"}}" data-key="{{@key}}"><i class="fas fa-trash"></i>&nbsp;</a>
+        </div> 
+    </div>        
+    <div class="form-fields  flexrow flex-between">       
+          <div class='flex3 cell'>
             <label class="checkbox">
                 {{localize "COF.ui.effectType"}} 
             </label>            
@@ -77,8 +66,21 @@
                     <option value="skill">{{localize "COF.ui.skill"}}</option>            
                 {{/select}}
             </select> 
-        </div>
-        <div class='flex4 cell'>
+        </div>        
+        <div class='flex3 cell'>
+            <label class="checkbox">             
+                {{localize "COF.ui.ranks"}} <output id="rankOut{{@key}}">{{effect.rank}}</output>  {{localize "COF.ui.to"}} <output id="maxRankOut{{@key}}">{{effect.maxRank}}</output>
+            </label>
+            <div class='flexrow'>
+                <input type="range" min="1" max="5" step="1" name="data.effects.{{@key}}.rank" value="{{effect.rank}}" oninput="rankOut{{@key}}.innerHTML=this.value"/>            
+                <label class="flex-center">           
+                {{localize "COF.ui.to"}}
+                </label>
+                <input type="range" min="{{effect.rank}}" max="5" step="1" name="data.effects.{{@key}}.maxRank" value="{{effect.maxRank}}"  oninput="maxRankOut{{@key}}.innerHTML=this.value"/>
+            </div>
+        </div>   
+     
+       <div class='flex6 cell'>
             <label class="checkbox">
                 {{localize "COF.ui.target"}}:
             </label>
@@ -90,24 +92,20 @@
                 {{/select}}
             </select> 
         </div>        
+    </div>
+    <div class="form-fields flexrow flex-between" style="border-bottom:1px #999 solid;padding-bottom:3px">        
         <div class='flex4 cell'>
             <label class="checkbox">
-                {{localize "COF.ui.value"}}:
+                {{localize "COF.ui.effectValueFormula"}}
             </label>
-            <input type="text" value="{{effect.value}}" name="data.effects.{{@key}}.value" data-dtype="String" class='flex2 cell'>
+            <input type="text" value="{{effect.value}}" name="data.effects.{{@key}}.value" data-dtype="String" class='flex2 cell' placeholder="{{localize "COF.ui.formula"}}">
         </div>
-        {{#if (equals effect.type 'buff')}}
         <div class='flex4 cell'>
-            <label class="checkbox">
-                {{localize "COF.ui.attribute"}}:
+            <label class="checkbox {{disabled ( not (equals effect.type 'buff'))}}">
+                {{localize "COF.ui.buffedAttribute"}}:
             </label>
-            <input type="text" value="{{effect.stat}}" name="data.effects.{{@key}}.stat" data-dtype="String" class='flex2 cell'>
+            <input type="text" value="{{effect.stat}}" name="data.effects.{{@key}}.stat" data-dtype="String" class='flex2 cell' {{disabled ( not (equals effect.type 'buff'))}}>
         </div>
-        {{else}}
-            <div class='flex4 cell'></div>
-        {{/if}}
-        
-          &nbsp;
     </div>
 
  {{/each}}

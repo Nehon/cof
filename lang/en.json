@@ -87,6 +87,12 @@
   "COF.ui.attribute": "Attribute",
   "COF.ui.self": "Self",
   "COF.ui.selected": "Selected",
+  "COF.ui.addEffecct": "Add effect",
+  "COF.ui.deleteEffect": "Delete effect",
+  "COF.ui.ranks": "From rank",
+  "COF.ui.to": "to",
+  "COF.ui.effectValueFormula": "Effect value formula",
+  "COF.ui.buffedAttribute": "Buffed Attribute",
 
   "COF.roll.success" : "Success",
   "COF.roll.critical" : "Critical",

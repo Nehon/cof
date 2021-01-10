@@ -82,6 +82,10 @@ export class Macros {
             if(!effect.activable){
                 continue;
             }
+            const rank = actor.data.data.paths[cap.data.pathIndex].rank;
+            if(effect.rank > rank || rank > effect.maxRank){
+                continue;
+            }
             if (effect.type == 'skill') {
                 if (effect.testRoll) {
                     const testMod = effect.testMod.replace("@rank", `@paths.${cap.data.pathIndex}.rank`)

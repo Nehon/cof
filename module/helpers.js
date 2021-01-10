@@ -9,6 +9,18 @@ export const registerHandlebarsHelpers = function () {
         } else return null;
     });
 
+    Handlebars.registerHelper('disabled', function(value) {
+        return Boolean(value) ? "disabled" : "";
+    });
+
+    Handlebars.registerHelper('or', function(value1, value2) {
+        return Boolean(value1) || Boolean(value2);
+    });
+
+    Handlebars.registerHelper('and', function(value1, value2) {
+        return Boolean(value1) && Boolean(value2);
+    });
+
     Handlebars.registerHelper('getPaths', function (items) {
         return items.filter(item => item.type === "path");
     });

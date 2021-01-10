@@ -81,7 +81,9 @@ export class CofItemSheet extends ItemSheet {
                 roll: '1d6+@stats.str.mod',
                 stat: '@common.attributes.hp',
                 value: '0',
-                nbUses: '1',
+                rank: 1,
+                maxRank: 5,
+                nbUses: '1',                
                 frequency: 'combat'
             };
             this.item.update(data)
