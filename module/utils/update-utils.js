@@ -43,14 +43,15 @@ export class UpdateUtils {
     static updateActorsPathRank() {
         for(let actor of game.actors.entries){            
             actor.updatePathRanks(actor.getActiveCapacities(actor.data.items));
-            console.log(actor);
+            actor.applyCapacities(actor.data);
         }        
         // update tokens actor in case of unlinked tokens
         for(let token of canvas.tokens.objects.children){            
-            if(token.actor.data.data.paths){
+            if(token.actor.pathRanksUpdated){
                 continue;
             }
             token.actor.updatePathRanks(token.actor.getActiveCapacities(token.actor.data.items));
+            token.actor.applyCapacities(token.actor.data);
         }
     }
 

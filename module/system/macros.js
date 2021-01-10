@@ -61,5 +61,32 @@ export class Macros {
         }
     };
 
+    static rollCapacityMacro = function (itemId, itemName) {
+        const actor = this.getSpeakersActor()
+        if(!actor){
+            return ui.notifications.warn(`${game.i18n.localize("COF.notification.NoActorSelected")}: "${itemName}"`);
+        }
+
+        console.log("actor", actor.name, "capacity", itemName);
+        //let item;
+
+        // item = actor ? actor.items.find(i => i.name === itemName && i.type == itemType) : null;
+        // if (!item) return ui.notifications.warn(`${game.i18n.localize("COF.notification.MacroItemMissing")}: "${itemName}"`);
+        // const itemData = item.data;
+        // if(itemData.data.properties.weapon){
+        //     if(itemData.data.worn){
+        //         let label = itemData.name;
+        //         let mod = itemData.data.mod;
+        //         let critrange = itemData.data.critrange;
+        //         let dmg = itemData.data.dmg;
+        //         CofRoll.rollWeaponDialog(actor, label, mod, 0, critrange, dmg, 0);
+        //     }
+        //     else return ui.notifications.warn(`${game.i18n.localize("COF.notification.MacroItemUnequiped")}: "${itemName}"`);
+        // }
+        // else{
+        //     return item.sheet.render(true);
+        // }
+    };
+
 
 }

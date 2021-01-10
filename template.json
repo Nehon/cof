@@ -381,7 +381,19 @@
       "summary" : "",
       "rank": null,
       "limited": false,
-      "spell": false
+      "spell": false,      
+      "effects":[{
+        "rank": 1,
+        "type": null,
+        "target": null,
+        "stat": null,
+        "values": null,
+        "activable": false,
+        "testRoll": false,
+        "testMod": null,        
+        "nbUses": null,
+        "frequency":null
+      }]
     },
     "profile": {
       "templates": [

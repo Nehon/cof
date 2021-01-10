@@ -1,13 +1,162 @@
+<style>
+    .cell{
+        padding:1px;
+    }
+</style>
 <h3 class="form-header">{{localize "COF.ui.properties"}}</h3>
 <input class="field-value" name="data.key" type="hidden" value="{{data.key}}" placeholder="{{ localize "COF.ui.key" }}" data-dtype="String">
 <div class="form-group stacked">
     <label>{{localize "COF.ui.properties"}}</label>
-    <div class="form-fields">
+    <div class="form-fields">        
         <label class="checkbox">
             <input type="checkbox" name="data.limited" {{checked data.limited}}> {{localize "COF.ui.limited"}}
         </label>
         <label class="checkbox">
             <input type="checkbox" name="data.spell" {{checked data.spell}}> {{localize "COF.ui.spell"}}
-        </label>
+        </label>            
     </div>
+
+    {{#if data.activable}}    
+        
+    {{/if}}
+
+    </div>
+<h3 class="form-header">{{localize "COF.ui.effects"}}
+    <div class="item-controls" style="display: inline;">
+            <a class="item-control item-create capacity-effect-add" title="{{localize "COF.ui.addCapacity"}}"><i class="fas fa-plus"></i>&nbsp;</a>
+    </div>
+</h3> 
+ {{#each data.effects as |effect key|}}     
+        
+    <div class="form-fields  flexrow flex-between">
+        <div class='flex4 cell flexrow'>
+        <label class="checkbox"> 
+            From rank
+            {{!-- {{localize "COF.ui.fromRank"}}  --}}
+        </label>
+          <select name="data.effects.{{@key}}.rank" data-type="String" >
+                {{#select effect.rank}}
+                    <option value="1">1</option>
+                    <option value="2">2</option>
+                    <option value="3">3</option>
+                    <option value="4">4</option>
+                    <option value="5">5</option>
+                {{/select}}
+            </select>    
+        </div>
+        <div class='flex4 cell'>
+        <label class="checkbox">
+        <input type="checkbox" name="data.effects.{{@key}}.activable" {{checked effect.activable}}> {{localize "COF.ui.activable"}} 
+        </label>
+        </div>
+        <div class='flex4 cell'>
+        <label class="checkbox">
+            <input type="checkbox" name="data.effects.{{@key}}.testRoll" {{checked effect.testRoll}}> {{localize "COF.ui.testRoll"}} 
+        </label>
+        </div>
+        <div class='flex6 cell'>
+            {{#if effect.testRoll}}     
+                <input type="text" value="{{effect.testMod}}" name="data.effects.{{@key}}.testMod" data-dtype="String"/>
+            {{/if}}  
+        </div>
+          <div class='flex1 cell right' >
+        <a class="item-control capacity-effect-delete" title="{{localize "COF.ui.deleteCapacity"}}" data-key="{{@key}}"><i class="fas fa-minus"></i>&nbsp;</a>
+          </div>
+    </div>
+    <div class="form-fields flexrow flex-between" style="border-bottom:1px #999 solid;padding-bottom:3px">        
+        <div class='flex4 cell'>
+            <label class="checkbox">
+                {{localize "COF.ui.effectType"}} 
+            </label>            
+            <select name="data.effects.{{@key}}.type" data-type="String">
+                {{#select effect.type}}
+                    <option value="">{{localize "COF.None"}}</option>
+                    <option value="damage">{{localize "COF.ui.damage"}}</option>
+                    <option value="heal">{{localize "COF.properties.heal"}}</option>
+                    <option value="buff">{{localize "COF.properties.buff"}}</option>            
+                    <option value="skill">{{localize "COF.ui.skill"}}</option>            
+                {{/select}}
+            </select> 
+        </div>
+        <div class='flex4 cell'>
+            <label class="checkbox">
+                {{localize "COF.ui.target"}}:
+            </label>
+            <select name="data.effects.{{@key}}.target" data-type="String" class='flex2 cell'>
+                {{#select effect.target}}
+                    <option value="">{{localize "COF.None"}}</option>
+                    <option value="self">{{localize "COF.ui.self"}}</option>
+                    <option value="selected">{{localize "COF.ui.selected"}}</option>                
+                {{/select}}
+            </select> 
+        </div>        
+        <div class='flex4 cell'>
+            <label class="checkbox">
+                {{localize "COF.ui.value"}}:
+            </label>
+            <input type="text" value="{{effect.value}}" name="data.effects.{{@key}}.value" data-dtype="String" class='flex2 cell'>
+        </div>
+        {{#if (equals effect.type 'buff')}}
+        <div class='flex4 cell'>
+            <label class="checkbox">
+                {{localize "COF.ui.attribute"}}:
+            </label>
+            <input type="text" value="{{effect.stat}}" name="data.effects.{{@key}}.stat" data-dtype="String" class='flex2 cell'>
+        </div>
+        {{else}}
+            <div class='flex4 cell'></div>
+        {{/if}}
+        
+          &nbsp;
+    </div>
+
+ {{/each}}
+ {{!-- <div class="form-group stacked"></div>
+    <select name="effect.type" data-type="String" >
+        {{#select this.type}}
+            <option value="damage">{{localize "COF.ui.damage"}}</option>
+            <option value="heal">{{localize "COF.properties.heal"}}</option>
+            <option value="buff">{{localize "COF.properties.buff"}}</option>            
+        {{/select}}
+    </select> 
+
+</div>
+ {{/each}} --}}
+ 
+ {{!-- type: null,
+                target: null,
+                roll: null,
+                stat: null,
+                value: null,
+                nbUses: null,
+                frequency:null --}}
+
+
+{{!-- <ol class="inventory-list">
+    <li class="inventory-header flexrow">
+        <h3 class="item-name flexrow">{{localize "COF.ui.effects"}}</h3>
+        <div class="item-detail"></div>
+        <div class="item-detail item-rank">Rang</div>
+        <div class="item-controls">
+            <a class="item-control item-create compendium-pack" data-pack="cof.capacities" data-open="0" title="Ajouter une capacité"><i class="fas fa-plus"></i>&nbsp; Add</a>
+        </div>
+    </li>
+    {{#each (getEmbeddedItems "capacity" data.capacities) as |capacity id|}}
+    <ol class="item-list">
+        <li class="item flexrow" data-item-id="{{capacity._id}}" data-item-type="capacity" data-key="{{capacity.data.key}}" draggable="true">
+            <div class="item-name flexrow">
+                <div class="item-image" style="background-image: url('{{capacity.img}}')"></div>
+                <h4>{{capacity.name}}</h4>
+            </div>
+            <div class="item-detail"></div>
+            <div class="item-detail item-rank">{{add id 1}}</div>
+            <div class="item-controls">
+                <a class="item-control item-edit" title="Edit Item"><i class="fas fa-edit"></i></a>
+                <a class="item-control item-delete" title="Delete Item"><i class="fas fa-trash"></i></a>
+            </div>
+        </li>
+    </ol>
+    {{/each}}
+</ol> --}}
+
 </div>

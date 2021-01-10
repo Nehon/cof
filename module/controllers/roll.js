@@ -111,7 +111,6 @@ export class CofRoll {
     static rollHitPoints(data, actor, event) {
         let hp = data.attributes.hp;
         const lvl = data.level.value;
-        const conMod = data.stats.con.mod;
         const actorData = actor.data;
 
         Dialog.confirm({
@@ -123,13 +122,12 @@ export class CofRoll {
                     const hdmax = parseInt(hd.split("d")[1]);
                     // If LVL 1 COMPUTE HIT POINTS
                     if (lvl == 1) {
-                        hp.base = hdmax + conMod;
+                        hp.base = hdmax;
                         hp.max = hp.base + hp.bonus;
-                        hp.value = hp.max;
                     } else {
-                        const hpLvl1 = hdmax + conMod;
+                        const hpLvl1 = hdmax;
                         const dice2Roll = lvl - 1;
-                        const formula = `${dice2Roll}d${hdmax} + ${dice2Roll * conMod}`;
+                        const formula = `${dice2Roll}d${hdmax}`;
                         const r = new Roll(formula);
                         r.roll();
                         r.toMessage({
@@ -138,8 +136,7 @@ export class CofRoll {
                             speaker: ChatMessage.getSpeaker({actor: actor})
                         });
                         hp.base = hpLvl1 + r.total;
-                        hp.max = hp.base + hp.bonus;
-                        hp.value = hp.max;
+                        hp.max = hp.base + hp.bonus;                       
                     }
                     actor.update({'data.attributes.hp': hp});
                 } else ui.notifications.error("Vous devez sélectionner un profil ou choisir un Dé de Vie.");

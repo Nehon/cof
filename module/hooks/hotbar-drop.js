@@ -9,8 +9,13 @@ import {Macros} from "../system/macros.js";
 Hooks.on("hotbarDrop", async (bar, data, slot) => {
     // Create item macro if rollable item - weapon, spell, prayer, trait, or skill
     if (data.type == "Item") {
-        let item = data.data;
-        let command = `game.cof.macros.rollItemMacro("${item._id}", "${item.name}", "${item.type}");`;
+        let item = data.data;        
+        let command;
+        if(item.type === "capacity"){            
+            command = `game.cof.macros.rollCapacityMacro("${item._id}", "${item.name}");`;
+        } else {            
+            command = `game.cof.macros.rollItemMacro("${item._id}", "${item.name}", "${item.type}");`;            
+        }
         let macro = game.macros.entities.find(m => (m.name === item.name) && (m.command === command));
         if (!macro) {
           macro = await Macro.create({

@@ -3,7 +3,6 @@
  * @extends {Actor}
  */
 import {Stats} from "../system/stats.js";
-import {COF} from "../config.js";
 
 export class CofActor extends Actor {
 
@@ -29,7 +28,7 @@ export class CofActor extends Actor {
 
     _prepareBaseCharacterData(actorData) {
         this.computeModsAndAttributes(actorData);
-        this.computeAttacks(actorData);
+        this.computeAttacks(actorData);       
     }
 
     /* -------------------------------------------- */
@@ -37,6 +36,7 @@ export class CofActor extends Actor {
     _prepareDerivedCharacterData(actorData) {
         this.computeDef(actorData);
         this.computeXP(actorData);
+        this.applyCapacities(actorData);
     }
 
     /* -------------------------------------------- */
@@ -196,7 +196,7 @@ export class CofActor extends Actor {
         attributes.fp.max = attributes.fp.base + attributes.fp.bonus;
         attributes.dr.value = attributes.dr.base.value + attributes.dr.bonus.value;
         attributes.rp.max = attributes.rp.base + attributes.rp.bonus;
-        attributes.hp.max = attributes.hp.base + attributes.hp.bonus;
+        attributes.hp.max = attributes.hp.base + stats.con.mod * lvl + attributes.hp.bonus;
 
         const magicMod = this.getMagicMod(stats, profile);
         if(profile){
@@ -234,6 +234,33 @@ export class CofActor extends Actor {
         }
     }
 
+    applyCapacities(actorData) {
+        if(!this.pathRanksUpdated){
+            return;
+        }
+        const caps = this.getActiveCapacities(actorData.items);
+        for(let cap of caps){
+            if(cap.activable || !cap.data.effects){
+                continue;
+            }
+            for (const key in cap.data.effects) {
+                const effect = cap.data.effects[key];                
+                if(effect.type == 'buff' && effect.target == 'self'){
+                    const value = effect.value.replace("@rank", `@paths.${cap.pathIndex}.rank`)
+                    const roll = new Roll(value, actorData.data);
+                    roll.roll();
+                    const result = roll.total;                    
+                    const attr = effect.stat.replace('@','');    
+                    let attrValue = Stats.getObjectValueForPath(actorData.data, attr);
+                    attrValue += result;
+                    Stats.setPath(actorData.data, attr, attrValue);
+                }
+            }
+            
+        }
+    }
+    
+
     /* -------------------------------------------- */
 
     computeDef(actorData) {
@@ -248,14 +275,19 @@ export class CofActor extends Actor {
 
     /* -------------------------------------------- */
 
-    computePathRank(path, capacites) {       
+    computePathRank(path, pathIndex, capacites) {       
         let rank = 0;
         for (const capacity of path.data.capacities) {
-            const cap = game.cof.config.capacities.find(c => c._id == capacity);
-            const activeCapacity = capacites.find(i => i.data.key === cap.data.key);
+            let cap = game.cof.config.capacities.find(c => c._id == capacity);
+            if(!cap){
+                const gameCaps = game.items.filter(i => i.type === "capacity");
+                cap = gameCaps.find(c => c._id == capacity);
+            }
+            const activeCapacity = capacites.find(i => i.data.key === cap.data.data.key);
             if (!activeCapacity) {
                 continue;
             }
+            activeCapacity.pathIndex = pathIndex;
             if (activeCapacity.data.rank > rank) {
                 rank = activeCapacity.data.rank;
             }
@@ -268,9 +300,10 @@ export class CofActor extends Actor {
         this.data.data.paths = {};  // important, paths needs to be an object in order to be able to call @paths.0.rank in chat macros.
         for (let index = 0; index < paths.length; index++) {
             const path = paths[index];
-            const rank = this.computePathRank(path, capacities);
+            const rank = this.computePathRank(path, index, capacities);
             this.data.data.paths[index] = {_id: path._id, rank: rank};       
         }
+        this.pathRanksUpdated = true;
     }
 
     /* -------------------------------------------- */
@@ -294,12 +327,10 @@ export class CofActor extends Actor {
             const diff = currxp - maxxp;
             alert.msg =  `${actorData.name} a dépensé ${diff} point${(diff == 1) ?'':'s'} de capacité en trop !`;
             alert.type = "error";
-            ui.notifications.error(alert.msg);
         } else if (maxxp - currxp > 0) {
             const diff = maxxp - currxp;
             alert.msg = `Il reste ${diff} point${(diff == 1) ?'':'s'} de capacité à dépenser à ${actorData.name}!`;
             alert.type = "info";
-            ui.notifications.info(alert.msg);
         } else {
             alert.msg = null;
             alert.type = null;

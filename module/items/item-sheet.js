@@ -67,6 +67,41 @@ export class CofItemSheet extends ItemSheet {
         // Delete items
         html.find('.item-delete').click(this._onDeleteItem.bind(this));
 
+        html.find('.capacity-effect-add').click(ev => {
+            ev.preventDefault();
+            let data = duplicate(this.item.data);
+            if (!data.data.effects) {
+                data.data.effects = {};
+            }
+            const length = Object.keys(data.data.effects).length
+
+            data.data.effects[length] = {
+                type: 'damage',
+                target: 'selected',
+                roll: '1d6+@stats.str.mod',
+                stat: '@common.attributes.hp',
+                value: '0',
+                nbUses: '1',
+                frequency: 'combat'
+            };
+            this.item.update(data)
+        });
+
+        html.find('.capacity-effect-delete').click(ev => {
+            ev.preventDefault();
+            let li = $(ev.currentTarget), key = li.data("key");
+            //let data = duplicate(this.item.data);            
+            if (!this.item.data.data.effects) {
+                return;
+            }
+            let data = {
+                data: {
+                    effects: {}
+                }
+            }
+            data.data.effects['-=' + key] = null
+            this.item.update(data)
+        });
     }
 
     /** @override */
