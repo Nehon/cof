@@ -304,6 +304,16 @@
   "COF.SheetClassItem" : "Fiche d'Objet COF par défaut",
 
   "COF.notification.MacroItemMissing" : "Le personnage ne possède pas cet objet",
-  "COF.notification.MacroItemUnequiped" : "L'objet n'est pas équipé"
-
+  "COF.notification.MacroItemUnequiped" : "L'objet n'est pas équipé",
+  "COF.notification.NoActorSelected": "Aucun personnage n'est sélectionné",
+  "COF.notification.NoCapacity": "Le personnage ne connait pas la capacité",
+  
+  "COF.message.damageRoll": "Jet de dommages",
+  "COF.message.healRoll": "Jet de soin",
+  "COF.message.criticalDamageRoll": "Jet de dommages critique!!",
+  "COF.message.criticalHealRoll": "Jet de soin critique!!",
+  "COF.message.damage": "Dommages",
+  "COF.message.heal": "Soin",
+  "COF.message.criticalDamage": "Domages critiques",
+  "COF.message.criticalHeal": "Soin critique"
 }

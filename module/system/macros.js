@@ -61,31 +61,62 @@ export class Macros {
         }
     };
 
-    static rollCapacityMacro = function (itemId, itemName) {
+    static rollCapacityMacro = function (itemKey, itemName) {
         const actor = this.getSpeakersActor()
-        if(!actor){
-            return ui.notifications.warn(`${game.i18n.localize("COF.notification.NoActorSelected")}: "${itemName}"`);
+        if (!actor) {
+            return ui.notifications.warn(`${game.i18n.localize("COF.notification.NoActorSelected")}`);
         }
-
-        console.log("actor", actor.name, "capacity", itemName);
-        //let item;
-
-        // item = actor ? actor.items.find(i => i.name === itemName && i.type == itemType) : null;
-        // if (!item) return ui.notifications.warn(`${game.i18n.localize("COF.notification.MacroItemMissing")}: "${itemName}"`);
-        // const itemData = item.data;
-        // if(itemData.data.properties.weapon){
-        //     if(itemData.data.worn){
-        //         let label = itemData.name;
-        //         let mod = itemData.data.mod;
-        //         let critrange = itemData.data.critrange;
-        //         let dmg = itemData.data.dmg;
-        //         CofRoll.rollWeaponDialog(actor, label, mod, 0, critrange, dmg, 0);
-        //     }
-        //     else return ui.notifications.warn(`${game.i18n.localize("COF.notification.MacroItemUnequiped")}: "${itemName}"`);
-        // }
-        // else{
-        //     return item.sheet.render(true);
-        // }
+        console.log("actor", actor, "capacity", itemKey);
+        
+        const cap = actor.getCapacityByKey(actor.data.items, itemKey);
+        if(!cap){
+             return ui.notifications.warn(`${game.i18n.localize("COF.notification.NoCapacity")}: "${itemName}"`);
+        }
+        const effects = cap.data.effects;
+        if(!effects){
+            // log the text in the chat?
+            return;
+        }
+        for(let key in effects){
+            const effect = effects[key];
+            if(!effect.activable){
+                continue;
+            }
+            if (effect.type == 'skill') {
+                if (effect.testRoll) {
+                    const testMod = effect.testMod.replace("@rank", `@paths.${cap.data.pathIndex}.rank`)
+                    let roll = new Roll(testMod, actor.data.data);
+                    roll.roll();
+                    CofRoll.skillRollDialog(actor, cap.name, roll.total, 0, 20/*, superior=false, onEnter = "submit"*/);
+                    return;
+                }
+            }
+            if (effect.type == 'damage') {
+                const value = effect.value.replace("@rank", `@paths.${cap.data.pathIndex}.rank`)
+                let dmgRoll = new Roll(value, actor.data.data);                    
+                if (effect.testRoll) {
+                    const testMod = effect.testMod.replace("@rank", `@paths.${cap.data.pathIndex}.rank`)
+                    let testRoll = new Roll(testMod, actor.data.data);
+                    CofRoll.rollWeaponDialog(actor, cap.name, testRoll.formula, 0, 20, dmgRoll.formula, 0, /* ,onEnter = "submit"*/);                      
+                    return;
+                } else {
+                    CofRoll.rollDamageDialog(actor, cap.name, dmgRoll._formula , 0 /* ,critical = false, onEnter = "submit"*/);
+                }
+            }
+            if (effect.type == 'heal') {
+                const value = effect.value.replace("@rank", `@paths.${cap.data.pathIndex}.rank`)
+                let dmgRoll = new Roll(value, actor.data.data);                    
+                if (effect.testRoll) {
+                    const testMod = effect.testMod.replace("@rank", `@paths.${cap.data.pathIndex}.rank`)
+                    let testRoll = new Roll(testMod, actor.data.data);
+                    CofRoll.rollWeaponDialog(actor, cap.name, testRoll.formula, 0, 20, dmgRoll.formula, 0, 'heal' /* ,onEnter = "submit"*/);                      
+                    return;
+                } else {
+                    CofRoll.rollDamageDialog(actor, cap.name, dmgRoll._formula , 0, "heal" /* ,critical = false, onEnter = "submit"*/);
+                }
+            }
+            
+        }
     };
 
 

@@ -12,7 +12,7 @@ Hooks.on("hotbarDrop", async (bar, data, slot) => {
         let item = data.data;        
         let command;
         if(item.type === "capacity"){            
-            command = `game.cof.macros.rollCapacityMacro("${item._id}", "${item.name}");`;
+            command = `game.cof.macros.rollCapacityMacro("${item.data.key}", "${item.name}");`;
         } else {            
             command = `game.cof.macros.rollItemMacro("${item._id}", "${item.name}", "${item.type}");`;            
         }

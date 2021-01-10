@@ -2,7 +2,7 @@ import {CofDamageRoll} from "./dmg-roll.js";
 
 export class CofSkillRoll {
 
-    constructor(label, dice, mod, bonus, difficulty, critrange){
+    constructor(label, dice, mod, bonus, difficulty, critrange, type = 'damage'){
         this._label = label;
         this._dice = dice;
         this._mod = mod;
@@ -16,6 +16,7 @@ export class CofSkillRoll {
         this._isFumble = false;
         this._isSuccess = false;
         this._msgFlavor = "";
+        this._type = type;
     }
 
     roll(actor){
@@ -40,18 +41,12 @@ export class CofSkillRoll {
 
     weaponRoll(actor, dmgFormula){
         this.roll(actor);
-        if (this._difficulty) {
-            if(this._isSuccess && game.settings.get("cof", "useComboRolls")){
-                let r = new CofDamageRoll(this._label, dmgFormula, this._isCritical);
-                r.roll(actor);
-            }
+        if(!game.settings.get("cof", "useComboRolls") ||
+           (this._difficulty && !this._isSuccess)){
+            return;
         }
-        else {
-            if(game.settings.get("cof", "useComboRolls")){
-                let r = new CofDamageRoll(this._label, dmgFormula, this._isCritical);
-                r.roll(actor);
-            }
-        }
+        let r = new CofDamageRoll(this._label, dmgFormula, this._isCritical, this._type);
+        r.roll(actor);
     }
 
     /* -------------------------------------------- */

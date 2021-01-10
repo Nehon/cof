@@ -380,6 +380,7 @@
       "key": "",
       "summary" : "",
       "rank": null,
+      "pathIndex": null,
       "limited": false,
       "spell": false,      
       "effects":[{

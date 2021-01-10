@@ -62,11 +62,19 @@
 {{/if}}
 
 {{#if (isEnabled "useComboRolls")}}
+{{#if (equals type 'damage')}}
 <div class="row flexrow table-header red">
     <div class="flex1 center">
-        <h3>{{localize 'COF.ui.damage'}}</h3>
+        <h3>{{ localize "COF.message.damage"}}</h3>
     </div>
 </div>
+{{else}}
+<div class="row flexrow table-header green">
+    <div class="flex1 center">
+        <h3>{{ localize "COF.message.heal"}}</h3>
+    </div>
+</div>
+{{/if}}
 <!-- DAMAGES -->
 {{> "systems/cof/templates/dialogs/parts/roll-dmg-fields.hbs"}}
 {{/if}}

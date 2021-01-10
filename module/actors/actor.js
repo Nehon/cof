@@ -146,6 +146,14 @@ export class CofActor extends Actor {
         return items.filter(i => i.type === "capacity" && i.data.rank)
     }
 
+    getCapacity(items, id){
+        return items.find(i => i.type === "capacity" && i._id === id)
+    }
+    
+    getCapacityByKey(items, key){
+        return items.find(i => i.type === "capacity" && i.data.key === key)
+    }
+
     /* -------------------------------------------- */
 
     getMagicMod(stats, profile) {
@@ -246,7 +254,7 @@ export class CofActor extends Actor {
             for (const key in cap.data.effects) {
                 const effect = cap.data.effects[key];                
                 if(effect.type == 'buff' && effect.target == 'self'){
-                    const value = effect.value.replace("@rank", `@paths.${cap.pathIndex}.rank`)
+                    const value = effect.value.replace("@rank", `@paths.${cap.data.pathIndex}.rank`)
                     const roll = new Roll(value, actorData.data);
                     roll.roll();
                     const result = roll.total;                    
@@ -287,7 +295,7 @@ export class CofActor extends Actor {
             if (!activeCapacity) {
                 continue;
             }
-            activeCapacity.pathIndex = pathIndex;
+            activeCapacity.data.pathIndex = pathIndex;
             if (activeCapacity.data.rank > rank) {
                 rank = activeCapacity.data.rank;
             }
