@@ -29,6 +29,18 @@ export class CofActorSheet extends ActorSheet {
             }
         });
 
+        html.find('.add-effect').on('click', async (ev) => {
+            let transfer = $(ev.currentTarget).data('transfer');
+            let id = (
+                await this.actor.createEmbeddedEntity('ActiveEffect', {
+                    label: 'Active Effect',
+                    icon: '/icons/svg/mystery-man-black.svg',
+                    transfer: transfer,
+                })
+            )._id;
+            return new ActiveEffectConfig(this.actor['effects'].get(id)).render(true);
+        });
+
         // Click to open
         html.find('.item-create.compendium-pack').click(ev => {
             ev.preventDefault();

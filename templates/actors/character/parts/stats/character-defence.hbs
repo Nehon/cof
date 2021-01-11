@@ -16,14 +16,16 @@
     <div class="flex2 center bg-blue">
         <span class="field-label"><i class="fas fa-shield-alt"></i>&nbsp;{{ localize 'COF.attributes.def.abbrev' }}</span>
     </div>
-    <div class="flex1 center cell readonly">
+    <div class="flex1 center cell readonly tooltip">
         <input class="field-value" name="data.attributes.def.base" type="text" readonly="true" value="{{actor.data.attributes.def.base}}" placeholder="Base" data-dtype="Number"/>
+        {{info 'left' (localize 'COF.stats.base.abbrev') 10 (localize 'COF.stats.dex.abbrev') actor.data.stats.dex.mod (localize 'COF.category.armor') (sub (sub actor.data.attributes.def.base 10) actor.data.stats.dex.mod)}}
     </div>
     <div class="flex1 center cell">
         <input class="field-value" name="data.attributes.def.bonus" type="text" value="{{actor.data.attributes.def.bonus}}" placeholder="Bonus" data-dtype="Number"/>
     </div>
-    <div class="flex1 center cell readonly">
+    <div class="flex1 center cell readonly tooltip">
         <input class="field-value" name="data.attributes.def.value" readonly="true" type="text" value="{{actor.data.attributes.def.value}}" placeholder="Value" data-dtype="Number"/>
+        {{info 'left' (localize 'COF.stats.base.abbrev') actor.data.attributes.def.base (localize 'COF.attributes.bonus.abbrev') actor.data.attributes.def.bonus  (localize 'COF.ui.buff') actor.data.attributes.def.buff}}
     </div>
 </div>
 {{#if (isEnabled "useDamageResistance")}}
@@ -37,8 +39,9 @@
     <div class="flex1 center cell">
         <input class="field-value" name="data.attributes.dr.bonus.value" type="text" value="{{actor.data.attributes.dr.bonus.value}}" placeholder="Bonus" data-dtype="Number"/>
     </div>
-    <div class="flex1 center cell readonly">
+    <div class="flex1 center cell readonly tooltip">
         <input class="field-value" name="data.attributes.dr.value" readonly="true" type="text" value="{{actor.data.attributes.dr.value}}" placeholder="Value" data-dtype="Number"/>
+        {{info 'left' (localize 'COF.stats.base.abbrev') actor.data.attributes.dr.base.value (localize 'COF.attributes.bonus.abbrev') actor.data.attributes.dr.bonus.value  (localize 'COF.ui.buff') actor.data.attributes.dr.buff}}
     </div>
 </div>
 {{/if}}

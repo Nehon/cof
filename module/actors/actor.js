@@ -26,17 +26,56 @@ export class CofActor extends Actor {
 
     /* -------------------------------------------- */
 
+    initBuffs(actorData) {
+        let stats = actorData.data.stats;
+        let attributes = actorData.data.attributes;
+        let attacks = actorData.data.attacks;
+
+        stats.str.buff = 0;
+        stats.dex.buff = 0;
+        stats.con.buff = 0;
+        stats.int.buff = 0;
+        stats.wis.buff = 0;
+        stats.cha.buff = 0;
+
+        attributes.hp.buff = 0;
+        attributes.def.buff = 0;
+        attributes.init.buff = 0;
+        attributes.dr.buff = 0;
+        attributes.rp.buff = 0;
+        attributes.fp.buff = 0;
+        attributes.mp.buff = 0;
+
+        attacks.melee.buff = 0;
+        attacks.ranged.buff = 0;
+        attacks.magic.buff = 0;
+    }
+
     _prepareBaseCharacterData(actorData) {
-        this.computeModsAndAttributes(actorData);
-        this.computeAttacks(actorData);       
+        // reset all buff values
+        this.initBuffs(actorData);
+        // compute xp points and rank levels
+        this.computeXP(actorData);
+        // apply only base stats capacity buff
+        this.applyCapacities(actorData, true);
+        // compute the modifiers        
+        this.computeMods(actorData);    
+
+        // TODO Active effects are applied there in the prepareData flow.
+        //  If an active effect has an influence on the mods this might not work properly.
+        //  I'd need to do a first pass of applyActiveEffect for just mods before computing the mods
+        //  this would mean to override the base Actor class prepareData.
     }
 
     /* -------------------------------------------- */
 
     _prepareDerivedCharacterData(actorData) {
+        // apply non base stat capacity buffs
+        this.applyCapacities(actorData, false);     
+        // compute derived attributes
+        this.computeAttributes(actorData);        
+        this.computeAttacks(actorData);       
         this.computeDef(actorData);
-        this.computeXP(actorData);
-        this.applyCapacities(actorData);
     }
 
     /* -------------------------------------------- */
@@ -182,29 +221,34 @@ export class CofActor extends Actor {
 
     /* -------------------------------------------- */
 
-    computeModsAndAttributes(actorData) {
+    computeMods(actorData) {
+        let stats = actorData.data.stats;
+        let items = actorData.items;
+        let species = this.getSpecies(items);        
+
+        for(const [key, stat] of Object.entries(stats)){
+            stat.racial = (species && species.data.bonuses[key]) ? species.data.bonuses[key] : stat.racial;
+            stat.value = stat.base + stat.racial + stat.bonus + stat.buff;
+            stat.mod = Stats.getModFromStatValue(stat.value);
+        }
+    }
+
+    computeAttributes(actorData) {
 
         let stats = actorData.data.stats;
         let attributes = actorData.data.attributes;
         let items = actorData.items;
         let lvl = actorData.data.level.value;
-        let species = this.getSpecies(items);
         let profile = this.getProfile(items);
 
-        for(const [key, stat] of Object.entries(stats)){
-            stat.racial = (species && species.data.bonuses[key]) ? species.data.bonuses[key] : stat.racial;
-            stat.value = stat.base + stat.racial + stat.bonus;
-            stat.mod = Stats.getModFromStatValue(stat.value);
-        }
-
         attributes.init.base = stats.dex.value;
-        attributes.init.value = attributes.init.base + attributes.init.bonus;
+        attributes.init.value = attributes.init.base + attributes.init.bonus + attributes.init.buff;
 
         attributes.fp.base = 3 + stats.cha.mod;
-        attributes.fp.max = attributes.fp.base + attributes.fp.bonus;
-        attributes.dr.value = attributes.dr.base.value + attributes.dr.bonus.value;
-        attributes.rp.max = attributes.rp.base + attributes.rp.bonus;
-        attributes.hp.max = attributes.hp.base + stats.con.mod * lvl + attributes.hp.bonus;
+        attributes.fp.max = attributes.fp.base + attributes.fp.bonus + attributes.fp.buff;
+        attributes.dr.value = attributes.dr.base.value + attributes.dr.bonus.value + attributes.dr.buff;
+        attributes.rp.max = attributes.rp.base + attributes.rp.bonus + attributes.rp.buff;
+        attributes.hp.max = attributes.hp.base + stats.con.mod * lvl + attributes.hp.bonus + attributes.hp.buff;
 
         const magicMod = this.getMagicMod(stats, profile);
         if(profile){
@@ -212,7 +256,7 @@ export class CofActor extends Actor {
             attributes.mp.base = profile.data.mpfactor * (lvl + magicMod);
         }
         else attributes.mp.base = 0;
-        attributes.mp.max = attributes.mp.base + attributes.mp.bonus;
+        attributes.mp.max = attributes.mp.base + attributes.mp.bonus + attributes.mp.buff;
     }
 
     /* -------------------------------------------- */
@@ -238,11 +282,11 @@ export class CofActor extends Actor {
         ranged.base = (dexMod) ? dexMod + lvl : lvl;
         magic.base = (magicMod) ? magicMod + lvl : lvl;
         for (let attack of Object.values(attacks)) {
-            attack.mod = attack.base + attack.bonus;
+            attack.mod = attack.base + attack.bonus + attack.buff;
         }
     }
 
-    applyCapacities(actorData) {
+    applyCapacities(actorData, statPass = false) {
         if(!this.pathRanksUpdated){
             return;
         }
@@ -258,7 +302,11 @@ export class CofActor extends Actor {
                     const roll = new Roll(value, actorData.data);
                     roll.roll();
                     const result = roll.total;                    
-                    const attr = effect.stat.replace('@','');    
+                    const attr = effect.stat.replace('@', '');
+                    if ((statPass && !attr.startsWith("stats."))
+                        || (!statPass && attr.startsWith("stats."))) {
+                        continue;
+                    }                    
                     let attrValue = Stats.getObjectValueForPath(actorData.data, attr);
                     attrValue += result;
                     Stats.setPath(actorData.data, attr, attrValue);

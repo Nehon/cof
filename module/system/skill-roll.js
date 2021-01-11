@@ -56,7 +56,7 @@ export class CofSkillRoll {
         if (this._isCritical) return `<h2 class="success critical">${game.i18n.localize("COF.roll.critical")} !!</h2>${subtitle}`;
         if (this._isFumble) return `<h2 class="failure fumble">${game.i18n.localize("COF.roll.fumble")} !!</h2>${subtitle}`;
         if (this._isSuccess) return `<h2 class="success">${game.i18n.localize("COF.roll.success")} !</h2>${subtitle}`;
-        else return `<h2 class="failure">${game.i18n.localize("COF.roll.failure")}...</h2>${subtitle}`;
+        else return `<h2 class="failure">${game.i18n.localize("COF.roll.failure")}...</h2>${subtitle}<button>Fate</button>`;
     }
 
     /* -------------------------------------------- */

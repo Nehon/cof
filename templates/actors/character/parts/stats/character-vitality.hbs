@@ -6,7 +6,7 @@
         <div class="field-label">{{ localize 'COF.ui.hd' }}</div>
     </div>
     <div class="flex1 center">
-        <div class="field-label">{{ localize 'COF.ui.current' }}</div>
+        <div class="field-label">{{ localize 'COF.ui.value' }}</div>
     </div>
     <div class="flex1 center">
         <div class="field-label">{{ localize 'COF.ui.base' }}</div>
@@ -44,7 +44,8 @@
     <div class="flex1 center cell">
         <input class="field-value" name="data.attributes.hp.bonus" type="text" value="{{actor.data.attributes.hp.bonus}}" placeholder="Bonus" data-dtype="Number"/>
     </div>
-    <div class="flex1 center cell readonly">
+    <div class="flex1 center cell readonly tooltip">
         <input class="field-value" name="data.attributes.hp.max" type="text" readonly="true" value="{{actor.data.attributes.hp.max}}" placeholder="Max" data-dtype="Number"/>
+        {{info4 'left' (localize 'COF.stats.base.abbrev') data.attributes.hp.base 'CON * Lvl' (mult data.stats.con.mod data.level.value) (localize 'COF.attributes.bonus.abbrev') data.attributes.hp.bonus  (localize 'COF.ui.buff') data.attributes.hp.buff}}
     </div>
 </div>

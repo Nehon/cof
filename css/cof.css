@@ -201,6 +201,72 @@ strong {
   overflow: hidden;
 }
 
+/* Tooltip container */
+.tooltip {
+  position: relative;
+  display: inline-block;
+}
+
+/* Tooltip text */
+.tooltip .tooltiptext {
+  visibility: hidden;
+  position: absolute;
+  width: 140px;
+  background-color: #555;
+  color: #fff;
+  text-align: center;
+  padding: 5px 0;
+  border-radius: 6px;
+  z-index: 1;
+  opacity: 0;
+  -webkit-transition: opacity 0.3s;
+  -o-transition: opacity 0.3s;
+  transition: opacity 0.3s;
+}
+
+/* Show the tooltip text when you mouse over the tooltip container */
+.tooltip:hover .tooltiptext {
+  visibility: visible;
+  opacity: 0.9;
+}
+
+.tooltip-left {
+  top: -15px;
+  bottom: auto;
+  right: 110%;
+}
+
+.tooltip-right {
+  top: -15px;
+  left: 110%;
+}
+
+.tooltip-move-up {
+  top: -26px;
+}
+
+.tooltip .tooltip-left::after {
+  content: "";
+  position: absolute;
+  top: 50%;
+  left: 100%;
+  margin-top: -5px;
+  border-width: 5px;
+  border-style: solid;
+  border-color: transparent transparent transparent #555;
+}
+
+.tooltip-right::after {
+  content: "";
+  position: absolute;
+  top: 50%;
+  right: 100%;
+  margin-top: -5px;
+  border-width: 5px;
+  border-style: solid;
+  border-color: transparent #555 transparent transparent;
+}
+
 /* ----------------------------------------- */
 /* Scrollbar
 /* ----------------------------------------- */
@@ -1102,7 +1168,7 @@ Copied from dnd5e
 .cof.actor .readonly {
   -webkit-box-shadow: 0 0 10px #00000052 inset;
   box-shadow: 0 0 10px #00000052 inset;
-  cursor: not-allowed;
+  cursor: default;
 }
 
 .cof.actor .label-text {
@@ -1535,7 +1601,7 @@ Copied from dnd5e
 .cof input[readonly="true"] {
   border: none;
   color: dimgray;
-  cursor: not-allowed;
+  cursor: default;
   width: 100%;
   vertical-align: middle;
   background: transparent;

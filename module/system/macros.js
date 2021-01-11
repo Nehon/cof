@@ -101,7 +101,8 @@ export class Macros {
                 if (effect.testRoll) {
                     const testMod = effect.testMod.replace("@rank", `@paths.${cap.data.pathIndex}.rank`)
                     let testRoll = new Roll(testMod, actor.data.data);
-                    CofRoll.rollWeaponDialog(actor, cap.name, testRoll.formula, 0, 20, dmgRoll.formula, 0, /* ,onEnter = "submit"*/);                      
+                    let formula = testRoll.formula.replace(/ /g, "");
+                    CofRoll.rollWeaponDialog(actor, cap.name, formula, 0, 20, dmgRoll.formula, 0, /* ,onEnter = "submit"*/);                      
                     return;
                 } else {
                     CofRoll.rollDamageDialog(actor, cap.name, dmgRoll._formula , 0 /* ,critical = false, onEnter = "submit"*/);
@@ -113,7 +114,8 @@ export class Macros {
                 if (effect.testRoll) {
                     const testMod = effect.testMod.replace("@rank", `@paths.${cap.data.pathIndex}.rank`)
                     let testRoll = new Roll(testMod, actor.data.data);
-                    CofRoll.rollWeaponDialog(actor, cap.name, testRoll.formula, 0, 20, dmgRoll.formula, 0, 'heal' /* ,onEnter = "submit"*/);                      
+                    let formula = testRoll.formula.replace(/ /g, "");
+                    CofRoll.rollWeaponDialog(actor, cap.name, formula, 0, 20, dmgRoll.formula, 0, 'heal' /* ,onEnter = "submit"*/);                      
                     return;
                 } else {
                     CofRoll.rollDamageDialog(actor, cap.name, dmgRoll._formula , 0, "heal" /* ,critical = false, onEnter = "submit"*/);

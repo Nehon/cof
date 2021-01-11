@@ -21,6 +21,30 @@ export const registerHandlebarsHelpers = function () {
         return Boolean(value1) && Boolean(value2);
     });
 
+
+    Handlebars.registerHelper('info', function(align, label1, value1, label2, value2, label3, value3) {
+        const v2Sign = value2 < 0?'':'+';
+        const v3Sign = value3 < 0?'':'+';        
+        return  new Handlebars.SafeString(`<span class="tooltiptext tooltip-${align}">` +
+                `<span class="flexrow"><span class="flex1 right">${label1}&nbsp;</span><span class="flex1 left">&nbsp;${value1}</span></span>` +
+                `<span class="flexrow"><span class="flex1 right">${label2}&nbsp;</span><span class="flex1 left">&nbsp;${v2Sign}${value2}</span></span>` +
+                `<span class="flexrow"><span class="flex1 right">${label3}&nbsp;</span><span class="flex1 left">&nbsp;${v3Sign}${value3}</span></span>` +
+                '</span>');
+    });
+           
+    Handlebars.registerHelper('info4', function(align, label1, value1, label2, value2, label3, value3, label4, value4) {
+        const v2Sign = value2 < 0?'':'+';
+        const v3Sign = value3 < 0?'':'+';        
+        const v4Sign = value4 < 0?'':'+';       
+        return  new Handlebars.SafeString(`<span class="tooltiptext tooltip-${align} tooltip-move-up">` +
+                `<span class="flexrow"><span class="flex1 right">${label1}&nbsp;</span><span class="flex1 left">&nbsp;${value1}</span></span>` +
+                `<span class="flexrow"><span class="flex1 right">${label2}&nbsp;</span><span class="flex1 left">&nbsp;${v2Sign}${value2}</span></span>` +
+                `<span class="flexrow"><span class="flex1 right">${label3}&nbsp;</span><span class="flex1 left">&nbsp;${v3Sign}${value3}</span></span>` +
+                `<span class="flexrow"><span class="flex1 right">${label4}&nbsp;</span><span class="flex1 left">&nbsp;${v4Sign}${value4}</span></span>` +
+                '</span>');
+    });
+          
+
     Handlebars.registerHelper('getPaths', function (items) {
         return items.filter(item => item.type === "path");
     });
@@ -192,6 +216,15 @@ export const registerHandlebarsHelpers = function () {
 
     Handlebars.registerHelper('add', function (a, b) {
         return parseInt(a) + parseInt(b);
+    });
+
+    Handlebars.registerHelper('sub', function (a, b) {
+        return parseInt(a) - parseInt(b);
+    });
+
+
+    Handlebars.registerHelper('mult', function (a, b) {
+        return parseInt(a) * parseInt(b);
     });
 
     Handlebars.registerHelper('valueAtIndex', function (arr, idx) {

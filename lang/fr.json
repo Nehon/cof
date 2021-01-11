@@ -93,6 +93,7 @@
   "COF.ui.to": "à",
   "COF.ui.effectValueFormula": "Formule de la valeur de l'effet",
   "COF.ui.buffedAttribute": "Attribut amélioré",
+  "COF.ui.buff": "Buff",
 
   "COF.roll.success" : "Succès",
   "COF.roll.critical" : "Critique",
@@ -151,6 +152,7 @@
   "COF.attributes.value.abbrev": "Valeur",
   "COF.attributes.mod.abbrev" : "Mod",
   "COF.attributes.bonus.abbrev" : "Bonus",
+  "COF.attributes.buff.abbrev" : "Buff",
   "COF.attributes.max.abbrev" : "Max",
 
   "COF.attributes.defence.label": "DEFENSE",
