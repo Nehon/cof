@@ -323,5 +323,10 @@
   "COF.message.damage": "Dommages",
   "COF.message.heal": "Soin",
   "COF.message.criticalDamage": "Domages critiques",
-  "COF.message.criticalHeal": "Soin critique"
+  "COF.message.criticalHeal": "Soin critique",
+  "COF.message.fate": "CHANCE",
+  "COF.message.fateText": "Points de chance",
+  "COF.message.noMoreFP": "J'ai bien peur que la chance vous ait abandonné mon ami. Vous n'avez plus de point à dépenser.",
+  "COF.message.fateAlreadyRolled": "La chance a déjà parlé dans cette affaire.",
+  "COF.message.fateNotAllowed": "Vous ne pouvez pas provoquer la chance pour quelqu'un d'autre."
 }

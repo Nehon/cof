@@ -323,5 +323,10 @@
   "COF.message.damage": "Damage",
   "COF.message.heal": "Heal",
   "COF.message.criticalDamage": "Critical Damage",
-  "COF.message.criticalHeal": "Critical Heal"
+  "COF.message.criticalHeal": "Critical Heal",
+  "COF.message.fate": "FATE",
+  "COF.message.fateText": "Fate points",
+  "COF.message.noMoreFP": "I'm afraid Fate has forsaken you my friend, you have no more point to spend.",
+  "COF.message.fateAlreadyRolled": "Fate already played its part in this story.",
+  "COF.message.fateNotAllowed": "You can't alter the fate for someone else."
 }
