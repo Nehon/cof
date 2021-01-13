@@ -12,6 +12,7 @@
 
 import {CharacterGeneration} from "../system/chargen.js";
 import { CofSkillRoll } from "../system/skill-roll.js";
+import { CofDamageRoll } from "../system/dmg-roll.js";
 
 Hooks.on("chatMessage", (html, content, msg) => {
     let regExp;
@@ -42,48 +43,6 @@ Hooks.on("chatMessage", (html, content, msg) => {
 });
 
 Hooks.on('renderChatMessage', (message, html, data) => {   
-    const fateButton =  html.find('.chat-message-fate-button');
-    if(!fateButton){
-        return;
-    }
-    fateButton.click(ev => {
-        ev.stopPropagation();
-        const flags = message.data.flags; 
-        if(!message.isAuthor && !game.user.isGM){
-            ui.notifications.error(game.i18n.localize("COF.message.fateNotAllowed"));
-            return;
-        }
-        if(flags.rolled){
-            ui.notifications.error(game.i18n.localize("COF.message.fateAlreadyRolled"));
-            return;
-        }
-        const roll = message.roll;
-        
-        const actor = game.actors.get(message.data.speaker.actor);
-        if(!actor){
-            ui.notifications.error("No actor associated with this message");
-            return;
-        }
-        const fp = actor.data.data.attributes.fp.value -1 
-        if(fp<0){
-            ui.notifications.error(game.i18n.localize("COF.message.noMoreFP"));
-            return;
-        }
-               
-        const newRoll = new CofSkillRoll(flags.label, `${roll.total}`, "0", "10", flags.difficulty, "100", flags.type, false);
-        if(flags.dmgFormula){
-            newRoll.weaponRoll(actor, flags.dmgFormula);
-        } else {
-            newRoll.roll(actor);
-        }
-        
-        actor.update({
-            "data.attributes.fp.value":fp
-        });
-
-        message.update({
-            "flags.rolled": true
-        });        
-    });     
-   
+    CofSkillRoll.handleFateReroll(message, html, data);
+    CofDamageRoll.handleApplyDamageButton(message, html, data);
 });

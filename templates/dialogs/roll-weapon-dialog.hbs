@@ -48,6 +48,19 @@
     </div>
 </div>
 <hr/>
+<!-- Target -->
+<div class="row flexrow" style="margin-bottom: 1px; line-height: 1.8;">
+    <div class="flex1 center bg-darkslate">
+        <span class="field-label">{{localize 'COF.ui.target'}}</span>
+    </div>
+    <div class="flex1 center cell">
+        {{#if targetName}}
+            {{targetName}}        
+        {{else}}
+            {{localize 'COF.ui.noTarget'}}
+        {{/if}}
+    </div>
+</div>
 {{#if (isEnabled "displayDifficulty")}}
 <!-- DIFFICULTY -->
 <div class="row flexrow" style="margin-bottom: 5px;">

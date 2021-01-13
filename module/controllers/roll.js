@@ -1,6 +1,7 @@
 import {CharacterGeneration} from "../system/chargen.js";
 import {CofSkillRoll} from "../system/skill-roll.js";
 import {CofDamageRoll} from "../system/dmg-roll.js";
+import { Traversal } from "../utils/traversal.js";
 
 export class CofRoll {
     static options() {
@@ -36,12 +37,13 @@ export class CofRoll {
     static rollWeapon(data, actor, event) {
         const li = $(event.currentTarget).parents(".item");
         let item = actor.getOwnedItem(li.data("itemId"));
+        item.prepareData();
         const itemData = item.data;
         let label = itemData.name;
         let mod = itemData.data.mod;
         let critrange = itemData.data.critrange;
         let dmg = itemData.data.dmg;
-        return this.rollWeaponDialog(actor, label, mod, 0, critrange, dmg, 0);
+        return this.rollWeaponDialog(actor, label, mod, 0, critrange, dmg, 0, 'damage', [...game.user.targets][0]);
     }
 
     /**
@@ -51,12 +53,12 @@ export class CofRoll {
      * @private
      */
     static rollEncounterWeapon(data, actor, event) {
-        const item = $(event.currentTarget).parents(".weapon");
+        const item = $(event.currentTarget).parents(".weapon");        
         let label = item.find(".weapon-name").text();
         let mod = item.find(".weapon-mod").val();
         let critrange = item.find(".weapon-critrange").val();
         let dmg = item.find(".weapon-dmg").val();
-        return this.rollWeaponDialog(actor, label, mod, 0, critrange, dmg, 0);
+        return this.rollWeaponDialog(actor, label, mod, 0, critrange, dmg, 0, 'damage', [...game.user.targets][0]);
     }
 
     /**
@@ -80,7 +82,8 @@ export class CofRoll {
      */
     static rollSpell(data, actor, event) {
         const li = $(event.currentTarget).parents(".item");
-        let item = actor.getOwnedItem(li.data("itemId"));
+        let item = actor.getOwnedItem(li.data("itemId"));        
+        item.prepareData();
         let label = item.data.name;
         let mod = item.data.data.mod;
         let critrange = item.data.data.critrange;
@@ -213,12 +216,15 @@ export class CofRoll {
         return d.render(true);
     }
 
-    static async rollWeaponDialog(actor, label, mod, bonus, critrange, dmgFormula, dmgBonus, type = 'damage', onEnter = "submit") {
+    static async rollWeaponDialog(actor, label, mod, bonus, critrange, dmgFormula, dmgBonus, type = 'damage', target = undefined, onEnter = "submit") {
         const rollOptionTpl = 'systems/cof/templates/dialogs/roll-weapon-dialog.hbs';
         let diff = null;
-        if (game.settings.get("cof", "displayDifficulty") && game.user.targets.size > 0) {
-            diff = [...game.user.targets][0].actor.data.data.attributes.def.value;
+        let targetName = undefined;
+        if (game.settings.get("cof", "displayDifficulty") && target) {
+            diff = target.actor.data.data.attributes.def.value;
+            targetName = Traversal.getTokenName(target);
         }
+        
         const rollOptionContent = await renderTemplate(rollOptionTpl, {
             mod: mod,
             bonus: bonus,
@@ -227,7 +233,8 @@ export class CofRoll {
             dmgFormula: dmgFormula,
             dmgBonus: dmgBonus,
             dmgCustomFormula: "",
-            type: type
+            type: type,
+            targetName: targetName
         });
 
         let d = new Dialog({
@@ -257,7 +264,7 @@ export class CofRoll {
                         if(dmgBonus > 0) dmgFormula = dmgFormula.concat('+', dmgBonus);
                         else if(dmgBonus < 0) dmgFormula = dmgFormula.concat(' ', dmgBonus);
                         let r = new CofSkillRoll(label, dice, m, b, diff, critrange, type);
-                        r.weaponRoll(actor, dmgFormula);
+                        r.weaponRoll(actor, dmgFormula, target);
                     }
                 }
             },
@@ -268,7 +275,7 @@ export class CofRoll {
         return d.render(true);
     }
 
-    static async rollDamageDialog(actor, label, formula, bonus, type = 'damage', critical = false, onEnter = "submit") {
+    static async rollDamageDialog(actor, label, formula, bonus, type = 'damage', critical = false, target = undefined, onEnter = "submit") {
         const rollOptionTpl = 'systems/cof/templates/dialogs/roll-dmg-dialog.hbs';
         const rollOptionContent = await renderTemplate(rollOptionTpl, {dmgFormula: formula, dmgBonus: bonus, dmgCustomFormula: "", isCritical: critical, type: type});
 
@@ -298,8 +305,8 @@ export class CofRoll {
                         else if(dmgBonus < 0) {
                             dmgFormula = dmgFormula.concat(' ', dmgBonus);
                         }
-                        let r = new CofDamageRoll(label, dmgFormula, isCritical, type);
-                        r.roll(actor);
+                        let r = new CofDamageRoll(label, dmgFormula, isCritical, type);                        
+                        r.roll(actor, target);
                     }
                 }
             },

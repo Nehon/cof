@@ -1,4 +1,5 @@
 import {CofRoll} from "../controllers/roll.js";
+import { Traversal } from "../utils/traversal.js";
 
 export class Macros {
 
@@ -45,6 +46,7 @@ export class Macros {
         let item;
         item = actor ? actor.items.find(i => i.name === itemName && i.type == itemType) : null;
         if (!item) return ui.notifications.warn(`${game.i18n.localize("COF.notification.MacroItemMissing")}: "${itemName}"`);
+        item.prepareData();
         const itemData = item.data;
         if(itemData.data.properties.weapon){
             if(itemData.data.worn){
@@ -52,7 +54,7 @@ export class Macros {
                 let mod = itemData.data.mod;
                 let critrange = itemData.data.critrange;
                 let dmg = itemData.data.dmg;
-                CofRoll.rollWeaponDialog(actor, label, mod, 0, critrange, dmg, 0);
+                CofRoll.rollWeaponDialog(actor, label, mod, 0, critrange, dmg, 0, 'damage', [...game.user.targets][0]);
             }
             else return ui.notifications.warn(`${game.i18n.localize("COF.notification.MacroItemUnequiped")}: "${itemName}"`);
         }
@@ -95,6 +97,14 @@ export class Macros {
                     return;
                 }
             }
+            // self
+            let target = undefined;
+            if(effect.target === "selected"){
+                target = [...game.user.targets][0];
+            } else if(effect.target = "self"){
+                target = canvas.tokens.controlled[0];
+            }
+
             if (effect.type == 'damage') {
                 const value = effect.value.replace("@rank", `@paths.${cap.data.pathIndex}.rank`)
                 let dmgRoll = new Roll(value, actor.data.data);                    
@@ -102,10 +112,10 @@ export class Macros {
                     const testMod = effect.testMod.replace("@rank", `@paths.${cap.data.pathIndex}.rank`)
                     let testRoll = new Roll(testMod, actor.data.data);
                     let formula = testRoll.formula.replace(/ /g, "");
-                    CofRoll.rollWeaponDialog(actor, cap.name, formula, 0, 20, dmgRoll.formula, 0, /* ,onEnter = "submit"*/);                      
+                    CofRoll.rollWeaponDialog(actor, cap.name, formula, 0, 20, dmgRoll.formula, 0, effect.type , target/* ,onEnter = "submit"*/);                      
                     return;
                 } else {
-                    CofRoll.rollDamageDialog(actor, cap.name, dmgRoll._formula , 0 /* ,critical = false, onEnter = "submit"*/);
+                    CofRoll.rollDamageDialog(actor, cap.name, dmgRoll._formula , 0, effect.type, false, target/* onEnter = "submit"*/);
                 }
             }
             if (effect.type == 'heal') {
@@ -115,10 +125,10 @@ export class Macros {
                     const testMod = effect.testMod.replace("@rank", `@paths.${cap.data.pathIndex}.rank`)
                     let testRoll = new Roll(testMod, actor.data.data);
                     let formula = testRoll.formula.replace(/ /g, "");
-                    CofRoll.rollWeaponDialog(actor, cap.name, formula, 0, 20, dmgRoll.formula, 0, 'heal' /* ,onEnter = "submit"*/);                      
+                    CofRoll.rollWeaponDialog(actor, cap.name, formula, 0, 20, dmgRoll.formula, 0, effect.type, target/* ,onEnter = "submit"*/);                      
                     return;
                 } else {
-                    CofRoll.rollDamageDialog(actor, cap.name, dmgRoll._formula , 0, "heal" /* ,critical = false, onEnter = "submit"*/);
+                    CofRoll.rollDamageDialog(actor, cap.name, dmgRoll._formula , 0, "heal", false, target /* ,critical = false, onEnter = "submit"*/);
                 }
             }
             

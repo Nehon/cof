@@ -193,6 +193,14 @@ export class CofActor extends Actor {
         return items.find(i => i.type === "capacity" && i.data.key === key)
     }
 
+    applyDamage(value){
+        const hp = this.data.data.attributes.hp;
+        const newValue = Math.min(hp.value - value, hp.max);
+        this.update({
+            "data.attributes.hp.value": newValue
+        })
+    }
+
     /* -------------------------------------------- */
 
     getMagicMod(stats, profile) {

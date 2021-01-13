@@ -84,6 +84,7 @@
   "COF.ui.effects" : "Effets",
   "COF.ui.effectType": "Type d'effet",
   "COF.ui.target": "Cible",
+  "COF.ui.noTarget": "Pas de cible",
   "COF.ui.attribute": "Attribut",
   "COF.ui.self": "Soi même",
   "COF.ui.selected": "Sélectionné",
@@ -328,5 +329,11 @@
   "COF.message.fateText": "Points de chance",
   "COF.message.noMoreFP": "J'ai bien peur que la chance vous ait abandonné mon ami. Vous n'avez plus de point à dépenser.",
   "COF.message.fateAlreadyRolled": "La chance a déjà parlé dans cette affaire.",
-  "COF.message.fateNotAllowed": "Vous ne pouvez pas provoquer la chance pour quelqu'un d'autre."
+  "COF.message.fateNotAllowed": "Vous ne pouvez pas provoquer la chance pour quelqu'un d'autre.",
+  "COF.message.notAllowedButton": "Vous n'interviendrez pas!",
+  "COF.message.alreadyApplied": "Cette histoire est terminée, il n'y a plus rien à faire",
+  "COF.message.missingTarget": "La cible est introuvable",
+  "COF.message.apply.damage": "Appliquer les dommages",
+  "COF.message.apply.heal": "Appliquer les soins"
+
 }

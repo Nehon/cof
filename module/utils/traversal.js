@@ -103,4 +103,13 @@ export class Traversal {
         return this.getAllPathsData().find(entity => entity.data.key === key);
     }
 
+    static findTargetToken(id){
+        if(!id) return undefined;
+        return canvas.tokens.placeables.find(token => token.data._id === id);
+    }
+
+    static getTokenName(token){
+        return (token.data.displayName === 30 || token.data.displayName ===50)? token.name:"???";
+    }
+
 }

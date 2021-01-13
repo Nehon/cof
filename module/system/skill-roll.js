@@ -1,4 +1,5 @@
 import {CofDamageRoll} from "./dmg-roll.js";
+import {Traversal} from "../utils/traversal.js";
 
 export class CofSkillRoll {
 
@@ -20,7 +21,11 @@ export class CofSkillRoll {
         this._fateAllowed = fateAllowed;
     }
 
-    roll(actor, dmgFormula = undefined) {
+    setTarget(target){
+        this._target = target;
+    }
+
+    roll(actor, target = undefined) {
         let r = new Roll(this._formula);
         r.roll();
         // Getting the dice kept in case of 2d12 or 2d20 rolls
@@ -33,31 +38,33 @@ export class CofSkillRoll {
         if (this._difficulty) {
             this._isSuccess = r.total >= this._difficulty;            
         } 
-        this._msgFlavor = this._buildRollMessage(actor);
+        this._msgFlavor = this._buildRollMessage(actor, target);
         r.toMessage({
             user: game.user._id,
             flavor: this._msgFlavor,
             speaker: ChatMessage.getSpeaker({ actor: actor }),
-            "flags.dmgFormula": dmgFormula,
+            "flags.dmgFormula": this._dmgFormula,
             "flags.label": this._label,
             "flags.difficulty": this._difficulty,
-            "flags.type": this._type
+            "flags.type": this._type,
+            "flags.target": target ? target.data._id : undefined
         });
     }
 
-    weaponRoll(actor, dmgFormula){
-        this.roll(actor, dmgFormula);
+    weaponRoll(actor, dmgFormula, target = undefined){
+        this._dmgFormula = dmgFormula;
+        this.roll(actor, target);
         if(!game.settings.get("cof", "useComboRolls") ||
            (this._difficulty && !this._isSuccess)){
             return;
         }
         let r = new CofDamageRoll(this._label, dmgFormula, this._isCritical, this._type);
-        r.roll(actor);
+        r.roll(actor, target);
     }
 
     /* -------------------------------------------- */
 
-    _buildRollMessage(actor) {
+    _buildRollMessage(actor, target = undefined) {
         let fateButton="";
         if(this._fateAllowed){
             const fp = actor.data.data.attributes.fp.value;
@@ -72,9 +79,24 @@ export class CofSkillRoll {
             </button>`;
         }
         
-        const difficultyLabel = this._difficulty? ` ${game.i18n.localize("COF.ui.difficulty")} <strong>${this._difficulty}</strong>`:'';
+        let subtitle = `<div class="flexrow"><h3 class="flex3"><strong>${this._label}</strong>`;
+        
+        if(target){
+            subtitle+= `<br>${Traversal.getTokenName(target)}&nbsp;`;
+            if(this._difficulty) subtitle+=`<strong>(${this._difficulty})</strong>`;
+        } else if(this._difficulty){
+            subtitle+= `<br>${game.i18n.localize("COF.ui.difficulty")} <strong>${this._difficulty}</strong>`
+        }
+        subtitle+= "</h3>"
 
-        let subtitle = `<h3><strong>${this._label}</strong>${difficultyLabel}</h3>`;
+        if(target){
+            subtitle += `<div class="flex2"><img style="border:none" src="${canvas.tokens.controlled[0].data.img}" width="32" height="32" />
+                    <i class="fas fa-arrow-alt-circle-right" style="font-size: 16px;margin: 3px;vertical-align: super;"></i>
+                    <img style="border:none" src="${target.data.img}" width="32" height="32" />
+            </div>`
+        }
+
+        subtitle += "</div>"
         if (this._isCritical) return `<h2 class="success critical">${game.i18n.localize("COF.roll.critical")} !!</h2>${subtitle}`;
         if (this._isFumble) return `<h2 class="failure fumble">${game.i18n.localize("COF.roll.fumble")} !!</h2>${subtitle}`;
         if(this._difficulty){
@@ -83,6 +105,57 @@ export class CofSkillRoll {
         } else {
             return `<h2 class="roll flexrow"><span class="flex2 left">${game.i18n.localize("COF.ui.skillcheck")}</span>${fateButton}</h2>${subtitle}`;
         }
+    }
+
+    // roll messages hooks    
+    static handleFateReroll(message, html, data){
+        if(!message.isRoll){
+            return;
+        }
+        const fateButton =  html.find('.chat-message-fate-button');
+        if(!fateButton){
+            return;
+        }
+        fateButton.click(ev => {
+            ev.stopPropagation();
+            const flags = message.data.flags; 
+            if(!message.isAuthor && !game.user.isGM){
+                ui.notifications.error(game.i18n.localize("COF.message.fateNotAllowed"));
+                return;
+            }
+            if(flags.rolled){
+                ui.notifications.error(game.i18n.localize("COF.message.fateAlreadyRolled"));
+                return;
+            }
+            const roll = message.roll;
+            
+            const actor = game.actors.get(message.data.speaker.actor);
+            if(!actor){
+                ui.notifications.error("No actor associated with this message");
+                return;
+            }
+            const fp = actor.data.data.attributes.fp.value -1 
+            if(fp<0){
+                ui.notifications.error(game.i18n.localize("COF.message.noMoreFP"));
+                return;
+            }
+                
+            const newRoll = new CofSkillRoll(flags.label, `${roll.total}`, "0", "10", flags.difficulty, "100", flags.type, false);
+            const target = Traversal.findTargetToken(flags.target);
+            if(flags.dmgFormula){
+                newRoll.weaponRoll(actor, flags.dmgFormula, target);
+            } else {
+                newRoll.roll(actor, target);
+            }
+            
+            actor.update({
+                "data.attributes.fp.value":fp
+            });
+
+            message.update({
+                "flags.rolled": true
+            });        
+        });     
     }
 
     /* -------------------------------------------- */

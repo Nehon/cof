@@ -84,6 +84,7 @@
   "COF.ui.effects" : "Effects",
   "COF.ui.effectType": "Effect type",
   "COF.ui.target": "Target",
+  "COF.ui.noTarget": "No target",
   "COF.ui.attribute": "Attribute",
   "COF.ui.self": "Self",
   "COF.ui.selected": "Selected",
@@ -328,5 +329,10 @@
   "COF.message.fateText": "Fate points",
   "COF.message.noMoreFP": "I'm afraid Fate has forsaken you my friend, you have no more point to spend.",
   "COF.message.fateAlreadyRolled": "Fate already played its part in this story.",
-  "COF.message.fateNotAllowed": "You can't alter the fate for someone else."
+  "COF.message.fateNotAllowed": "You cannot alter the fate for someone else.",
+  "COF.message.notAllowedButton": "You shall not intervene.",
+  "COF.message.alreadyApplied": "This story has already been told, nothing more to do.",
+  "COF.message.missingTarget": "The target is nowhere to be found.",
+  "COF.message.apply.damage": "Apply damage",
+  "COF.message.apply.heal": "Apply heal"
 }
