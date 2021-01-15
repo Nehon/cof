@@ -21,7 +21,6 @@ Hooks.once("ready", async () => {
     await game.cof.config.getPaths();
     await game.cof.config.getCapacities();
 
-    // UpdateUtils.updateCapacities();
     // UpdateUtils.updatePaths();
     // UpdateUtils.updateProfiles();
     // UpdateUtils.updateSpecies();
@@ -29,7 +28,6 @@ Hooks.once("ready", async () => {
     // await UpdateUtils.updateEncounters();
     
     UpdateUtils.updateActorsPathRank();
-    console.log(game.actors);
     console.info("System Initialized.");
 
 });

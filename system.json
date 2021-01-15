@@ -11,7 +11,8 @@
     "module/cof.js",
     "module/hooks/system-ready.js",
     "module/hooks/chat-message.js",
-    "module/hooks/hotbar-drop.js"
+    "module/hooks/hotbar-drop.js",
+    "module/hooks/combat.js"
   ],
   "scripts": [],
   "styles": [

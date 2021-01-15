@@ -334,7 +334,7 @@ export class CofActor extends Actor {
         // COMPUTE DEF SCORES
         let protection = protections.reduce((acc, curr) => acc + curr, 0);
         attributes.def.base = 10 + protection + stats.dex.mod;
-        attributes.def.value = attributes.def.base + attributes.def.bonus;
+        attributes.def.value = attributes.def.base + attributes.def.bonus + attributes.def.buff;
     }
 
     /* -------------------------------------------- */

@@ -68,7 +68,6 @@ export class Macros {
         if (!actor) {
             return ui.notifications.warn(`${game.i18n.localize("COF.notification.NoActorSelected")}`);
         }
-        console.log("actor", actor, "capacity", itemKey);
         
         const cap = actor.getCapacityByKey(actor.data.items, itemKey);
         if(!cap){

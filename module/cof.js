@@ -7,6 +7,7 @@
 // Import Modules
 import {CofActor} from "./actors/actor.js";
 import {CofItem} from "./items/item.js";
+import {CofEffect} from "./effects/effect.js";
 
 import {CofItemSheet} from "./items/item-sheet.js";
 import {CofCharacterSheet} from "./actors/character-sheet.js";
@@ -37,6 +38,8 @@ Hooks.once("init", async function () {
     // Define custom Entity classes
     CONFIG.Actor.entityClass = CofActor;
     CONFIG.Item.entityClass = CofItem;
+    CONFIG.ActiveEffect.entityClass = CofEffect;    
+    CONFIG.time.turnTime = 1;
 
     // Create a namespace within the game global
     game.cof = {

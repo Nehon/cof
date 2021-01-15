@@ -99,10 +99,6 @@ export class Traversal {
         return ingame.concat(compendium);
     }
 
-    static findPathDataByKey (key) {
-        return this.getAllPathsData().find(entity => entity.data.key === key);
-    }
-
     static findTargetToken(id){
         if(!id) return undefined;
         return canvas.tokens.placeables.find(token => token.data._id === id);

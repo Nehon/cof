@@ -11,10 +11,18 @@ import {Traversal} from "../utils/traversal.js";
 
 export class CofActorSheet extends ActorSheet {
 
+    
+    /** @override */    
+    getData(options) {
+        let data = super.getData(options);
+        data.options.isGM = game.user.isGM;
+        return data;
+    }
+
     /** @override */
     activateListeners(html) {
         super.activateListeners(html);
-
+        this.isGM = game.user.isGM;
         // Everything below here is only needed if the sheet is editable
         if (!this.options.editable) return;
 
@@ -29,17 +37,39 @@ export class CofActorSheet extends ActorSheet {
             }
         });
 
-        html.find('.add-effect').on('click', async (ev) => {
-            let transfer = $(ev.currentTarget).data('transfer');
-            let id = (
-                await this.actor.createEmbeddedEntity('ActiveEffect', {
-                    label: 'Active Effect',
-                    icon: '/icons/svg/mystery-man-black.svg',
-                    transfer: transfer,
-                })
-            )._id;
-            return new ActiveEffectConfig(this.actor['effects'].get(id)).render(true);
-        });
+        if ( game.user.isGM) {
+            html.find('.add-effect').on('click', async (ev) => {
+                let transfer = $(ev.currentTarget).data('transfer');
+                let id = (
+                    await this.actor.createEmbeddedEntity('ActiveEffect', {
+                        label: `effec${this.actor.data.effects.length}`,
+                        icon: '/icons/svg/mystery-man.svg',
+                        //transfer: transfer,
+                        duration: {
+                            combat: game.combat._id,
+                            rounds: 2,
+                            turns: 0,
+                            startRound: game.combat.current.round,
+                            startTurn: game.combat.current.turn
+                        }
+                    })
+                )._id;
+                return new ActiveEffectConfig(this.actor['effects'].get(id)).render(true);
+            });
+
+            html.find('.delete-effect').on('click', async (ev) => {
+                let id = $(ev.currentTarget).data('id');
+                this.actor.deleteEmbeddedEntity("ActiveEffect", id);
+            });
+
+            html.find('.edit-effect').on('click', async (ev) => {
+                let id = $(ev.currentTarget).data('id');
+                return new ActiveEffectConfig(this.actor['effects'].get(id)).render(true);
+            });
+        }
+
+          
+
 
         // Click to open
         html.find('.item-create.compendium-pack').click(ev => {

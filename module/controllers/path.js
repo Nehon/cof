@@ -13,8 +13,7 @@ export class Path {
         }
     }
 
-    static removeFromActor(actor, event, entity) {
-        console.log(entity);
+    static removeFromActor(actor, event, entity) {       
         const pathData = entity.data;
         Dialog.confirm({
             title: "Supprimer la voie ?",

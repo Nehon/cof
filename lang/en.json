@@ -108,6 +108,7 @@
   "COF.tabs.capacities" : "Capacities",
   "COF.tabs.inventory" : "Inventory",
   "COF.tabs.description" : "Description",
+  "COF.tabs.effects": "Effects (debug)",
 
   "COF.details.name": "Name",
   "COF.details.class": "Class",
@@ -334,5 +335,6 @@
   "COF.message.alreadyApplied": "This story has already been told, nothing more to do.",
   "COF.message.missingTarget": "The target is nowhere to be found.",
   "COF.message.apply.damage": "Apply damage",
-  "COF.message.apply.heal": "Apply heal"
+  "COF.message.apply.heal": "Apply heal",
+  "COF.message.dissipate": "dissipates for"
 }

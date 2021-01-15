@@ -2,13 +2,6 @@ import {Traversal} from "./traversal.js";
 
 export class UpdateUtils {
 
-    static updateCapacities() {
-        Traversal.getAllCapacitiesData().forEach(cap => {
-            console.log(cap);
-            let path = Traversal.findPathDataByKey(cap.data.path);
-        });
-    }
-
     static updatePaths() {
         game.packs.get("cof.paths").getContent().then(index => {
             index.forEach(entity => {
@@ -90,7 +83,6 @@ export class UpdateUtils {
                 });
                 data.capacities = caps.map(e => e._id);
                 spec.data = data;
-                console.log(spec);
                 entity.update(spec);
             })
         });

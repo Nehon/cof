@@ -297,7 +297,6 @@ export class CofRoll {
                         let dmgCustomFormula = html.find("#dmgCustomFormula").val();
                         let dmgBaseFormula = html.find("#dmgFormula").val();
                         const isCritical = html.find("#isCritical").is(":checked");
-                        console.log(isCritical);
                         let dmgFormula = (dmgCustomFormula) ? dmgCustomFormula : dmgBaseFormula;
                         if(dmgBonus > 0) {
                             dmgFormula = dmgFormula.concat('+', dmgBonus);

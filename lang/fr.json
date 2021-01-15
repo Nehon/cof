@@ -108,6 +108,7 @@
   "COF.tabs.capacities" : "Capacités",
   "COF.tabs.inventory" : "Inventaire",
   "COF.tabs.description" : "Description",
+  "COF.tabs.effects": "Effets (debug)",
 
   "COF.details.name": "Nom",
   "COF.details.class": "Classe",
@@ -334,6 +335,7 @@
   "COF.message.alreadyApplied": "Cette histoire est terminée, il n'y a plus rien à faire",
   "COF.message.missingTarget": "La cible est introuvable",
   "COF.message.apply.damage": "Appliquer les dommages",
-  "COF.message.apply.heal": "Appliquer les soins"
+  "COF.message.apply.heal": "Appliquer les soins",
+  "COF.message.dissipate": "se dissipe pour"
 
 }
