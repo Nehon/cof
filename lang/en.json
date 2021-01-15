@@ -95,6 +95,15 @@
   "COF.ui.effectValueFormula": "Effect value formula",
   "COF.ui.buffedAttribute": "Buffed Attribute",
   "COF.ui.buff": "Buff",
+  "COF.ui.effectDuration": "Duration",
+  "COF.ui.effectNbUsage": "Usage number",
+  "COF.ui.frequency": "Frequency",
+  "COF.ui.combat": "Combat",
+  "COF.ui.day": "Day",
+  "COF.ui.round": "Round",
+  "COF.ui.allies": "Allies",
+  "COF.ui.enemies": "Enemies",
+  "COF.ui.all": "All",
 
   "COF.roll.success" : "Success",
   "COF.roll.critical" : "Critical",
@@ -177,6 +186,7 @@
   "COF.attributes.hd.abbrev": "HD",
   "COF.attributes.sc.label": "Spellcasting",
   "COF.attributes.sc.abbrev": "SPELL",
+  "COF.globalRollBonus": "All tests",
 
   "COF.attacks.label": "ATTACKS",
   "COF.attacks.name.abbrev" : "Name",
@@ -336,5 +346,8 @@
   "COF.message.missingTarget": "The target is nowhere to be found.",
   "COF.message.apply.damage": "Apply damage",
   "COF.message.apply.heal": "Apply heal",
-  "COF.message.dissipate": "dissipates for"
+  "COF.message.dissipate": "dissipates for",
+  "COF.message.for": "For",
+  "COF.message.rounds": "rounds",
+  "COF.message.hours": "hours"
 }

@@ -1,3 +1,4 @@
+import { CofRoll } from "../controllers/roll.js";
 import {Traversal} from "../utils/traversal.js";
 
 export class CofDamageRoll {
@@ -8,37 +9,39 @@ export class CofDamageRoll {
         this._type = type
     }
 
-    roll(actor, target = undefined){
+    roll(actor, targets = undefined){
         const r = new Roll(this._formula);
         r.roll();
         if (this._isCritical) r._total = r._total * 2;
-        const dmgCheckFlavor = this._buildDamageRollMessage(target);
+        const dmgCheckFlavor = this._buildDamageRollMessage(targets);
+
+        let targetsIds;
+        if(targets){
+            targetsIds = targets.map((elem) => elem.data._id);
+        }
+
         r.toMessage({
             user: game.user._id,
             flavor: dmgCheckFlavor,
             speaker: ChatMessage.getSpeaker({actor: actor}),
             "flags.type": this._type,
-            "flags.target": target ? target.data._id : undefined,
+            "flags.targets": targetsIds,
             "flags.damageRoll": true
         });
     }
 
     /* -------------------------------------------- */
 
-    _buildDamageRollMessage(target) {
+    _buildDamageRollMessage(targets) {
 
         let subtitle = `<div class="flexrow"><h3 class="flex3"><strong>${this._label}</strong>`;
-        
-        if (target) {
-            subtitle+= `<br>${Traversal.getTokenName(target)}&nbsp;</h3>`;        
-            subtitle += `<div class="flex2"><img style="border:none" src="${canvas.tokens.controlled[0].data.img}" width="32" height="32" />
-                    <i class="fas fa-arrow-alt-circle-right" style="font-size: 16px;margin: 3px;vertical-align: super;"></i>
-                    <img style="border:none" src="${target.data.img}" width="32" height="32" />
-            </div>`
+        if (targets) {
+            const elipsis = targets.length > 1 ? "...":"&nbsp;";
+            subtitle+= `<br>${Traversal.getTokenName(targets[0])}${elipsis}</h3>`;        
+            subtitle += CofRoll.getTargetsTemplate(targets);            
         } else {
             subtitle += "</h3>";
         }
-        
         subtitle += "</div>"
 
         if(this._type === 'damage'){
@@ -53,7 +56,7 @@ export class CofDamageRoll {
     // roll messages hooks    
     static handleApplyDamageButton(message, html, data) {
         const flags = message.data.flags;
-        if (!message.isRoll || !flags.type || !flags.damageRoll || !flags.target) {
+        if (!message.isRoll || !flags.type || !flags.damageRoll || !flags.targets) {
             return;
         }
         const color = flags.type === 'damage' ? "#dd3333" : "#339933";
@@ -77,19 +80,23 @@ export class CofDamageRoll {
                 ui.notifications.error(game.i18n.localize("COF.message.notAllowedButton"));
                 return;
             }
-            
-            
-            let target = Traversal.findTargetToken(flags.target);
-            if(!target){
+            if(!flags.targets){
                 ui.notifications.error(game.i18n.localize("COF.message.missingTarget"));
                 return;
             }
-            const roll = message.roll;
+            for (const targetId of flags.targets) {
+                let target = Traversal.findTargetToken(targetId);
+                if(!target){
+                    ui.notifications.error(game.i18n.localize("COF.message.missingTarget"));
+                    return;
+                }
+                const roll = message.roll;
 
-            target.actor.applyDamage(flags.type === 'damage' ? roll.total : -roll.total);
-            message.update({
-                "flags.applied": true
-            });   
+                target.actor.applyDamage(flags.type === 'damage' ? roll.total : -roll.total);
+                message.update({
+                    "flags.applied": true
+                });   
+            }
         });
     }
 

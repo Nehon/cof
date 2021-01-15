@@ -49,6 +49,8 @@ export class CofActor extends Actor {
         attacks.melee.buff = 0;
         attacks.ranged.buff = 0;
         attacks.magic.buff = 0;
+
+        actorData.data.globalRollBonus = 0;
     }
 
     _prepareBaseCharacterData(actorData) {

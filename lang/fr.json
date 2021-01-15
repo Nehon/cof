@@ -95,6 +95,15 @@
   "COF.ui.effectValueFormula": "Formule de la valeur de l'effet",
   "COF.ui.buffedAttribute": "Attribut amélioré",
   "COF.ui.buff": "Buff",
+  "COF.ui.effectDuration": "Durée",
+  "COF.ui.effectNbUsage": "Nombre d'utilisation",
+  "COF.ui.frequency": "Fréquence",
+  "COF.ui.combat": "Combat",
+  "COF.ui.day": "Jour",
+  "COF.ui.round": "Tour",
+  "COF.ui.allies": "Alliés",
+  "COF.ui.eanemies": "Ennemis",
+  "COF.ui.all": "Tous",
 
   "COF.roll.success" : "Succès",
   "COF.roll.critical" : "Critique",
@@ -177,6 +186,7 @@
   "COF.attributes.hd.abbrev": "DV",
   "COF.attributes.sc.label": "Incantation",
   "COF.attributes.sc.abbrev": "INCANT",
+  "COF.globalRollBonus": "Tous les tests",
 
   "COF.attacks.label": "ATTAQUES",
   "COF.attacks.name.abbrev" : "Nom",
@@ -336,6 +346,9 @@
   "COF.message.missingTarget": "La cible est introuvable",
   "COF.message.apply.damage": "Appliquer les dommages",
   "COF.message.apply.heal": "Appliquer les soins",
-  "COF.message.dissipate": "se dissipe pour"
+  "COF.message.dissipate": "se dissipe pour",
+  "COF.message.for": "Pour",
+  "COF.message.rounds": "tours",
+  "COF.message.hours": "heures"
 
 }

@@ -16,7 +16,7 @@ export class CofActorSheet extends ActorSheet {
     getData(options) {
         let data = super.getData(options);
         data.options.isGM = game.user.isGM;
-        return data;
+            return data;
     }
 
     /** @override */
@@ -45,13 +45,14 @@ export class CofActorSheet extends ActorSheet {
                         label: `effec${this.actor.data.effects.length}`,
                         icon: '/icons/svg/mystery-man.svg',
                         //transfer: transfer,
-                        duration: {
+                        
+                        duration: game.combat?{
                             combat: game.combat._id,
                             rounds: 2,
                             turns: 0,
                             startRound: game.combat.current.round,
                             startTurn: game.combat.current.turn
-                        }
+                        }:undefined
                     })
                 )._id;
                 return new ActiveEffectConfig(this.actor['effects'].get(id)).render(true);
@@ -67,9 +68,6 @@ export class CofActorSheet extends ActorSheet {
                 return new ActiveEffectConfig(this.actor['effects'].get(id)).render(true);
             });
         }
-
-          
-
 
         // Click to open
         html.find('.item-create.compendium-pack').click(ev => {

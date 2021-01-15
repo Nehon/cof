@@ -88,12 +88,15 @@
                 {{#select effect.target}}
                     <option value="">{{localize "COF.None"}}</option>
                     <option value="self">{{localize "COF.ui.self"}}</option>
-                    <option value="selected">{{localize "COF.ui.selected"}}</option>                
+                    <option value="selected">{{localize "COF.ui.selected"}}</option>
+                    <option value="allies">{{localize "COF.ui.allies"}}</option>
+                    <option value="enemies">{{localize "COF.ui.enemies"}}</option>
+                    <option value="all">{{localize "COF.ui.all"}}</option>
                 {{/select}}
             </select> 
         </div>        
     </div>
-    <div class="form-fields flexrow flex-between" style="border-bottom:1px #999 solid;padding-bottom:3px">        
+    <div class="form-fields flexrow flex-between">        
         <div class='flex4 cell'>
             <label class="checkbox">
                 {{localize "COF.ui.effectValueFormula"}}
@@ -123,7 +126,34 @@
                 <option value="@attributes.fp.buff">{{localize "COF.attributes.fp.label"}}</option>
                 <option value="@attributes.mp.buff">{{localize "COF.attributes.mp.label"}}</option>`
                 <option value="@attributes.dr.buff">{{localize "COF.attributes.dr.label"}}</option>
+                <option value="@globalRollBonus">{{localize "COF.globalRollBonus"}}</option>
           {{/select}}
+        </select>
+        </div>
+    </div>
+        <div class="form-fields flexrow flex-between" style="border-bottom:1px #999 solid;padding-bottom:3px">        
+        <div class='flex4 cell'>
+            <label class="checkbox">
+                {{localize "COF.ui.effectDuration"}}
+            </label>
+            <input type="text" value="{{effect.duration}}" name="data.effects.{{@key}}.duration" data-dtype="String"  placeholder="{{localize "COF.ui.formula"}}">
+        </div>
+        <div class='flex4 cell'>
+            <label class="checkbox">
+                {{localize "COF.ui.effectNbUsage"}}
+            </label>
+            <input type="text" value="{{effect.nbUsage}}" name="data.effects.{{@key}}.nbUsage" data-dtype="String"  placeholder="{{localize "COF.ui.formula"}}">
+        </div>
+        <div class='flex4 cell'>
+            <label class="checkbox {{disabled ( not (equals effect.type 'buff'))}}">
+                {{localize "COF.ui.frequency"}}:
+            </label>            
+            <select name="data.effects.{{@key}}.frequency" data-dtype="String" {{disabled ( not (equals effect.nbUsage null))}}>
+            {{#select effect.frequency}}                
+                <option value="combat">{{localize "COF.ui.combat"}}</option>
+                <option value="day">{{localize "COF.ui.day"}}</option>                
+                <option value="day">{{localize "COF.ui.round"}}</option>                
+            {{/select}}
         </select>
         </div>
     </div>

@@ -134,6 +134,7 @@
       },
       "common": {
         "description": "",
+        "globalRollBonus" : 0,
         "attributes": {
           "hp": {
             "key" : "hp",
@@ -393,6 +394,7 @@
         "activable": false,
         "testRoll": false,
         "testMod": null,        
+        "duration": null,
         "nbUses": null,
         "frequency":null
       }]

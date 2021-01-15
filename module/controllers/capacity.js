@@ -51,6 +51,37 @@ export class Capacity {
         }
     }
 
+    static makeActiveEffect(capacity, effect, value, duration) {
+        if (effect.type != 'buff') {
+            return undefined
+        }
+
+        const durationObj = game.combat ? {
+            combat: game.combat._id,
+            rounds: duration,
+            turns: 0,
+            startRound: game.combat.current.round,
+            startTurn: game.combat.current.turn
+        } : {
+            rounds: duration,
+        };
+
+        const changes = [{
+            key: effect.stat.replace('@','data.'),
+            mode: 2,
+            value: value
+        }];
+
+        let effectData = {
+            label: capacity.name,
+            icon: capacity.img,
+            duration: durationObj,
+            changes: changes,
+            "flags.from" : capacity.data.key
+        }
+        return effectData;
+    }
+
     // static removeFromActor(actor, event, entity) {
     //     return actor.deleteOwnedItem(entity._id);
     // }

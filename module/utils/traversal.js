@@ -104,6 +104,12 @@ export class Traversal {
         return canvas.tokens.placeables.find(token => token.data._id === id);
     }
 
+    // Hostile is -1, Friendly is +1
+    // optional exclude id.
+    static getTokensForDisposition(disposition, excludeId = undefined){        
+        return canvas.tokens.placeables.filter(token => token.data.disposition === disposition && (token.data._id !== excludeId));
+    }
+
     static getTokenName(token){
         return (token.data.displayName === 30 || token.data.displayName ===50)? token.name:"???";
     }

@@ -1,9 +1,11 @@
-import {CofRoll} from "../controllers/roll.js";
+import { Capacity } from "../controllers/capacity.js";
+import { CofRoll } from "../controllers/roll.js";
 import { Traversal } from "../utils/traversal.js";
+import { CofBuffRoll } from "./buff-roll.js";
 
 export class Macros {
 
-    static getSpeakersActor = function(){
+    static getSpeakersActor = function () {
         const speaker = ChatMessage.getSpeaker();
         let actor;
         // if a token is selected take it as target actor
@@ -14,24 +16,24 @@ export class Macros {
     }
 
     static rollStatMacro = async function (actor, stat, onEnter = "submit") {
-        if(actor){
+        if (actor) {
             let statObj;
-            switch(stat){
-                case "for" :
-                case "str" : statObj = eval(`actor.data.data.stats.str`); break;
-                case "dex" : statObj = eval(`actor.data.data.stats.dex`); break;
-                case "con" : statObj = eval(`actor.data.data.stats.con`); break;
-                case "int" : statObj = eval(`actor.data.data.stats.int`); break;
-                case "sag" :
-                case "wis" : statObj = eval(`actor.data.data.stats.wis`); break;
-                case "cha" : statObj = eval(`actor.data.data.stats.cha`); break;
-                case "atc" :
-                case "melee" : statObj = eval(`actor.data.data.attacks.melee`); break;
-                case "atd" :
-                case "ranged" : statObj = eval(`actor.data.data.attacks.ranged`); break;
-                case "atm" :
-                case "magic" : statObj = eval(`actor.data.data.attacks.magic`); break;
-                default :
+            switch (stat) {
+                case "for":
+                case "str": statObj = eval(`actor.data.data.stats.str`); break;
+                case "dex": statObj = eval(`actor.data.data.stats.dex`); break;
+                case "con": statObj = eval(`actor.data.data.stats.con`); break;
+                case "int": statObj = eval(`actor.data.data.stats.int`); break;
+                case "sag":
+                case "wis": statObj = eval(`actor.data.data.stats.wis`); break;
+                case "cha": statObj = eval(`actor.data.data.stats.cha`); break;
+                case "atc":
+                case "melee": statObj = eval(`actor.data.data.attacks.melee`); break;
+                case "atd":
+                case "ranged": statObj = eval(`actor.data.data.attacks.ranged`); break;
+                case "atm":
+                case "magic": statObj = eval(`actor.data.data.attacks.magic`); break;
+                default:
                     ui.notifications.error("La compétence à tester n'a pas été reconnue.");
                     break;
             }
@@ -48,17 +50,17 @@ export class Macros {
         if (!item) return ui.notifications.warn(`${game.i18n.localize("COF.notification.MacroItemMissing")}: "${itemName}"`);
         item.prepareData();
         const itemData = item.data;
-        if(itemData.data.properties.weapon){
-            if(itemData.data.worn){
+        if (itemData.data.properties.weapon) {
+            if (itemData.data.worn) {
                 let label = itemData.name;
                 let mod = itemData.data.mod;
                 let critrange = itemData.data.critrange;
                 let dmg = itemData.data.dmg;
-                CofRoll.rollWeaponDialog(actor, label, mod, 0, critrange, dmg, 0, 'damage', [...game.user.targets][0]);
+                CofRoll.rollWeaponDialog(actor, label, mod, actor.data.data.globalRollBonus, critrange, dmg, 0, 'damage', [...game.user.targets][0]);
             }
             else return ui.notifications.warn(`${game.i18n.localize("COF.notification.MacroItemUnequiped")}: "${itemName}"`);
         }
-        else{
+        else {
             return item.sheet.render(true);
         }
     };
@@ -68,23 +70,23 @@ export class Macros {
         if (!actor) {
             return ui.notifications.warn(`${game.i18n.localize("COF.notification.NoActorSelected")}`);
         }
-        
+
         const cap = actor.getCapacityByKey(actor.data.items, itemKey);
-        if(!cap){
-             return ui.notifications.warn(`${game.i18n.localize("COF.notification.NoCapacity")}: "${itemName}"`);
+        if (!cap) {
+            return ui.notifications.warn(`${game.i18n.localize("COF.notification.NoCapacity")}: "${itemName}"`);
         }
         const effects = cap.data.effects;
-        if(!effects){
+        if (!effects) {
             // log the text in the chat?
             return;
         }
-        for(let key in effects){
+        for (let key in effects) {
             const effect = effects[key];
-            if(!effect.activable){
+            if (!effect.activable) {
                 continue;
             }
             const rank = actor.data.data.paths[cap.data.pathIndex].rank;
-            if(effect.rank > rank || rank > effect.maxRank){
+            if (effect.rank > rank || rank > effect.maxRank) {
                 continue;
             }
             if (effect.type == 'skill') {
@@ -92,45 +94,85 @@ export class Macros {
                     const testMod = effect.testMod.replace("@rank", `@paths.${cap.data.pathIndex}.rank`)
                     let roll = new Roll(testMod, actor.data.data);
                     roll.roll();
-                    CofRoll.skillRollDialog(actor, cap.name, roll.total, 0, 20/*, superior=false, onEnter = "submit"*/);
-                    return;
+                    CofRoll.skillRollDialog(actor, cap.name, roll.total, actor.data.data.globalRollBonus, 20/*, superior=false, onEnter = "submit"*/);
+                    continue;
                 }
             }
-            // self
-            let target = undefined;
-            if(effect.target === "selected"){
-                target = [...game.user.targets][0];
-            } else if(effect.target = "self"){
-                target = canvas.tokens.controlled[0];
+            // self            
+            let targets = undefined;
+            if (effect.target === "selected") {
+                targets = [[...game.user.targets][0]];
+            } else if (effect.target === "self") {
+                targets = [canvas.tokens.controlled[0]];
+            } else if (effect.target === "allies") {
+                const source = canvas.tokens.controlled[0];
+                targets = Traversal.getTokensForDisposition(source.data.disposition, source.data._id);
+            } else if (effect.target === "enemies") {
+                // friendly if hostile, hostile if friendly
+                targets = Traversal.getTokensForDisposition(source.data.disposition * -1);
+            } else if (effect.target === "all") {
+                targets = canvas.tokens.placeables;
+            }
+
+            if (effect.type == 'buff') {
+                const value = effect.value.replace("@rank", `@paths.${cap.data.pathIndex}.rank`)
+                let valueRoll = new Roll(value, actor.data.data);
+                if (effect.testRoll) {
+                } else {
+                    let durationFormula;
+                    if (effect.duration) {
+                        const duration = effect.duration.replace("@rank", `@paths.${cap.data.pathIndex}.rank`)
+                        let r = new Roll(duration, actor.data.data)
+                        durationFormula = r.formula;
+                    }
+                    let roll = new CofBuffRoll(cap.name, valueRoll.formula, effect.stat, durationFormula);
+                    roll.roll(actor, targets);
+
+                    const activeEffect = Capacity.makeActiveEffect(cap, effect, roll.total, roll.duration);
+                    if (activeEffect && targets) {
+                        targets.forEach(trg => {
+                            const prom = trg.actor.createEmbeddedEntity("ActiveEffect", activeEffect);
+                            if (!game.combat) {
+                                prom.then((eff) => {
+                                    setTimeout(() => {
+                                        trg.actor.deleteEmbeddedEntity("ActiveEffect", eff._id);
+                                    }, roll.duration * 10000);
+                                });
+                            }
+                        });
+                    }
+                }
+                continue;
             }
 
             if (effect.type == 'damage') {
                 const value = effect.value.replace("@rank", `@paths.${cap.data.pathIndex}.rank`)
-                let dmgRoll = new Roll(value, actor.data.data);                    
+                let dmgRoll = new Roll(value, actor.data.data);
                 if (effect.testRoll) {
                     const testMod = effect.testMod.replace("@rank", `@paths.${cap.data.pathIndex}.rank`)
                     let testRoll = new Roll(testMod, actor.data.data);
                     let formula = testRoll.formula.replace(/ /g, "");
-                    CofRoll.rollWeaponDialog(actor, cap.name, formula, 0, 20, dmgRoll.formula, 0, effect.type , target/* ,onEnter = "submit"*/);                      
-                    return;
+                    CofRoll.rollWeaponDialog(actor, cap.name, formula, actor.data.data.globalRollBonus, 20, dmgRoll.formula, 0, effect.type, targets?targets[0]:undefined/* ,onEnter = "submit"*/);
                 } else {
-                    CofRoll.rollDamageDialog(actor, cap.name, dmgRoll._formula , 0, effect.type, false, target/* onEnter = "submit"*/);
+                    CofRoll.rollDamageDialog(actor, cap.name, dmgRoll._formula, 0, effect.type, false, targets/* onEnter = "submit"*/);
                 }
+                continue;
             }
+
             if (effect.type == 'heal') {
                 const value = effect.value.replace("@rank", `@paths.${cap.data.pathIndex}.rank`)
-                let dmgRoll = new Roll(value, actor.data.data);                    
+                let dmgRoll = new Roll(value, actor.data.data);
                 if (effect.testRoll) {
                     const testMod = effect.testMod.replace("@rank", `@paths.${cap.data.pathIndex}.rank`)
                     let testRoll = new Roll(testMod, actor.data.data);
                     let formula = testRoll.formula.replace(/ /g, "");
-                    CofRoll.rollWeaponDialog(actor, cap.name, formula, 0, 20, dmgRoll.formula, 0, effect.type, target/* ,onEnter = "submit"*/);                      
-                    return;
+                    CofRoll.rollWeaponDialog(actor, cap.name, formula, actor.data.data.globalRollBonus, 20, dmgRoll.formula, 0, effect.type, targets?targets[0]:undefined/* ,onEnter = "submit"*/);
+
                 } else {
-                    CofRoll.rollDamageDialog(actor, cap.name, dmgRoll._formula , 0, "heal", false, target /* ,critical = false, onEnter = "submit"*/);
+                    CofRoll.rollDamageDialog(actor, cap.name, dmgRoll._formula, 0, "heal", false, targets /* ,critical = false, onEnter = "submit"*/);
                 }
+                continue;
             }
-            
         }
     };
 
