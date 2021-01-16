@@ -181,6 +181,9 @@ export class CofActor extends Actor {
     getPaths(items) {
         return items.filter(i => i.type === "path")        
     }
+    getPathById(id) {
+        return this.data.items.filter(i => i.type === "path" &&i._id === id )        
+    }
     /* -------------------------------------------- */
 
     getActiveCapacities(items) {
@@ -190,6 +193,10 @@ export class CofActor extends Actor {
     getCapacity(items, id){
         return items.find(i => i.type === "capacity" && i._id === id)
     }
+
+    getItemById(id){
+        return this.data.items.find(i => i._id === id)
+    }    
     
     getCapacityByKey(items, key){
         return items.find(i => i.type === "capacity" && i.data.key === key)

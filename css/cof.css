@@ -1903,7 +1903,7 @@ Copied from dnd5e
 }
 
 .cof .inventory-list .item {
-  line-height: 30px;
+  line-height: 32px;
   padding: 0 2px;
   border-bottom: 1px solid #c9c7b8;
 }
@@ -1914,16 +1914,19 @@ Copied from dnd5e
 
 .cof .inventory-list .item .item-name {
   cursor: pointer;
-  max-height: 30px;
+  max-height: 32px;
   overflow: hidden;
 }
 
 .cof .inventory-list .item .item-name .item-image {
   -webkit-box-flex: 0;
-  -ms-flex: 0 0 30px;
-  flex: 0 0 30px;
+  -ms-flex: 0 0 32px;
+  flex: 0 0 32px;
   background-size: 30px;
   margin-right: 5px;
+  border: #999999 1px solid;
+  background-color: #AAAAAA;
+  margin-top: 2px;
 }
 
 .cof .inventory-list .item .item-name h4 {

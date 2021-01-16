@@ -136,6 +136,19 @@ export class CofActorSheet extends ActorSheet {
         html.find('.item-delete').click(ev => {
             return this._onDeleteItem(ev);
         });
+        html.find('.item-link').click(this._onLinkItem.bind(this));
+
+        html.find('.capacity').hover(ev =>{
+            ev.preventDefault();
+            let li = $(ev.currentTarget);
+            let desc = li.find(".description");            
+            
+            html.find('#description').html(desc.html());
+        }, 
+        ev =>{
+            html.find('#description').html("");
+        }
+        )
     }
 
     async _onEditItem(event) {
@@ -154,6 +167,28 @@ export class CofActorSheet extends ActorSheet {
         }
         if(entity) return entity.sheet.render(true);
     }
+
+    /* -------------------------------------------- */
+
+    async _onLinkItem(ev){
+        ev.preventDefault();
+        const li = $(ev.currentTarget).closest(".item");
+        const id = li.data("itemId");        
+        const actor = this.object;
+
+        const item = actor.getItemById(id);
+        
+        if (!item) {
+            return;
+        }
+        const description = item.data.description?item.data.description:"<p></p>";
+        ChatMessage.create({
+            flavor: `<h2 class="roll" style="padding-bottom: 2px;"><img src="${item.img}" width="24" height="24" style="background:#aaaaaa;vertical-align: sub;margin-right: 4px;"/>${item.name}</h2>`,
+            content: description.replace("<p>","<p style='text-align: justify;padding: 0 5px;'>"),
+            speaker: ChatMessage.getSpeaker({actor: actor})
+        });        
+    }
+
 
     /* -------------------------------------------- */
     /* DELETE EVENTS CALLBACKS                      */

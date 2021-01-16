@@ -20,7 +20,10 @@ export const registerHandlebarsHelpers = function () {
     Handlebars.registerHelper('and', function(value1, value2) {
         return Boolean(value1) && Boolean(value2);
     });
+    Handlebars.registerHelper('safeString', function(string) {
 
+        return  new Handlebars.SafeString(string);
+    });
 
     Handlebars.registerHelper('info', function(align, label1, value1, label2, value2, label3, value3) {
         const v2Sign = value2 < 0?'':'+';

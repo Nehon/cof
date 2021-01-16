@@ -1,7 +1,7 @@
 {{#if (isEmpty (getPaths actor.items))}}
 <!--    <p class="empty">Aucune voie n'a été ajoutée pour le moment.</p>-->
 {{else}}
-    <div class="path-list">
+    <div class="path-list">        
         <div class="grid">
             <div class="gridrow grid-6col-150 gridheader">
                 <div>&nbsp;</div>
@@ -19,6 +19,7 @@
                     </div>
                     {{#each (getCapacitiesByIds path.data.capacities) as |capacity id|}}
                         <div class="gridcell gridcell-sm item capacity left darkgreen" data-item-id="{{capacity._id}}" data-item-type="item" data-pack="cof.capacities" data-path-id="{{path._id}}">
+                            <span class="description" style="display:none">{{safeString capacity.data.description}}</span>
                             {{#if (includesKey ../../actor.items "capacity" capacity.data.key)}}
                                 <a class="capacity-control capacity-checked" title="{{capacity.name}}"><i class="fas fa-square"></i></a>&nbsp;
                                 <a class="capacity-control item-edit ellipsis">{{capacity.name}}</a>
@@ -31,6 +32,7 @@
                 </div>
             {{/each}}
         </div>
+        <div id="description"></div>
         {{#if (equals actor.type "character")}}
             <hr/>
             {{#if (isNegative actor.data.xp.value)}}
