@@ -11,16 +11,22 @@ export class CofBuffRoll {
 
     roll(actor, targets = undefined){
         const r = new Roll(this._formula);
-        r.roll();
+        try{
+            r.roll();
+            this.total = r.total;
+            this.result = r.result;
+        } catch(e){
+            this.total = this._formula;
+            this.result = this._formula;
+        }
         if(this.durationFormula){            
             const dr = new Roll(this.durationFormula);
             dr.roll();
             this.duration = dr.total;
             this.durationTitle = dr.result;
         }
-        this.total = r.total;
-        this.result = r.result;
-        const message = this._buildRollMessage(targets);
+       
+        const message = this._buildRollMessage(actor, targets);
         ChatMessage.create({
             user: game.user._id,
             flavor: message,
@@ -32,7 +38,7 @@ export class CofBuffRoll {
 
     /* -------------------------------------------- */
 
-    _buildRollMessage(targets) {
+    _buildRollMessage(actor, targets) {
         const attr = game.i18n.localize(this._buffedAttribute.replace('@',"COF.").replace("buff","label"));
         const total = this.total > 0 ? `+${this.total}` : this.total;
         const cssClass = this.total > 0 ? "success" : "failure";
@@ -42,7 +48,7 @@ export class CofBuffRoll {
             subtitle+= `<br><span title="${this.durationTitle}">${game.i18n.localize("COF.message.for")} ${this.duration} ${game.i18n.localize("COF.message.rounds")}</span>&nbsp;`;
         }
         subtitle += "</h3>";
-        subtitle += CofRoll.getTargetsTemplate(targets);
+        subtitle += CofRoll.getTargetsTemplate(actor, targets);
         subtitle += "</div>"
         return `<h2 class="${cssClass}">${this._label}</h2>${subtitle}`;
 

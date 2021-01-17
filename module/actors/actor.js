@@ -309,11 +309,14 @@ export class CofActor extends Actor {
         }
         const caps = this.getActiveCapacities(actorData.items);
         for(let cap of caps){
-            if(cap.activable || !cap.data.effects){
+            if(!cap.data.effects){
                 continue;
             }
             for (const key in cap.data.effects) {
-                const effect = cap.data.effects[key];                
+                const effect = cap.data.effects[key];               
+                if(effect.activable){
+                   continue;
+                } 
                 if(effect.type == 'buff' && effect.target == 'self'){
                     const value = effect.value.replace("@rank", `@paths.${cap.data.pathIndex}.rank`)
                     const roll = new Roll(value, actorData.data);
@@ -354,7 +357,8 @@ export class CofActor extends Actor {
             let cap = game.cof.config.capacities.find(c => c._id == capacity);
             if(!cap){
                 const gameCaps = game.items.filter(i => i.type === "capacity");
-                cap = gameCaps.find(c => c._id == capacity).data;
+                cap = gameCaps.find(c => c._id == capacity);
+                cap = cap ? cap.data : cap;
             }
             const activeCapacity = capacites.find(i => i.data.key === cap.data.key);
             if (!activeCapacity) {

@@ -65,7 +65,7 @@ export class Macros {
         }
     };
 
-    static rollCapacityMacro = function (itemKey, itemName) {
+    static rollCapacityMacro = async function (itemKey, itemName) {
         const actor = this.getSpeakersActor()
         if (!actor) {
             return ui.notifications.warn(`${game.i18n.localize("COF.notification.NoActorSelected")}`);
@@ -89,23 +89,25 @@ export class Macros {
             if (effect.rank > rank || rank > effect.maxRank) {
                 continue;
             }
+            const source = canvas.tokens.controlled[0];
+
             if (effect.type == 'skill') {
                 if (effect.testRoll) {
                     const testMod = effect.testMod.replace("@rank", `@paths.${cap.data.pathIndex}.rank`)
                     let roll = new Roll(testMod, actor.data.data);
                     roll.roll();
-                    CofRoll.skillRollDialog(actor, cap.name, roll.total, actor.data.data.globalRollBonus, 20/*, superior=false, onEnter = "submit"*/);
+                    await CofRoll.skillRollDialog(actor, cap.name, roll.total, actor.data.data.globalRollBonus, 20/*, superior=false, onEnter = "submit"*/);
                     continue;
                 }
             }
+      
             // self            
             let targets = undefined;
             if (effect.target === "selected") {
                 targets = [[...game.user.targets][0]];
             } else if (effect.target === "self") {
-                targets = [canvas.tokens.controlled[0]];
-            } else if (effect.target === "allies") {
-                const source = canvas.tokens.controlled[0];
+                targets = [source];
+            } else if (effect.target === "allies") {            
                 targets = Traversal.getTokensForDisposition(source.data.disposition, source.data._id);
             } else if (effect.target === "enemies") {
                 // friendly if hostile, hostile if friendly
@@ -115,6 +117,7 @@ export class Macros {
             }
 
             if (effect.type == 'buff') {
+                const ae = CONFIG.statusEffects.find(e => e.id === effect.value);               
                 const value = effect.value.replace("@rank", `@paths.${cap.data.pathIndex}.rank`)
                 let valueRoll = new Roll(value, actor.data.data);
                 if (effect.testRoll) {
@@ -125,12 +128,21 @@ export class Macros {
                         let r = new Roll(duration, actor.data.data)
                         durationFormula = r.formula;
                     }
+                    
                     let roll = new CofBuffRoll(cap.name, valueRoll.formula, effect.stat, durationFormula);
                     roll.roll(actor, targets);
-
-                    const activeEffect = Capacity.makeActiveEffect(cap, effect, roll.total, roll.duration);
+                    let activeEffect;
+                    if (ae) {
+                        activeEffect = Capacity.makeActiveEffect(cap, effect, 0, roll.duration);
+                        activeEffect.icon = ae.icon;
+                        activeEffect.label = game.i18n.localize(ae.label);
+                        activeEffect["flags.core.statusId"] = ae.id;
+                    } else {
+                        activeEffect = Capacity.makeActiveEffect(cap, effect, roll.total, roll.duration);
+                    }
                     if (activeEffect && targets) {
                         targets.forEach(trg => {
+                            // TODO maybe record the starting time so that if the application is cloased before the timeout is called we can clean up / resume.
                             const prom = trg.actor.createEmbeddedEntity("ActiveEffect", activeEffect);
                             if (!game.combat) {
                                 prom.then((eff) => {
@@ -152,9 +164,9 @@ export class Macros {
                     const testMod = effect.testMod.replace("@rank", `@paths.${cap.data.pathIndex}.rank`)
                     let testRoll = new Roll(testMod, actor.data.data);
                     let formula = testRoll.formula.replace(/ /g, "");
-                    CofRoll.rollWeaponDialog(actor, cap.name, formula, actor.data.data.globalRollBonus, 20, dmgRoll.formula, 0, effect.type, targets?targets[0]:undefined/* ,onEnter = "submit"*/);
+                    await CofRoll.rollWeaponDialog(actor, cap.name, formula, actor.data.data.globalRollBonus, 20, dmgRoll.formula, 0, effect.type, targets?targets[0]:undefined/* ,onEnter = "submit"*/);
                 } else {
-                    CofRoll.rollDamageDialog(actor, cap.name, dmgRoll._formula, 0, effect.type, false, targets/* onEnter = "submit"*/);
+                    await CofRoll.rollDamageDialog(actor, cap.name, dmgRoll._formula, 0, effect.type, false, targets/* onEnter = "submit"*/);
                 }
                 continue;
             }
@@ -166,10 +178,10 @@ export class Macros {
                     const testMod = effect.testMod.replace("@rank", `@paths.${cap.data.pathIndex}.rank`)
                     let testRoll = new Roll(testMod, actor.data.data);
                     let formula = testRoll.formula.replace(/ /g, "");
-                    CofRoll.rollWeaponDialog(actor, cap.name, formula, actor.data.data.globalRollBonus, 20, dmgRoll.formula, 0, effect.type, targets?targets[0]:undefined/* ,onEnter = "submit"*/);
+                    await CofRoll.rollWeaponDialog(actor, cap.name, formula, actor.data.data.globalRollBonus, 20, dmgRoll.formula, 0, effect.type, targets?targets[0]:undefined/* ,onEnter = "submit"*/);
 
                 } else {
-                    CofRoll.rollDamageDialog(actor, cap.name, dmgRoll._formula, 0, "heal", false, targets /* ,critical = false, onEnter = "submit"*/);
+                    await CofRoll.rollDamageDialog(actor, cap.name, dmgRoll._formula, 0, "heal", false, targets /* ,critical = false, onEnter = "submit"*/);
                 }
                 continue;
             }

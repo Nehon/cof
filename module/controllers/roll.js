@@ -8,12 +8,13 @@ export class CofRoll {
         return { classes: ["cof", "dialog"] };
     }
 
-    static getTargetsTemplate(targets) {
+    static getTargetsTemplate(actor, targets) {
         if (!targets || !targets.length) {
             return;
         }
+        const actorToken = canvas.tokens.placeables.find((t) => t.actor.data._id === actor.data._id);
         let html = `<div class="flex2" style="position:relative">`;
-        html += `<img style="border:none" src="${canvas.tokens.controlled[0].data.img}" width="32" height="32" />`;
+        html += `<img style="border:none" src="${actorToken.data.img}" width="32" height="32" />`;
         html += `<i class="fas fa-arrow-alt-circle-right" style="font-size: 16px;margin: 3px;vertical-align: super;"></i>`;
         for (let i = 0; i < targets.length && i < 4; i++) {
             const target = targets[i];

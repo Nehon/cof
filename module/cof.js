@@ -19,6 +19,7 @@ import { registerSystemSettings } from "./settings.js";
 import {System, COF} from "./config.js";
 import {Macros} from "./system/macros.js";
 import {overrides079Bugs} from "./overridesBugs.js";
+import {overrideTokenRender} from "./hooks/tokenOverride.js";
 
 
 Hooks.once("init", async function () {
@@ -28,6 +29,9 @@ Hooks.once("init", async function () {
 
     // patching foundry bugs
     overrides079Bugs();
+
+    // patching token render
+    overrideTokenRender();
 
     /**
      * Set an initiative formula for the system

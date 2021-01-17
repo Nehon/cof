@@ -13,7 +13,7 @@ export class CofDamageRoll {
         const r = new Roll(this._formula);
         r.roll();
         if (this._isCritical) r._total = r._total * 2;
-        const dmgCheckFlavor = this._buildDamageRollMessage(targets);
+        const dmgCheckFlavor = this._buildDamageRollMessage(actor, targets);
 
         let targetsIds;
         if(targets){
@@ -32,13 +32,13 @@ export class CofDamageRoll {
 
     /* -------------------------------------------- */
 
-    _buildDamageRollMessage(targets) {
+    _buildDamageRollMessage(actor, targets) {
 
         let subtitle = `<div class="flexrow"><h3 class="flex3"><strong>${this._label}</strong>`;
         if (targets) {
             const elipsis = targets.length > 1 ? "...":"&nbsp;";
             subtitle+= `<br>${Traversal.getTokenName(targets[0])}${elipsis}</h3>`;        
-            subtitle += CofRoll.getTargetsTemplate(targets);            
+            subtitle += CofRoll.getTargetsTemplate(actor, targets);            
         } else {
             subtitle += "</h3>";
         }
