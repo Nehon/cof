@@ -224,6 +224,29 @@ strong {
   transition: opacity 0.3s;
 }
 
+.big-tooltip {
+  position: fixed;
+  max-width: 320px;
+  background: #eeeeee;
+  padding: 10px;
+  border: 1px solid #999999;
+  border-radius: 4px;
+}
+
+.big-tooltip #desc-content {
+  text-align: justify;
+}
+
+.big-tooltip h2 {
+  padding-bottom: 2px;
+}
+
+.big-tooltip #desc-img {
+  background: #aaaaaa;
+  vertical-align: sub;
+  margin-right: 4px;
+}
+
 /* Show the tooltip text when you mouse over the tooltip container */
 .tooltip:hover .tooltiptext {
   visibility: visible;

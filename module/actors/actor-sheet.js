@@ -141,12 +141,21 @@ export class CofActorSheet extends ActorSheet {
         html.find('.capacity').hover(ev =>{
             ev.preventDefault();
             let li = $(ev.currentTarget);
-            let desc = li.find(".description");            
-            
-            html.find('#description').html(li.html());
+            let desc = li.find(".cap-description");            
+            let name = li.find(".cap-name");
+            let img = li.find(".cap-img");
+            var pos = li.offset();
+
+            let tt = html.find('#description')
+            tt.find("#desc-title").html(name.html());
+            tt.find("#desc-content").html(desc.html());        
+            tt.find("#desc-img").attr("src", img.html());
+            tt.show();
+            const left = pos.left - 325;
+            tt.css({top:`${pos.top}px`, left: `${left}px`});
         }, 
         ev =>{
-            html.find('#description').html("");
+            html.find('#description').hide();
         }
         )
     }
