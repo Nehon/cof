@@ -41,7 +41,7 @@
       "system": "cof",
       "path": "./packs/encounters-capacities.db",
       "entity": "Item",
-      "tag" : "capacity"
+      "tag" : "capaencounters-capacity"
     },
     {
       "name": "encounters-paths",
@@ -49,7 +49,7 @@
       "system": "cof",
       "path": "./packs/encounters-paths.db",
       "entity": "Item",
-      "tag" : "path"
+      "tag" : "encounters-path"
     },
     {
       "name": "items",

@@ -16,7 +16,11 @@ export class CofItem extends Item {
 
     /** @override */
     prepareData() {
-        super.prepareData();
+        // if( this.compendium){
+        //     // workaround a bug in foundry where updates are merged with entity.data instead of entity._data
+        //     this._data = duplicate(this.data);
+        // }
+        super.prepareData();        
         const itemData = this.data;
         const actorData = (this.actor) ? this.actor.data : null;
         switch (itemData.type) {

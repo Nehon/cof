@@ -182,7 +182,7 @@ export class CofActor extends Actor {
         return items.filter(i => i.type === "path")        
     }
     getPathById(id) {
-        return this.data.items.filter(i => i.type === "path" &&i._id === id )        
+        return this.data.items.find(i => i.type === "path" && i._id === id )        
     }
     /* -------------------------------------------- */
 
@@ -354,9 +354,9 @@ export class CofActor extends Actor {
             let cap = game.cof.config.capacities.find(c => c._id == capacity);
             if(!cap){
                 const gameCaps = game.items.filter(i => i.type === "capacity");
-                cap = gameCaps.find(c => c._id == capacity);
+                cap = gameCaps.find(c => c._id == capacity).data;
             }
-            const activeCapacity = capacites.find(i => i.data.key === cap.data.data.key);
+            const activeCapacity = capacites.find(i => i.data.key === cap.data.key);
             if (!activeCapacity) {
                 continue;
             }

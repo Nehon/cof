@@ -8,7 +8,13 @@ export class Traversal {
         else if(type === "journal") entity = game.journal.get(id);
         // Case 2 - Import from a Compendium pack
         if (!entity && pack) {
-            await game.packs.get(pack).getEntity(id).then(e => entity = e);
+            const compendiums = game.packs.filter(c => c.metadata.tag === pack)
+            for(let compendium of compendiums){
+                await compendium.getEntity(id).then(e => entity = e);
+                if (entity) {
+                    return entity;
+                }
+            }
         }
         return entity;
     }
@@ -41,8 +47,8 @@ export class Traversal {
     //     return entity;
     // }
 
-    static getAllEntitiesOfType(type, pack) {
-        const compendium = game.packs.get(pack).getContent();
+    static async getAllEntitiesOfType(type, pack) {
+        const compendium = await game.packs.get(pack).getContent();
         const ingame = game.items.filter(item => item.type === type);
         return ingame.concat(compendium);
     }
@@ -71,29 +77,25 @@ export class Traversal {
         return game.items.filter(item => item.type === type).map(entity => entity.data);
     }
 
-    static getAllCapacitiesData () {
-        const compendiums = game.packs.filter(c => c.metadata.tag === "capacity")
+    static getAllCapacitiesData () {        
         const compendium = game.cof.config.capacities;
         const ingame = this.getInGameEntitiesDataOfType("capacity");
         return ingame.concat(compendium);
     }
 
-    static getAllPathsData () {
-        const compendiums = game.packs.filter(c => c.metadata.tag === "path")
+    static getAllPathsData () {        
         const compendium = game.cof.config.paths;
         const ingame = this.getInGameEntitiesDataOfType("path");
         return ingame.concat(compendium);
     }
 
-    static getAllProfilesData () {
-        const compendiums = game.packs.filter(c => c.metadata.tag === "profile")
+    static getAllProfilesData () {        
         const compendium = game.cof.config.profiles;
         const ingame = this.getInGameEntitiesDataOfType("profile");
         return ingame.concat(compendium);
     }
 
-    static getAllSpeciesData () {
-        const compendiums = game.packs.filter(c => c.metadata.tag === "species")
+    static getAllSpeciesData () {        
         const compendium = game.cof.config.species;
         const ingame = this.getInGameEntitiesDataOfType("species");
         return ingame.concat(compendium);

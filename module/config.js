@@ -66,28 +66,48 @@ COF.capacities = [];
 
 // Mise en cache des données de profil
 COF.getProfiles = async function () {
-    let profiles = await game.packs.get("cof.profiles").getContent().then(index => index.map(entity => entity.data));
+    const compendiums = game.packs.filter(c => c.metadata.tag === "profiles")
+    let profiles = [];
+    for(let compendium of compendiums){
+        let prof = await compendium.getContent().then(index => index.map(entity => entity.data));
+        profiles = profiles.concat(prof)
+    }    
     COF.profiles = profiles;
     console.debug("Profiles loaded");
 };
 
 // Mise en cache des données de races
 COF.getSpecies = async function () {
-    let species = await game.packs.get("cof.species").getContent().then(index => index.map(entity => entity.data));
+    const compendiums = game.packs.filter(c => c.metadata.tag === "species")
+    let species = [];
+    for(let compendium of compendiums){
+        let specs = await compendium.getContent().then(index => index.map(entity => entity.data));
+        species = species.concat(specs)
+    }    
     COF.species = species;
     console.debug("Species loaded");
 };
 
 // Mise en cache des données de voies
 COF.getPaths = async function () {
-    let paths = await game.packs.get("cof.paths").getContent().then(index => index.map(entity => entity.data));
+    const compendiums = game.packs.filter(c => c.metadata.tag === "path")
+    let paths = [];
+    for(let compendium of compendiums){
+        let p = await compendium.getContent().then(index => index.map(entity => entity.data));
+        paths = paths.concat(p)
+    }    
     COF.paths = paths;
     console.debug("Paths loaded");
 };
 
 // Mise en cache des données de capacités
 COF.getCapacities = async function () {
-    let capacities = await game.packs.get("cof.capacities").getContent().then(index => index.map(entity => entity.data));
+    const compendiums = game.packs.filter(c => c.metadata.tag === "capacity")
+    let capacities = [];    
+    for(let compendium of compendiums){
+        let caps = await compendium.getContent().then(index => index.map(entity => entity.data));
+        capacities = capacities.concat(caps)
+    }    
     COF.capacities = capacities;
     console.debug("Capacities loaded");
 };

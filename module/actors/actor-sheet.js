@@ -143,7 +143,7 @@ export class CofActorSheet extends ActorSheet {
             let li = $(ev.currentTarget);
             let desc = li.find(".description");            
             
-            html.find('#description').html(desc.html());
+            html.find('#description').html(li.html());
         }, 
         ev =>{
             html.find('#description').html("");

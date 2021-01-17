@@ -18,12 +18,16 @@ import { registerHandlebarsHelpers } from "./helpers.js";
 import { registerSystemSettings } from "./settings.js";
 import {System, COF} from "./config.js";
 import {Macros} from "./system/macros.js";
+import {overrides079Bugs} from "./overridesBugs.js";
 
 
 Hooks.once("init", async function () {
 
     console.info("System Initializing...");
     console.info(System.ASCII);
+
+    // patching foundry bugs
+    overrides079Bugs();
 
     /**
      * Set an initiative formula for the system

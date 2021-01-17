@@ -136,7 +136,7 @@ export class CofItemSheet extends ItemSheet {
         }
         // Case 2 - Dropped Actor
         if (data.type === "Actor") {
-            return this._onDropActor(event, data);
+            result = this._onDropActor(event, data);
         }
     }
 
@@ -224,15 +224,8 @@ export class CofItemSheet extends ItemSheet {
         ev.preventDefault();
         const li = $(ev.currentTarget).closest(".item");
         const id = li.data("itemId");
-        const itemType = li.data("itemType");
-        let pack = null;
-        switch(itemType){
-            case "species" : pack = "cof.species"; break;
-            case "profile" : pack = "cof.profiles"; break;
-            case "path" : pack = "cof.paths"; break;
-            case "capacity" : pack = "cof.capacities"; break;
-        }
-        if(pack) return Traversal.getEntity(id, "item", pack).then(e => { if(e) e.sheet.render(true) });
+        const itemType = li.data("itemType");        
+        return Traversal.getEntity(id, "item", itemType).then(e => { if(e) e.sheet.render(true) });
     }
 
     /* -------------------------------------------- */
