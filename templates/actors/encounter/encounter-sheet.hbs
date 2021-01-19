@@ -34,6 +34,9 @@
                     <a class="item compendium-pack" data-pack="item" data-open="0" data-tab="inventory">{{ localize "COF.tabs.inventory" }}</a>
                     <a class="item compendium-pack" data-pack="encounters-path" data-open="0" data-tab="capacities">{{ localize "COF.tabs.paths" }} & {{ localize "COF.tabs.capacities" }}</a>
                     <a class="item" data-tab="description">{{ localize "COF.tabs.description" }}</a>
+                    {{#if options.isGM}}
+                        <a class="item" data-tab="effects">{{ localize "COF.tabs.effects" }}</a>
+                    {{/if}}
                 </nav>
                 {{!-- Sheet Body --}}
                 <section class="sheet-body">
@@ -57,6 +60,26 @@
                     <div class="tab description" data-group="primary" data-tab="description">
                         {{> "systems/cof/templates/actors/character/parts/character-description.hbs"}}
                     </div>
+                     {{#if options.isGM}}
+                        {{!-- Effects Tab --}}                    
+                        <div class="tab effects" data-group="primary" data-tab="effects">                      
+                            <a class="header-field-add add-effect" data-transfer="true">
+                            <i class="fa fa-plus">effect</i>
+                            </a><br>
+                            {{#each actor.effects as |effect id|}}
+                                <div>
+                                    <img src="{{effect.icon}}" width="32" height="32"/>
+                                    {{effect.label}}
+                                    <a class="header-field-add edit-effect" data-id="{{effect._id}}">
+                                        <i class="fa fa-edit"></i>
+                                    </a>
+                                    <a class="header-field-add delete-effect" data-id="{{effect._id}}">
+                                        <i class="fa fa-minus"></i>
+                                    </a>
+                                </div>
+                            {{/each}}
+                        </div>     
+                     {{/if}}            
                 </section>
             </div>
         </div>

@@ -75,9 +75,10 @@ export class CofRoll {
         const item = $(event.currentTarget).parents(".weapon");
         let label = item.find(".weapon-name").text();
         let mod = item.find(".weapon-mod").val();
+        let attackMod = actor.data.data.attacks.melee.mod;
         let critrange = item.find(".weapon-critrange").val();
         let dmg = item.find(".weapon-dmg").val();
-        return this.rollWeaponDialog(actor, label, mod, actor.data.data.globalRollBonus, critrange, dmg, 0, 'damage', [...game.user.targets][0]);
+        return this.rollWeaponDialog(actor, label, attackMod + mod, actor.data.data.globalRollBonus, critrange, dmg, 0, 'damage', [...game.user.targets][0]);
     }
 
     /**

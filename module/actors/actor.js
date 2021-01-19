@@ -96,14 +96,6 @@ export class CofActor extends Actor {
     /* -------------------------------------------- */
 
     _prepareBaseEncounterData(actorData) {
-        // STATS
-        let stats = actorData.data.stats;
-        // COMPUTE STATS FROM MODS
-        for (let stat of Object.values(stats)) {
-            stat.value = Stats.getStatValueFromMod(stat.mod);
-        }
-
-        // ATTACKS
         if (!actorData.data.attacks) {
             actorData.data.attacks = {
                 "melee": {
@@ -114,7 +106,7 @@ export class CofActor extends Actor {
                     "enabled": true,
                     "base": Math.ceil(actorData.data.nc.value) + actorData.data.stats.str.mod,
                     "bonus": 0,
-                    "mod": Math.ceil(actorData.data.nc.value) + actorData.data.stats.str.mod
+                    "mod": Math.ceil(actorData.data.nc.value) + actorData.data.stats.str.mod, 
                 },
                 "ranged": {
                     "key": "ranged",
@@ -124,7 +116,7 @@ export class CofActor extends Actor {
                     "enabled": true,
                     "base": Math.ceil(actorData.data.nc.value) + actorData.data.stats.dex.mod,
                     "bonus": 0,
-                    "mod": Math.ceil(actorData.data.nc.value) + actorData.data.stats.dex.mod
+                    "mod": Math.ceil(actorData.data.nc.value) + actorData.data.stats.dex.mod 
                 },
                 "magic": {
                     "key": "magic",
@@ -137,12 +129,31 @@ export class CofActor extends Actor {
                     "mod": Math.ceil(actorData.data.nc.value) + actorData.data.stats.int.mod
                 }
             }
-        } else {
-            let attacks = actorData.data.attacks;
-            for (let attack of Object.values(attacks)) {
-                attack.mod = attack.base + attack.bonus;
-            }
         }
+         // reset all buff values
+        this.initBuffs(actorData);
+        // mod capacities
+        this.applyCapacities(actorData, true);
+        // STATS
+        let stats = actorData.data.stats;
+        // COMPUTE STATS FROM MODS
+        for (let stat of Object.values(stats)) {
+            stat.value = Stats.getStatValueFromMod(stat.mod);
+        }
+    }
+
+    /* -------------------------------------------- */
+
+    _prepareDerivedEncounterData(actorData) {
+        // apply non base stat capacity buffs
+        this.applyCapacities(actorData, false);    
+        // ATTACKS
+        let attacks = actorData.data.attacks;
+        
+        for (let attack of Object.values(attacks)) {            
+            attack.mod = attack.base + attack.bonus + attack.buff;
+        }
+        
 
         // MODIFY TOKEN REGARDING SIZE
         switch (actorData.data.details.size) {
@@ -166,10 +177,6 @@ export class CofActor extends Actor {
                 break;
         }
     }
-
-    /* -------------------------------------------- */
-
-    _prepareDerivedEncounterData(actorData) {}
 
     /* -------------------------------------------- */
 
