@@ -85,10 +85,15 @@ export class Macros {
             if (!effect.activable) {
                 continue;
             }
-            const rank = actor.data.data.paths[cap.data.pathIndex].rank;
-            if (effect.rank > rank || rank > effect.maxRank) {
-                continue;
+
+            let rank = 0;
+            if(cap.data.pathIndex != undefined){
+                rank = actor.data.data.paths[cap.data.pathIndex].rank;
+                if (effect.rank > rank || rank > effect.maxRank) {
+                    continue;
+                }
             }
+            
             const source = canvas.tokens.controlled[0];
 
             if (effect.type == 'skill') {
@@ -105,7 +110,7 @@ export class Macros {
             let targets = [];
             if (effect.target === "selected") {
                 if (game.user.targets.size) {
-                    targets = [[...game.user.targets][0]];
+                    targets = [...game.user.targets];
                 }
             } else if (effect.target === "self") {
                 targets = [source];
@@ -122,8 +127,8 @@ export class Macros {
                 const ae = CONFIG.statusEffects.find(e => e.id === effect.value);
                 const value = CofRoll.replaceSpecialAttributes(effect.value, actor, cap).result;
                 let valueRoll = new Roll(value, actor.data.data);
-                if (effect.testRoll) {
-                } else {
+
+                const onSuccess = ()=>{
                     let durationFormula;
                     if (effect.duration) {
                         const duration = CofRoll.replaceSpecialAttributes(effect.duration, actor, cap).result;
@@ -155,6 +160,22 @@ export class Macros {
                             }
                         });
                     }
+                }
+
+                if (effect.testRoll) {
+                    let difficulty;
+                    if (game.user.targets.size) {
+                        const targeted = [...game.user.targets][0];
+                        difficulty = targeted.actor.data.data.attributes.def.value;
+                    }
+
+                    const testMod = CofRoll.replaceSpecialAttributes(effect.testMod, actor, cap).result;
+                    let roll = new Roll(testMod, actor.data.data);
+                    roll.roll();
+                    CofRoll.skillRollDialog(actor, cap.name, roll.total, actor.data.data.globalRollBonus, 
+                                            20, false, effect.testDice, difficulty, onSuccess /*onEnter = "submit"*/);
+                } else {
+                   onSuccess();
                 }
                 continue;
             }

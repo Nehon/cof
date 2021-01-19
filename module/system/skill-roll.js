@@ -48,6 +48,7 @@ export class CofSkillRoll {
             "flags.type": this._type,
             "flags.target": target ? target.data._id : undefined
         });
+        return this._isSuccess;
     }
 
     weaponRoll(actor, dmgFormula, target = undefined){

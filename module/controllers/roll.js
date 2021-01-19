@@ -239,10 +239,10 @@ export class CofRoll {
     /* ROLL DIALOGS                                 */
     /* -------------------------------------------- */
 
-    static async skillRollDialog(actor, label, mod, bonus, critrange, superior = false, dice = "1d20", onEnter = "submit") {
+    static async skillRollDialog(actor, label, mod, bonus, critrange, superior = false, dice = "1d20", difficulty, onSuccess, onEnter = "submit") {
         const rollOptionTpl = 'systems/cof/templates/dialogs/skillroll-dialog.hbs';
         if(superior && !dice.endsWith("kh")) dice = `2${dice.substring(1, dice.length)}kh`;
-        const options =  { mod: mod, bonus: bonus, critrange: critrange, dice:dice };
+        const options =  { mod: mod, bonus: bonus, critrange: critrange, dice:dice, difficulty:difficulty };
         const rollOptionContent = await renderTemplate(rollOptionTpl, options);
         let d = new Dialog({
             title: label,
@@ -264,7 +264,9 @@ export class CofRoll {
                         const m = html.find('input#mod').val();
                         const b = html.find('input#bonus').val();
                         let r = new CofSkillRoll(label, dice, m, b, diff, critrange);
-                        r.roll(actor);
+                        if(r.roll(actor) && onSuccess){
+                            onSuccess();
+                        }
                     }
                 }
             },
