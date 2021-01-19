@@ -31,8 +31,7 @@ Hooks.on('applyActiveEffect', (actor, change) => {
 export class CofEffect extends ActiveEffect {
 
       /** @override */
-      prepareData() {          
-        // This can go away eventually an be handled during effect creation.
+      prepareData() {
         //  - an effect that affects a "stat" needs to be applied first also mods 
         //    will have to be recomputed when the effect is applied. So we force its mode to 0 (custom) and force priority to 0.
         //  - Effects that affects the other attributes are applied with lower priority (5)

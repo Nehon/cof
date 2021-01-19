@@ -12,7 +12,6 @@ export class CofSkillRoll {
         this._critrange = critrange;
         this._totalBonus = parseInt(this._mod) + parseInt(this._bonus);
         this._formula = (this._totalBonus === 0) ? this._dice : `${this._dice} + ${this._totalBonus}`;
-        this._critrange = critrange;
         this._isCritical = false;
         this._isFumble = false;
         this._isSuccess = false;
@@ -59,7 +58,7 @@ export class CofSkillRoll {
             return;
         }
         let r = new CofDamageRoll(this._label, dmgFormula, this._isCritical, this._type);
-        r.roll(actor, target);
+        r.roll(actor, target?[target]:undefined);
     }
 
     /* -------------------------------------------- */

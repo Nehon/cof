@@ -22,7 +22,14 @@ export class CofActor extends Actor {
         let actorData = this.data;
         if (actorData.type === "encounter") this._prepareDerivedEncounterData(actorData);
         else this._prepareDerivedCharacterData(actorData);
+        this.items = this._prepareOwnedItems(this.data.items || []);
     }
+
+    /** @override */
+    prepareEmbeddedEntities() {    
+        this.effects = this._prepareActiveEffects(this.data.effects || []);
+    }
+
 
     /* -------------------------------------------- */
 
@@ -49,6 +56,12 @@ export class CofActor extends Actor {
         attacks.melee.buff = 0;
         attacks.ranged.buff = 0;
         attacks.magic.buff = 0;
+        attacks.melee.superior = false;
+        attacks.ranged.superior = false;
+        attacks.magic.superior = false;
+        attacks.melee.critRangeBonus = 0;
+        attacks.ranged.critRangeBonus = 0;
+        attacks.magic.critRangeBonus = 0;
 
         actorData.data.globalRollBonus = 0;
     }

@@ -108,7 +108,9 @@
             "enabled": true,
             "base": 1,
             "bonus": 0,
-            "mod": 1
+            "mod": 1,
+            "critRangeBonus": 0,
+            "superior": false            
           },
           "ranged" : {
             "key" : "ranged",
@@ -118,7 +120,9 @@
             "enabled": true,
             "base": 1,
             "bonus": 0,
-            "mod": 1
+            "mod": 1,
+            "critRangeBonus": 0,
+            "superior": false
           },
           "magic" : {
             "key" : "magic",
@@ -128,7 +132,9 @@
             "enabled": true,
             "base": 1,
             "bonus": 0,
-            "mod": 1
+            "mod": 1,
+            "critRangeBonus": 0,
+            "superior": false
           }
         }
       },
@@ -393,6 +399,7 @@
         "values": null,
         "activable": false,
         "testRoll": false,
+        "testDice": "1d20",
         "testMod": null,        
         "duration": null,
         "nbUses": null,

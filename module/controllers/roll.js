@@ -54,14 +54,15 @@ export class CofRoll {
      */
     static rollWeapon(data, actor, event) {
         const li = $(event.currentTarget).parents(".item");
-        let item = actor.getOwnedItem(li.data("itemId"));
-        item.prepareData();
+        let item = actor.getOwnedItem(li.data("itemId"));      
         const itemData = item.data;
         let label = itemData.name;
         let mod = itemData.data.mod;
         let critrange = itemData.data.critrange;
         let dmg = itemData.data.dmg;
-        return this.rollWeaponDialog(actor, label, mod, actor.data.data.globalRollBonus, critrange, dmg, 0, 'damage', [...game.user.targets][0]);
+        const key = itemData.data.skill.replace("@", "data.").replace(".mod", ".superior");
+        const superior = eval(key);
+        return this.rollWeaponDialog(actor, label, mod, actor.data.data.globalRollBonus, critrange, dmg, 0, 'damage', [...game.user.targets][0], superior);
     }
 
     /**
@@ -100,8 +101,7 @@ export class CofRoll {
      */
     static rollSpell(data, actor, event) {
         const li = $(event.currentTarget).parents(".item");
-        let item = actor.getOwnedItem(li.data("itemId"));
-        item.prepareData();
+        let item = actor.getOwnedItem(li.data("itemId"));        
         let label = item.data.name;
         let mod = item.data.data.mod;
         let critrange = item.data.data.critrange;
@@ -191,6 +191,44 @@ export class CofRoll {
         return true;
     }
 
+
+    static replaceSpecialAttributes(formula, actor, capacity) {
+        let superior = false;
+        if(!formula){
+            return "0";
+        }
+        let result = formula;
+        if (result.indexOf("@rank") >= 0) {
+            const rank = actor.data.data.paths[capacity.data.pathIndex].rank;
+            result = result.replace(/@rank/g, rank);
+        }
+        if (result.indexOf("@shield.def") >= 0) {
+            const shield = actor.items.find(i => i.data.data.subtype === "shield" && i.data.data.worn);
+            let shieldDef = 0;
+            if (!shield) {
+                ui.notifications.warn(`${game.i18n.localize("COF.notification.NoShieldEquiped")}`);
+            } else {
+                shieldDef = shield.data.data.def;
+            }
+            result = result.replace(/@shield.def/g, shieldDef);
+        }
+
+        const wRE = /@weapon\.([^+-\/*\s)(]*)/g
+        const matches = [...result.matchAll(wRE)];
+        if(matches && matches.length) {
+            const weapon = actor.items.find(i => i.data.data.subtype === "melee" && i.data.data.worn && i.data.data.properties.weapon );
+            superior = eval(`actor.data.data.${weapon.data.data.skill.replace("@","").replace("mod","superior")}`);
+            for (const match of matches) {
+                for (let i = 1; i < match.length; i += 2) {
+                    result = result.replace(match[i-1], weapon.data.data[match[i]]);                
+                }    
+            }
+            
+        }
+        
+        return {result:result, superior, superior};
+    }
+
     /* -------------------------------------------- */
     /* ROLL DIALOGS                                 */
 
@@ -201,9 +239,11 @@ export class CofRoll {
     /* ROLL DIALOGS                                 */
     /* -------------------------------------------- */
 
-    static async skillRollDialog(actor, label, mod, bonus, critrange, superior = false, onEnter = "submit") {
+    static async skillRollDialog(actor, label, mod, bonus, critrange, superior = false, dice = "1d20", onEnter = "submit") {
         const rollOptionTpl = 'systems/cof/templates/dialogs/skillroll-dialog.hbs';
-        const rollOptionContent = await renderTemplate(rollOptionTpl, { mod: mod, bonus: bonus, critrange: critrange, superior: superior });
+        if(superior && !dice.endsWith("kh")) dice = `2${dice.substring(1, dice.length)}kh`;
+        const options =  { mod: mod, bonus: bonus, critrange: critrange, dice:dice };
+        const rollOptionContent = await renderTemplate(rollOptionTpl, options);
         let d = new Dialog({
             title: label,
             content: rollOptionContent,
@@ -234,7 +274,7 @@ export class CofRoll {
         return d.render(true);
     }
 
-    static async rollWeaponDialog(actor, label, mod, bonus, critrange, dmgFormula, dmgBonus, type = 'damage', target = undefined, onEnter = "submit") {
+    static async rollWeaponDialog(actor, label, mod, bonus, critrange, dmgFormula, dmgBonus, type = 'damage', target = undefined, superior = false, dice = "1d20", onEnter = "submit") {
         const rollOptionTpl = 'systems/cof/templates/dialogs/roll-weapon-dialog.hbs';
         let diff = null;
         let targetName = undefined;
@@ -243,6 +283,7 @@ export class CofRoll {
             targetName = Traversal.getTokenName(target);
         }
 
+        if(superior && !dice.endsWith("kh")) dice = `2${dice.substring(1, dice.length)}kh`;
         const rollOptionContent = await renderTemplate(rollOptionTpl, {
             mod: mod,
             bonus: bonus,
@@ -252,7 +293,8 @@ export class CofRoll {
             dmgBonus: dmgBonus,
             dmgCustomFormula: "",
             type: type,
-            targetName: targetName
+            targetName: targetName,
+            dice: dice
         });
 
         let d = new Dialog({
