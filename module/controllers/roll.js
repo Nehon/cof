@@ -198,7 +198,10 @@ export class CofRoll {
         if(!formula){
             return "0";
         }
-        let result = formula;
+        const arr = formula.split(">");
+        let result = arr[0].trim();
+        let difficulty = arr.length>1? arr[1].trim():undefined;
+
         if (result.indexOf("@rank") >= 0) {
             const rank = actor.data.data.paths[capacity.data.pathIndex].rank;
             result = result.replace(/@rank/g, rank);
@@ -227,7 +230,7 @@ export class CofRoll {
             
         }
         
-        return {result:result, superior, superior};
+        return {result:result, superior: superior, difficulty: difficulty};
     }
 
     /* -------------------------------------------- */
@@ -277,12 +280,19 @@ export class CofRoll {
         return d.render(true);
     }
 
-    static async rollWeaponDialog(actor, label, mod, bonus, critrange, dmgFormula, dmgBonus, type = 'damage', target = undefined, superior = false, dice = "1d20", onEnter = "submit") {
+    static async rollWeaponDialog(actor, label, mod, bonus, critrange, dmgFormula, dmgBonus, type = 'damage', target = undefined, superior = false, dice = "1d20", difficulty, onEnter = "submit") {
         const rollOptionTpl = 'systems/cof/templates/dialogs/roll-weapon-dialog.hbs';
         let diff = null;
         let targetName = undefined;
-        if (game.settings.get("cof", "displayDifficulty") && target) {
-            diff = target.actor.data.data.attributes.def.value;
+
+        if (game.settings.get("cof", "displayDifficulty")) {
+            if(difficulty){
+                diff = difficulty;
+            }else if(target){
+                diff = target.actor.data.data.attributes.def.value;
+            }            
+        }
+        if(target){
             targetName = Traversal.getTokenName(target);
         }
 

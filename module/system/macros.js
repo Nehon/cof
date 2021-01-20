@@ -1,5 +1,6 @@
 import { Capacity } from "../controllers/capacity.js";
 import { CofRoll } from "../controllers/roll.js";
+import { CofItem } from "../items/item.js";
 import { Traversal } from "../utils/traversal.js";
 import { CofBuffRoll } from "./buff-roll.js";
 
@@ -76,8 +77,8 @@ export class Macros {
             return ui.notifications.warn(`${game.i18n.localize("COF.notification.NoCapacity")}: "${itemName}"`);
         }
         const effects = cap.data.effects;
-        if (!effects) {
-            // log the text in the chat?
+        if (!effects || !effects["0"]) {
+            CofItem.logItem(cap, actor);
             return;
         }
         for (let key in effects) {
@@ -101,7 +102,7 @@ export class Macros {
                     const testMod = CofRoll.replaceSpecialAttributes(effect.testMod, actor, cap).result;
                     let roll = new Roll(testMod, actor.data.data);
                     roll.roll();
-                    await CofRoll.skillRollDialog(actor, cap.name, roll.total, actor.data.data.globalRollBonus, 20, false, effect.testDice/*onEnter = "submit"*/);
+                    await CofRoll.skillRollDialog(actor, cap.name, roll.total, actor.data.data.globalRollBonus, 20, false, effect.testDice, testMod.difficulty/*onEnter = "submit"*/);
                     continue;
                 }
             }
@@ -188,7 +189,7 @@ export class Macros {
                     let testRoll = new Roll(testMod.result, actor.data.data);
                     //let formula = testRoll.formula.replace(/ /g, "");
                     testRoll.roll();
-                    await CofRoll.rollWeaponDialog(actor, cap.name, testRoll.total, actor.data.data.globalRollBonus, 20, dmgRoll.formula, 0, effect.type, targets ? targets[0] : undefined, testMod.superior, effect.testDice/* ,onEnter = "submit"*/);
+                    await CofRoll.rollWeaponDialog(actor, cap.name, testRoll.total, actor.data.data.globalRollBonus, 20, dmgRoll.formula, 0, effect.type, targets ? targets[0] : undefined, testMod.superior, effect.testDice, testMod.difficulty/* ,onEnter = "submit"*/);
                 } else {
                     await CofRoll.rollDamageDialog(actor, cap.name, dmgRoll._formula, 0, effect.type, false, targets/* onEnter = "submit"*/);
                 }
@@ -203,7 +204,7 @@ export class Macros {
                     let testRoll = new Roll(testMod.result, actor.data.data);
                     //let formula = testRoll.formula.replace(/ /g, "");
                     testRoll.roll();
-                    await CofRoll.rollWeaponDialog(actor, cap.name, testRoll.total, actor.data.data.globalRollBonus, 20, dmgRoll.formula, 0, effect.type, targets ? targets[0] : undefined, testMod.superior, effect.testDice/* ,onEnter = "submit"*/);
+                    await CofRoll.rollWeaponDialog(actor, cap.name, testRoll.total, actor.data.data.globalRollBonus, 20, dmgRoll.formula, 0, effect.type, targets ? targets[0] : undefined, testMod.superior, effect.testDice, testMod.difficulty/* ,onEnter = "submit"*/);
 
                 } else {
                     await CofRoll.rollDamageDialog(actor, cap.name, dmgRoll._formula, 0, "heal", false, targets /* ,critical = false, onEnter = "submit"*/);
