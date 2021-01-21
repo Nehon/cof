@@ -207,7 +207,7 @@ export class CofActor extends Actor {
     /* -------------------------------------------- */
 
     getActiveCapacities(items) {
-        return items.filter(i => i.type === "capacity" && i.data.rank)
+        return items.filter(i => i.type === "capacity")
     }
 
     getCapacity(items, id){
