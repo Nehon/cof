@@ -13,6 +13,7 @@
 import {CharacterGeneration} from "../system/chargen.js";
 import { CofSkillRoll } from "../system/skill-roll.js";
 import { CofDamageRoll } from "../system/dmg-roll.js";
+import { CofBuffRoll } from "../system/buff-roll.js";
 
 Hooks.on("chatMessage", (html, content, msg) => {
     let regExp;
@@ -44,5 +45,6 @@ Hooks.on("chatMessage", (html, content, msg) => {
 
 Hooks.on('renderChatMessage', (message, html, data) => {   
     CofSkillRoll.handleFateReroll(message, html, data);
+    CofBuffRoll.handleApplyBuffButton(message, html, data);
     CofDamageRoll.handleApplyDamageButton(message, html, data);
 });

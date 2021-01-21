@@ -1,4 +1,3 @@
-import { Capacity } from "../controllers/capacity.js";
 import { CofRoll } from "../controllers/roll.js";
 import { CofItem } from "../items/item.js";
 import { Traversal } from "../utils/traversal.js";
@@ -124,8 +123,7 @@ export class Macros {
                 targets = canvas.tokens.placeables;
             }
 
-            if (effect.type == 'buff') {
-                const ae = CONFIG.statusEffects.find(e => e.id === effect.value);
+            if (effect.type == 'buff') {                
                 const value = CofRoll.replaceSpecialAttributes(effect.value, actor, cap).result;
                 let valueRoll = new Roll(value, actor.data.data);
 
@@ -137,30 +135,12 @@ export class Macros {
                         durationFormula = r.formula;
                     }
 
-                    let roll = new CofBuffRoll(cap.name, valueRoll.formula, effect.stat, durationFormula);
-                    roll.roll(actor, targets);
-                    let activeEffect;
-                    if (ae) {
-                        activeEffect = Capacity.makeActiveEffect(cap, effect, 0, roll.duration);
-                        activeEffect.icon = ae.icon;
-                        activeEffect.label = game.i18n.localize(ae.label);
-                        activeEffect["flags.core.statusId"] = ae.id;
-                    } else {
-                        activeEffect = Capacity.makeActiveEffect(cap, effect, roll.total, roll.duration);
-                    }
-                    if (activeEffect && targets) {
-                        targets.forEach(trg => {
-                            // TODO maybe record the starting time so that if the application is cloased before the timeout is called we can clean up / resume.
-                            const prom = trg.actor.createEmbeddedEntity("ActiveEffect", activeEffect);
-                            if (!game.combat) {
-                                prom.then((eff) => {
-                                    setTimeout(() => {
-                                        trg.actor.deleteEmbeddedEntity("ActiveEffect", eff._id);
-                                    }, roll.duration * 10000);
-                                });
-                            }
-                        });
-                    }
+                    let roll = new CofBuffRoll(cap.name, valueRoll.formula, effect, durationFormula);
+                    roll.roll(actor, targets,{
+                        name: cap.name,
+                        img: cap.img,
+                        "data.key": cap.data.key
+                    });                   
                 }
 
                 if (effect.testRoll) {

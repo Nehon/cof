@@ -346,6 +346,7 @@
   "COF.message.missingTarget": "The target is nowhere to be found.",
   "COF.message.apply.damage": "Apply damage",
   "COF.message.apply.heal": "Apply heal",
+  "COF.message.apply.buff": "Apply buff",
   "COF.message.dissipate": "dissipates for",
   "COF.message.for": "For",
   "COF.message.rounds": "rounds",

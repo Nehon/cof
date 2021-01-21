@@ -75,8 +75,7 @@ export class CofDamageRoll {
                 return;
             }            
 
-            if ((flags.type !== 'heal' && !game.user.isGM)
-                || (flags.type==='heal' && !message.isAuthor && !game.user.isGM)) {
+            if (!game.user.isGM) {
                 ui.notifications.error(game.i18n.localize("COF.message.notAllowedButton"));
                 return;
             }
@@ -93,10 +92,11 @@ export class CofDamageRoll {
                 const roll = message.roll;
 
                 target.actor.applyDamage(flags.type === 'damage' ? roll.total : -roll.total);
-                message.update({
-                    "flags.applied": true
-                });   
+               
             }
+            message.update({
+                "flags.applied": true
+            });   
         });
     }
 

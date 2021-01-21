@@ -346,6 +346,7 @@
   "COF.message.missingTarget": "La cible est introuvable",
   "COF.message.apply.damage": "Appliquer les dommages",
   "COF.message.apply.heal": "Appliquer les soins",
+  "COF.message.apply.buff": "Appliquer l'amélioration",
   "COF.message.dissipate": "se dissipe pour",
   "COF.message.for": "Pour",
   "COF.message.rounds": "tours",
