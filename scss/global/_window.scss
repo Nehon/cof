@@ -44,6 +44,9 @@
   z-index: 1;
   opacity: 0;
   transition: opacity 0.3s;
+  font-size:14px;
+  font-weight:normal;
+  margin:0;
 }
 
 .big-tooltip{
@@ -85,6 +88,13 @@
     left: 110%;
 }
 
+.tooltip-bottom {
+    top: 100%;
+    left: 50%;
+    margin-right: -50%;
+    transform: translate(-50%, 0%)
+}
+
 .tooltip-move-up {
     top: -26px;  
 }
@@ -109,6 +119,17 @@
     border-width: 5px;
     border-style: solid;
     border-color: transparent #555 transparent transparent;
+}
+
+.tooltip-bottom::after {
+    content: "";
+    position: absolute;
+    bottom: 100%;
+    left: 50%;
+    margin-left: -5px;
+    border-width: 5px;
+    border-style: solid;
+    border-color: transparent transparent #555 transparent;
 }
 
 /* ----------------------------------------- */

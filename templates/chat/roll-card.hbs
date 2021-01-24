@@ -1,0 +1,67 @@
+<h2>{{name}}</h2>
+
+{{#if (and global global.skill)}}
+<div class="flexrow flex-center message-skill-roll">
+<div class="flex1"><img  style="border:none" src="{{img}}" width="48" height="48" /></div>
+<h1 class="flex3 {{getClass global.skill}} tooltip" >{{global.skill.total}}    
+    <span class="tooltiptext tooltip-bottom">{{safeString global.skill.result}}</span>
+    <i class="fas overlay"></i>
+</h1>
+<div class="flex1">
+    {{#if (not hideFate)}}
+     <button class="chat-message-fate-button tooltip" >
+                <i class="fas fa-star" style="vertical-align:top;"> {{localize "COF.message.fate"}}</i>
+                <span class="tooltiptext tooltip-left" style="top:-18px;">{{localize "COF.message.fateText"}} <br> <span style="font-size:larger">{{fateValue}} / {{fateMax}}</span></span>
+    </button>
+    {{/if}}
+</div>
+</div>
+{{else}}
+<div class="center"><img  style="border:none" src="{{img}}" width="48" height="48" /></div>
+{{/if}}
+{{#if displayTargets}}
+    <hr/>
+    {{#forin targets "target"}}
+    <div class="flexrow target">
+        <div class="flex2"><img style="border:none;vertical-align: bottom;" src="{{target.img}}" width="24" height="24" /><i class="overlay name">{{target.name}}</i></div>
+        <div class="flex5 flexrow right">        
+            {{#if (and target.skill (not (and ../global ../global.skill)))}}
+                <h1 class="flex3 center baseline {{getClass target.skill}} tooltip" >{{target.skill.total}}
+                    <span class="tooltiptext {{#if target.skill.isSuccess}}tooltip-bottom{{else}}tooltip-left{{/if}}">{{safeString target.skill.result}}</span>
+                    <i class="fas overlay"></i>
+                </h1>   
+            {{else}}    
+            <div class="flex3"></div>
+            {{/if}}        
+            {{#if target.uncheckedEffects}}
+                <div class="flex3 tooltip center baseline"><img style="border:none;vertical-align: bottom;border-radius: 12px;" src="{{target.uncheckedEffects.icon}}" width="24" height="24" />
+                    <span class="tooltiptext tooltip-left">{{safeString target.uncheckedEffects.tooltip}}</span>
+                    <i class="overlay" style=";font-size:0.8em">EFF</i>
+                </div>            
+            {{else}}    
+                {{#if (and target.effects (and target.skill target.skill.isSuccess))}}
+                    <div class="flex3 tooltip center baseline"><img style="border:none;vertical-align: bottom;border-radius: 12px;" src="{{target.effects.icon}}" width="24" height="24" />
+                        <span class="tooltiptext tooltip-left">{{safeString target.effects.tooltip}}</span>                
+                        <i class="overlay" style=";font-size:0.8em">EFF</i>
+                    </div>            
+                {{else}}    
+                    <div class="flex3"></div>
+                {{/if}}        
+            {{/if}}        
+            {{#if (and target.damage (or (or (not target.skill) target.skill.isSuccess) target.forceDisplay))}}
+                <h1 class="flex3 {{target.damage.type}} tooltip center flexend" ><span class="signed">{{target.damage.total}}</span>
+                    <span class="tooltiptext tooltip-left">{{safeString target.damage.result}}</span>
+                    <i class="overlay">{{localize "COF.attributes.hp.abbrev"}}</i>
+                </h1>
+            {{else}}    
+                <div class="flex3"></div>
+            {{/if}}        
+        </div>
+    </div> 
+    {{/forin}}
+{{/if}}
+{{#if (or (or (not global.skill) global.skill.isSuccess) global.uncheckedEffects)}}    
+    <button class="chat-message-apply-button" style="line-height: 20px;margin-top:3px" >
+        <i class="fas fa-check-circle" style="vertical-align:middle;"> {{localize "COF.message.apply"}}</i>
+    </button
+{{/if}}

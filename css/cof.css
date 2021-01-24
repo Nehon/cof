@@ -222,6 +222,9 @@ strong {
   -webkit-transition: opacity 0.3s;
   -o-transition: opacity 0.3s;
   transition: opacity 0.3s;
+  font-size: 14px;
+  font-weight: normal;
+  margin: 0;
 }
 
 .big-tooltip {
@@ -264,6 +267,15 @@ strong {
   left: 110%;
 }
 
+.tooltip-bottom {
+  top: 100%;
+  left: 50%;
+  margin-right: -50%;
+  -webkit-transform: translate(-50%, 0%);
+  -ms-transform: translate(-50%, 0%);
+  transform: translate(-50%, 0%);
+}
+
 .tooltip-move-up {
   top: -26px;
 }
@@ -288,6 +300,17 @@ strong {
   border-width: 5px;
   border-style: solid;
   border-color: transparent #555 transparent transparent;
+}
+
+.tooltip-bottom::after {
+  content: "";
+  position: absolute;
+  bottom: 100%;
+  left: 50%;
+  margin-left: -5px;
+  border-width: 5px;
+  border-style: solid;
+  border-color: transparent transparent #555 transparent;
 }
 
 /* ----------------------------------------- */
@@ -610,7 +633,7 @@ strong {
 }
 
 .message-header h2.critical {
-  color: green;
+  color: #15ff00;
   font-weight: bold;
 }
 
@@ -620,18 +643,155 @@ strong {
 }
 
 .message-header h2.success {
-  color: darkgreen;
+  color: #069006;
   font-weight: bold;
 }
 
 .message-header h2.failure {
-  color: darkred;
+  color: #b10505;
   font-weight: bold;
 }
 
 .message-header h2.roll {
   color: darkslategrey;
   font-weight: bold;
+}
+
+.message-skill-roll h1 {
+  border: none;
+  font-size: 2.8em;
+  margin: 0.2rem 0 0.2rem;
+  text-shadow: 0px 0px 1px black;
+}
+
+.target {
+  border: 1px #999 solid;
+  border-radius: 3px;
+  background-color: rgba(0, 0, 0, 0.1);
+  margin-top: 2px;
+  padding: 2px;
+  -webkit-box-align: center;
+  -ms-flex-align: center;
+  align-items: center;
+}
+
+.target h1 {
+  border: none;
+  margin: 0 0 0 0;
+  padding: 0 0 0 0;
+  line-height: 1;
+  text-shadow: 0px 0px 1px black;
+}
+
+.target .overlay {
+  color: darkslategrey;
+  font-size: 0.4em;
+  opacity: 0.9;
+  font-weight: bolder;
+  margin-left: -5px;
+}
+
+.target .overlay.name {
+  color: #fff;
+  margin-left: -10px;
+  font-size: 0.9em;
+  text-shadow: 0px 0px 3px black;
+  max-width: 62px;
+  opacity: 1;
+  display: -webkit-inline-box;
+  display: -ms-inline-flexbox;
+  display: inline-flex;
+  white-space: nowrap;
+  /* overflow: hidden; */
+  -o-text-overflow: ellipsis;
+  text-overflow: ellipsis;
+}
+
+.target .tooltip-left {
+  top: -5px;
+  bottom: auto;
+  right: 60px;
+}
+
+.target .baseline {
+  -webkit-box-align: baseline;
+  -ms-flex-align: baseline;
+  align-items: baseline;
+}
+
+.target .flexend {
+  -webkit-box-align: end;
+  -ms-flex-align: end;
+  align-items: flex-end;
+}
+
+.critical {
+  color: #15ff00;
+  font-weight: bold;
+}
+
+.critical .overlay:before {
+  content: "\f005";
+  color: #8aff80;
+}
+
+.fumble {
+  color: red;
+  font-weight: bold;
+}
+
+.fumble .overlay:before {
+  content: "\f0e7";
+  color: #ff4d4d;
+}
+
+.success {
+  color: #069006;
+  font-weight: bold;
+}
+
+.success .overlay:before {
+  content: "\f00c";
+  color: #08c108;
+}
+
+.failure {
+  color: #b10505;
+  font-weight: bold;
+}
+
+.failure .overlay:before {
+  content: "\f00d";
+  color: #f80a0a;
+}
+
+.roll {
+  color: darkslategrey;
+  font-weight: bold;
+}
+
+.damage {
+  color: orangered;
+  font-weight: bold;
+}
+
+.damage .signed:before {
+  content: "-";
+}
+
+.heal {
+  color: #00db80;
+  font-weight: bold;
+}
+
+.heal .signed:before {
+  content: "+";
+}
+
+.overlay {
+  font-size: 0.5em;
+  margin-left: -16px;
+  text-shadow: 0px 0px 2px black;
 }
 
 /* Styles limited to cof sheets */

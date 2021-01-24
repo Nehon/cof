@@ -31,11 +31,12 @@ $borderGroove: 2px groove #eeede0;
 $borderGrooveGreen: 2px groove #003700;
 //$borderGrooveOriginal: 2px groove #eeede0;
 
-$colorSuccess : darkgreen;
-$colorCritical : green;
-$colorFailure : darkred;
+$colorSuccess : #069006;
+$colorCritical : rgb(21, 255, 0);
+$colorFailure : rgb(177, 5, 5);
 $colorFumble : red;
 $colorDamage : orangered;
+$colorHeal : rgb(0, 219, 128);
 $colorRoll : darkslategrey;
 
 /* ----------------------------------------- */

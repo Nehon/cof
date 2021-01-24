@@ -24,3 +24,130 @@
     font-weight: bold;
   }
 }
+
+.message-skill-roll {
+  h1{
+    border: none;
+    font-size: 2.8em;
+    margin: 0.2rem 0 0.2rem;
+    text-shadow: 0px 0px 1px rgba(0,0,0,1);
+  } 
+}
+
+.target{
+  border: 1px #999 solid;
+  border-radius: 3px;
+  background-color: rgba(0, 0, 0, 0.1);
+  margin-top:2px;
+  padding:2px;
+  align-items: center;
+  h1{
+    border: none;
+    margin: 0 0 0 0;
+    padding: 0 0 0 0;
+    line-height: 1;
+    text-shadow: 0px 0px 1px rgba(0,0,0,1);
+  }  
+  .overlay {  
+     color: $colorRoll;
+     font-size: 0.4em;
+     opacity: 0.9;
+     //text-shadow: none;
+     font-weight: bolder;
+    margin-left: -5px;
+  }
+  .overlay.name{
+    color: #fff;
+    margin-left: -10px;
+    font-size: 0.9em;
+    text-shadow: 0px 0px 3px black;
+    max-width: 62px;
+    opacity: 1;
+    display: inline-flex;
+    white-space: nowrap;
+    /* overflow: hidden; */
+    -o-text-overflow: ellipsis;
+    text-overflow: ellipsis;
+  }
+  .tooltip-left{
+    top: -5px;
+    bottom: auto;
+    right: 60px;
+  }
+  .baseline{
+    align-items: baseline;
+  }
+  .flexend{
+    align-items: flex-end;
+  }
+}
+
+.critical{
+  color: $colorCritical;
+  font-weight: bold;  
+  .overlay:before {
+    content: "\f005";
+    color: lighten($colorCritical, 25%);
+  }   
+}
+.fumble{
+  color: $colorFumble;
+  font-weight: bold;
+  .overlay:before {
+     content: "\f0e7";
+     color: lighten($colorFumble, 15%);
+  }   
+}
+.success{
+  color: $colorSuccess;
+  font-weight: bold;
+  .overlay:before {
+    content: "\f00c";
+    color: lighten($colorSuccess, 10%);
+  }
+}
+.failure{
+  color: $colorFailure;
+  font-weight: bold;
+  .overlay:before {
+    content: "\f00d";
+    color: lighten($colorFailure, 15%);
+  }
+}
+.roll{
+  color: $colorRoll;
+  font-weight: bold;
+}
+
+.damage{
+  color: $colorDamage;
+  font-weight: bold;
+  .signed:before{
+    content: "-"
+  }
+} 
+
+.heal{
+  color: $colorHeal;
+  font-weight: bold;
+  .signed:before{
+    content: "+"
+  }
+} 
+
+.overlay{
+  font-size: 0.5em;
+  margin-left: -16px;
+  //-webkit-text-stroke: 1px #000;
+  text-shadow: 0px 0px 2px rgba(0,0,0,1);
+} 
+
+// .fa-certificate:before {
+//     content: "\f0a3";
+// }
+// .fa-star:before {
+//     content: "\f005";
+// }
+// .fa-bolt:before {
+//     content: "\f0e7";
+// }

@@ -75,11 +75,6 @@ export class CofActor extends Actor {
         this.applyCapacities(actorData, true);
         // compute the modifiers        
         this.computeMods(actorData);    
-
-        // TODO Active effects are applied there in the prepareData flow.
-        //  If an active effect has an influence on the mods this might not work properly.
-        //  I'd need to do a first pass of applyActiveEffect for just mods before computing the mods
-        //  this would mean to override the base Actor class prepareData.
     }
 
     /* -------------------------------------------- */
@@ -176,6 +171,10 @@ export class CofActor extends Actor {
             default:
                 break;
         }
+        let attributes = actorData.data.attributes;
+        attributes.init.value = attributes.init.base + attributes.init.buff;
+        attributes.def.value = attributes.def.base + attributes.def.buff;
+        attributes.dr.value = attributes.dr.base.value + attributes.dr.buff;
     }
 
     /* -------------------------------------------- */

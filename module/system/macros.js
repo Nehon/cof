@@ -1,7 +1,6 @@
 import { CofRoll } from "../controllers/roll.js";
 import { CofItem } from "../items/item.js";
-import { Traversal } from "../utils/traversal.js";
-import { CofBuffRoll } from "./buff-roll.js";
+import { Capacity } from "../controllers/capacity.js";
 
 export class Macros {
 
@@ -44,18 +43,32 @@ export class Macros {
     };
 
     static rollItemMacro = function (itemId, itemName, itemType) {
-        const actor = this.getSpeakersActor()
+        const actor = Macros.getSpeakersActor()
         let item;
         item = actor ? actor.items.find(i => i.name === itemName && i.type == itemType) : null;
         if (!item) return ui.notifications.warn(`${game.i18n.localize("COF.notification.MacroItemMissing")}: "${itemName}"`);
         const itemData = item.data;
         if (itemData.data.properties.weapon) {
             if (itemData.data.worn) {
-                let label = itemData.name;
-                let mod = itemData.data.mod;
-                let critrange = itemData.data.critrange;
-                let dmg = itemData.data.dmg;
-                CofRoll.rollWeaponDialog(actor, label, mod, actor.data.data.globalRollBonus, critrange, dmg, 0, 'damage', [...game.user.targets][0]);
+                const key = itemData.data.skill.replace("@", "actor.data.data.").replace(".mod", ".superior");
+                const superior = eval(key);
+
+                const action = {
+                    skillRoll: {
+                        superior: superior,
+                        mod: itemData.data.mod,
+                        dice: "1d20",
+                        critRange: itemData.data.critrange,
+                        target: "selected"
+                    },
+
+                    damageRoll: {
+                        formula: itemData.data.dmg,
+                        type: "damage",
+                        target: "selected"
+                    }
+                };
+                CofRoll.rollDialog(actor, actor.token, itemData.name, itemData.img, action);
             }
             else return ui.notifications.warn(`${game.i18n.localize("COF.notification.MacroItemUnequiped")}: "${itemName}"`);
         }
@@ -64,9 +77,8 @@ export class Macros {
         }
     };
 
-    
     static rollCapacityMacro = async function (itemKey, itemName) {
-        const actor = this.getSpeakersActor()
+        const actor = Macros.getSpeakersActor()
         if (!actor) {
             return ui.notifications.warn(`${game.i18n.localize("COF.notification.NoActorSelected")}`);
         }
@@ -80,6 +92,16 @@ export class Macros {
             CofItem.logItem(cap, actor);
             return;
         }
+
+        // register actions and effects for each type of targets. + one entry for the skill roll
+        let action = {
+            skillRoll: undefined, // optional skill roll
+            damageRoll: undefined, // optional damage roll. if SkillRoll damage are only applied on success.
+            effects: new Map(), // ActiveEffects to apply only when a skill roll succeeded for each type of targets.
+            uncheckedEffects: new Map(), // ActiveEffect data map to apply in any case when the capacity is triggerred for each type of targets.
+        }
+        // only activable effects are considered, all effects found after a skill roll are considered applied only if the skill roll succeeded.
+        // gather effects
         for (let key in effects) {
             const effect = effects[key];
             if (!effect.activable) {
@@ -87,111 +109,68 @@ export class Macros {
             }
 
             let rank = 0;
-            if(cap.data.pathIndex != undefined){
+            if (cap.data.pathIndex != undefined) {
                 rank = actor.data.data.paths[cap.data.pathIndex].rank;
                 if (effect.rank > rank || rank > effect.maxRank) {
                     continue;
                 }
             }
-            
-            const source = canvas.tokens.controlled[0];
+
+            if (effect.testRoll) {
+                if (action.skillRoll != undefined) {
+                    ui.notifications.warn(`${game.i18n.localize("COF.notification.multipleSkillRoll")}: "${cap.name}"`);
+                }
+                action.skillRoll = CofRoll.replaceSpecialAttributes(effect.testMod, actor, cap);
+                let roll = new Roll(action.skillRoll.formula, actor.data.data);
+                roll.roll();
+                action.skillRoll.mod = roll.total;
+                action.skillRoll.dice = effect.testDice
+                action.skillRoll.target = effect.target.length ? effect.target : undefined;
+                action.skillRoll.critRange = 20;
+            }
+
+            const hasSkillRoll = action.skillRoll != undefined;
 
             if (effect.type == 'skill') {
-                if (effect.testRoll) {
-                    const testMod = CofRoll.replaceSpecialAttributes(effect.testMod, actor, cap).result;
-                    let roll = new Roll(testMod, actor.data.data);
-                    roll.roll();
-                    await CofRoll.skillRollDialog(actor, cap.name, roll.total, actor.data.data.globalRollBonus, 20, false, effect.testDice, testMod.difficulty/*onEnter = "submit"*/);
+                continue;
+            }
+
+            if (effect.type === "damage" || effect.type === "heal") {
+                const value = CofRoll.replaceSpecialAttributes(effect.value, actor, cap).formula;
+                action.damageRoll = {};
+                action.damageRoll.formula = new Roll(value, actor.data.data).formula;
+                action.damageRoll.type = effect.type;
+                action.damageRoll.target = effect.target.length ? effect.target : undefined;
+                continue;
+            }
+
+            if (effect.type == 'buff') {
+                const valueFormula = CofRoll.replaceSpecialAttributes(effect.value, actor, cap).formula;
+                let value = 0;
+                try { value = new Roll(valueFormula, actor.data.data).roll().total; } catch (e) { }
+                let duration = 0;
+                if (effect.duration) {
+                    const durationFormula = CofRoll.replaceSpecialAttributes(effect.duration, actor, cap).formula;
+                    duration = new Roll(durationFormula, actor.data.data).roll().total;
+                }
+
+
+                const effectKey = hasSkillRoll ? "effects" : "uncheckedEffects";
+                let activeEffect = action[effectKey].get(effect.target);
+                if (!activeEffect) {
+                    // no active effect, let's create it
+                    action[effectKey].set(effect.target, Capacity.makeActiveEffect(cap, effect, value, duration));
                     continue;
                 }
-            }
-
-            // self            
-            let targets = [];
-            if (effect.target === "selected") {
-                if (game.user.targets.size) {
-                    targets = [...game.user.targets];
-                }
-            } else if (effect.target === "self") {
-                targets = [source];
-            } else if (effect.target === "allies") {
-                targets = Traversal.getTokensForDisposition(source.data.disposition, source.data._id);
-            } else if (effect.target === "enemies") {
-                // friendly if hostile, hostile if friendly
-                targets = Traversal.getTokensForDisposition(source.data.disposition * -1);
-            } else if (effect.target === "all") {
-                targets = canvas.tokens.placeables;
-            }
-
-            if (effect.type == 'buff') {                
-                const value = CofRoll.replaceSpecialAttributes(effect.value, actor, cap).result;
-                let valueRoll = new Roll(value, actor.data.data);
-
-                const onSuccess = ()=>{
-                    let durationFormula;
-                    if (effect.duration) {
-                        const duration = CofRoll.replaceSpecialAttributes(effect.duration, actor, cap).result;
-                        let r = new Roll(duration, actor.data.data)
-                        durationFormula = r.formula;
-                    }
-
-                    let roll = new CofBuffRoll(cap.name, valueRoll.formula, effect, durationFormula);
-                    roll.roll(actor, targets,{
-                        name: cap.name,
-                        img: cap.img,
-                        "data.key": cap.data.key
-                    });                   
-                }
-
-                if (effect.testRoll) {
-                    let difficulty;
-                    if (game.user.targets.size) {
-                        const targeted = [...game.user.targets][0];
-                        difficulty = targeted.actor.data.data.attributes.def.value;
-                    }
-
-                    const testMod = CofRoll.replaceSpecialAttributes(effect.testMod, actor, cap).result;
-                    let roll = new Roll(testMod, actor.data.data);
-                    roll.roll();
-                    CofRoll.skillRollDialog(actor, cap.name, roll.total, actor.data.data.globalRollBonus, 
-                                            20, false, effect.testDice, difficulty, onSuccess /*onEnter = "submit"*/);
-                } else {
-                   onSuccess();
-                }
-                continue;
-            }
-
-            if (effect.type == 'damage') {
-                const value = CofRoll.replaceSpecialAttributes(effect.value, actor, cap).result;
-                let dmgRoll = new Roll(value, actor.data.data);
-                if (effect.testRoll) {
-                    const testMod = CofRoll.replaceSpecialAttributes(effect.testMod, actor, cap);
-                    let testRoll = new Roll(testMod.result, actor.data.data);
-                    //let formula = testRoll.formula.replace(/ /g, "");
-                    testRoll.roll();
-                    await CofRoll.rollWeaponDialog(actor, cap.name, testRoll.total, actor.data.data.globalRollBonus, 20, dmgRoll.formula, 0, effect.type, targets ? targets[0] : undefined, testMod.superior, effect.testDice, testMod.difficulty/* ,onEnter = "submit"*/);
-                } else {
-                    await CofRoll.rollDamageDialog(actor, cap.name, dmgRoll._formula, 0, effect.type, false, targets/* onEnter = "submit"*/);
-                }
-                continue;
-            }
-
-            if (effect.type == 'heal') {
-                const value = CofRoll.replaceSpecialAttributes(effect.value, actor, cap).result;
-                let dmgRoll = new Roll(value, actor.data.data);
-                if (effect.testRoll) {
-                    const testMod = CofRoll.replaceSpecialAttributes(effect.testMod, actor, cap);
-                    let testRoll = new Roll(testMod.result, actor.data.data);
-                    //let formula = testRoll.formula.replace(/ /g, "");
-                    testRoll.roll();
-                    await CofRoll.rollWeaponDialog(actor, cap.name, testRoll.total, actor.data.data.globalRollBonus, 20, dmgRoll.formula, 0, effect.type, targets ? targets[0] : undefined, testMod.superior, effect.testDice, testMod.difficulty/* ,onEnter = "submit"*/);
-
-                } else {
-                    await CofRoll.rollDamageDialog(actor, cap.name, dmgRoll._formula, 0, "heal", false, targets /* ,critical = false, onEnter = "submit"*/);
-                }
+                // active effect already exists for this target, let's just add a change to it                
+                Capacity.addActiveEffectChange(activeEffect, effect.stat, value);
                 continue;
             }
         }
+
+        console.log(action);
+        const source = canvas.tokens.controlled[0];
+        CofRoll.rollDialog(actor, source, cap.name, cap.img, action);
     };
 
 

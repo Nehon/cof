@@ -336,7 +336,7 @@
   "COF.message.heal": "Heal",
   "COF.message.criticalDamage": "Critical Damage",
   "COF.message.criticalHeal": "Critical Heal",
-  "COF.message.fate": "FATE",
+  "COF.message.fate":  "  F.P.  ",
   "COF.message.fateText": "Fate points",
   "COF.message.noMoreFP": "I'm afraid Fate has forsaken you my friend, you have no more point to spend.",
   "COF.message.fateAlreadyRolled": "Fate already played its part in this story.",
@@ -350,5 +350,13 @@
   "COF.message.dissipate": "dissipates for",
   "COF.message.for": "For",
   "COF.message.rounds": "rounds",
-  "COF.message.hours": "hours"
+  "COF.message.hours": "hours",
+  "COF.message.apply":"Apply",
+
+  "data.attributes.def.buff":"DEF",
+  "data.attributes.init.buff":"INIT",
+  "data.attacks.melee.buff":"ATK_MLE",
+  "data.attacks.ranged.buff":"ATK_RNG",
+  "data.attacks.magic.buff":"ATK_MAG"
+  
 }

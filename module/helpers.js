@@ -13,6 +13,11 @@ export const registerHandlebarsHelpers = function () {
         return Boolean(value) ? "disabled" : "";
     });
 
+    Handlebars.registerHelper('readonly', function(value) {
+        return Boolean(value) ? "readonly" : "";
+    });
+
+
     Handlebars.registerHelper('or', function(value1, value2) {
         return Boolean(value1) || Boolean(value2);
     });
@@ -34,7 +39,37 @@ export const registerHandlebarsHelpers = function () {
                 `<span class="flexrow"><span class="flex1 right">${label3}&nbsp;</span><span class="flex1 left">&nbsp;${v3Sign}${value3}</span></span>` +
                 '</span>');
     });
-           
+
+    Handlebars.registerHelper('forin', function(object, elementName, block) {
+        let accum = "";
+        let i = 0;
+        if(!elementName) elementName= "element";
+        for (const key in object) {
+            let obj = {key:key, i:i};
+            obj[elementName] = object[key];
+            accum += block.fn(obj);
+            i++;
+        }
+        return accum;
+    });
+
+    
+    Handlebars.registerHelper('getClass', function(skillRoll) {
+        if (skillRoll.isCritical){
+            return "critical";
+        }
+        if (skillRoll.isSuccess){
+            return "success";
+        }
+        if (skillRoll.isFumble){
+            return "fumble";
+        }
+        if (skillRoll.isSuccess === false){
+            return "failure";
+        }
+        return "roll";
+    });
+       
     Handlebars.registerHelper('info4', function(align, label1, value1, label2, value2, label3, value3, label4, value4) {
         const v2Sign = value2 < 0?'':'+';
         const v3Sign = value3 < 0?'':'+';        

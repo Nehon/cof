@@ -116,4 +116,18 @@ export class Traversal {
         return (token.data.displayName === 30 || token.data.displayName ===50)? token.name:"???";
     }
 
+    static rollResultToString(r){
+        let diceResult = "";
+        for (const term of r.terms) {
+            if ((typeof term) === "string" || (typeof term) === "number") {
+                diceResult += `${term} `;
+                continue;
+            }
+            for (const res of term.results) {
+                 diceResult += diceResult.length ? `+ (${res.result}) ` : `(${res.result}) `;
+            }
+        }
+        return diceResult;
+    }
+
 }

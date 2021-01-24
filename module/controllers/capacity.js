@@ -79,11 +79,27 @@ export class Capacity {
             changes: changes,
             "flags.from" : capacity.data.key
         }
+
+        // Standard effects
+        const ae = CONFIG.statusEffects.find(e => e.id === effect.value);
+        if (ae) {            
+            effectData.icon = ae.icon;
+            effectData.label = game.i18n.localize(ae.label);
+            effectData["flags.core.statusId"] = ae.id;
+            effectData.changes = effectData.changes?effectData.changes:[];
+        }
         return effectData;
     }
 
-    // static removeFromActor(actor, event, entity) {
-    //     return actor.deleteOwnedItem(entity._id);
-    // }
+    static addActiveEffectChange(effectData, key, value) {
+        effectData.changes.push({
+            key: key.replace('@','data.'),
+            mode: 2,
+            value: value
+        });
+        return effectData;
+    }
+
+
 
 }

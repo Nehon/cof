@@ -336,7 +336,7 @@
   "COF.message.heal": "Soin",
   "COF.message.criticalDamage": "Domages critiques",
   "COF.message.criticalHeal": "Soin critique",
-  "COF.message.fate": "CHANCE",
+  "COF.message.fate": "  P.C.  ",
   "COF.message.fateText": "Points de chance",
   "COF.message.noMoreFP": "J'ai bien peur que la chance vous ait abandonné mon ami. Vous n'avez plus de point à dépenser.",
   "COF.message.fateAlreadyRolled": "La chance a déjà parlé dans cette affaire.",
@@ -350,6 +350,13 @@
   "COF.message.dissipate": "se dissipe pour",
   "COF.message.for": "Pour",
   "COF.message.rounds": "tours",
-  "COF.message.hours": "heures"
+  "COF.message.hours": "heures",
+  "COF.message.apply":"Appliquer",
 
+  "data.attributes.def.buff":"DEF",
+  "data.attributes.init.buff":"INIT",
+  "data.attacks.melee.buff":"ATK_MLE",
+  "data.attacks.ranged.buff":"ATK_DST",
+  "data.attacks.magic.buff":"ATK_MAG"
+  
 }
