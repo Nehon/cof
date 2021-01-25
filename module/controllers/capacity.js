@@ -66,28 +66,32 @@ export class Capacity {
             rounds: duration,
         };
 
-        const changes = [{
-            key: effect.stat.replace('@','data.'),
-            mode: 2,
-            value: value
-        }];
-
         let effectData = {
             label: capacity.name,
             icon: capacity.img,
             duration: durationObj,
-            changes: changes,
-            "flags.from" : capacity.data.key
+            "flags.core.statusId" : capacity.data.key
         }
 
         // Standard effects
-        const ae = CONFIG.statusEffects.find(e => e.id === effect.value);
+        let ae = CONFIG.statusEffects.find(e => e.id === effect.value ||  e.id === capacity.data.key);
         if (ae) {            
             effectData.icon = ae.icon;
             effectData.label = game.i18n.localize(ae.label);
             effectData["flags.core.statusId"] = ae.id;
-            effectData.changes = effectData.changes?effectData.changes:[];
+            effectData.changes = ae.changes;
+        } else {            
+            CONFIG.statusEffects.push({id:capacity.data.key, label:capacity.name, icon:capacity.img});
         }
+
+        if(effect.stat.length){
+            effectData.changes = [{
+                key: effect.stat.replace('@','data.'),
+                mode: 2,
+                value: value
+            }];
+        }
+
         return effectData;
     }
 

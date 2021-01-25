@@ -4,16 +4,16 @@ import { CofDamageRoll } from "../system/dmg-roll.js";
 import { Traversal } from "../utils/traversal.js";
 
 
-const iconsMap ={
+const iconsMap = {
     "data.stats.str": "systems/cof/ui/macros/icons/FOR.png",
     "data.stats.dex": "systems/cof/ui/macros/icons/DEX.png",
     "data.stats.con,": "systems/cof/ui/macros/icons/STAM.png",
     "data.stats.int": "systems/cof/ui/macros/icons/INT.png",
     "data.stats.wis": "systems/cof/ui/macros/icons/WIS.png",
     "data.stats.cha": "systems/cof/ui/macros/icons/CHA.png",
-    "data.attacks.melee":"systems/cof/ui/macros/icons/ATC.png",
-    "data.attacks.ranged":"systems/cof/ui/macros/icons/ATD.png",
-    "data.attacks.magic":"systems/cof/ui/macros/icons/ATM.png",
+    "data.attacks.melee": "systems/cof/ui/macros/icons/ATC.png",
+    "data.attacks.ranged": "systems/cof/ui/macros/icons/ATD.png",
+    "data.attacks.magic": "systems/cof/ui/macros/icons/ATM.png",
 }
 
 export class CofRoll {
@@ -53,14 +53,14 @@ export class CofRoll {
         // let bonus = eval(`${key}.bonus`);
         let superior = eval(`${key}.superior`);
         label = (label) ? game.i18n.localize(label) : null;
-        
-        const skillRoll = {        
+
+        const skillRoll = {
             superior: superior,
             mod: mod,
             dice: "1d20",
             critRange: 20,
         }
-        CofRoll.rollDialog(actor, actor.token, label, iconsMap[key], {skillRoll: skillRoll});        
+        CofRoll.rollDialog(actor, actor.token, label, iconsMap[key], { skillRoll: skillRoll });
     }
 
 
@@ -78,7 +78,7 @@ export class CofRoll {
         const superior = eval(key);
 
         const action = {
-            skillRoll : {        
+            skillRoll: {
                 superior: superior,
                 mod: itemData.data.mod,
                 dice: "1d20",
@@ -86,13 +86,13 @@ export class CofRoll {
                 target: "selected"
             },
 
-            damageRoll:{
+            damageRoll: {
                 formula: itemData.data.dmg,
                 type: "damage",
                 target: "selected"
             }
         };
-        return CofRoll.rollDialog(actor, actor.token, itemData.name, itemData.img, action);        
+        return CofRoll.rollDialog(actor, actor.token, itemData.name, itemData.img, action);
     }
 
     /**
@@ -104,21 +104,21 @@ export class CofRoll {
     static rollEncounterWeapon(data, actor, event) {
         const item = $(event.currentTarget).parents(".weapon");
         let label = item.find(".weapon-name").val();
-        let mod = parseInt(item.find(".weapon-mod").val(),10);
+        let mod = parseInt(item.find(".weapon-mod").val(), 10);
         let attackBuff = actor.data.data.attacks.melee.buff;
         let critrange = item.find(".weapon-critrange").val();
         let dmg = item.find(".weapon-dmg").val();
 
         const action = {
-            hideFate:true,
-            skillRoll : {                       
+            hideFate: true,
+            skillRoll: {
                 mod: mod + attackBuff,
                 dice: "1d20",
                 critRange: critrange,
                 target: "selected"
             },
 
-            damageRoll:{
+            damageRoll: {
                 formula: dmg,
                 type: "damage",
                 target: "selected"
@@ -138,7 +138,7 @@ export class CofRoll {
         let label = item.find(".weapon-name").val();
         let dmg = item.find(".weapon-dmg").val();
         const action = {
-            damageRoll:{
+            damageRoll: {
                 formula: dmg,
                 type: "damage",
                 target: "selected"
@@ -157,7 +157,7 @@ export class CofRoll {
         const li = $(event.currentTarget).parents(".item");
         let item = actor.getOwnedItem(li.data("itemId"));
         const action = {
-            skillRoll: {                
+            skillRoll: {
                 mod: item.data.data.mod,
                 dice: "1d20",
                 critRange: item.data.data.critrange,
@@ -170,7 +170,7 @@ export class CofRoll {
                 target: "selected"
             }
         };
-        return CofRoll.rollDialog(actor, actor.token, item.data.name, item.data.img, action);       
+        return CofRoll.rollDialog(actor, actor.token, item.data.name, item.data.img, action);
     }
 
     /**
@@ -183,13 +183,13 @@ export class CofRoll {
         const li = $(event.currentTarget).parents(".item");
         let item = actor.getOwnedItem(li.data("itemId"));
         const action = {
-            damageRoll:{
+            damageRoll: {
                 formula: item.data.data.dmg,
                 type: "damage",
                 target: "selected"
             }
         };
-        return CofRoll.rollDialog(actor, actor.token, item.data.name, item.data.img, action);  
+        return CofRoll.rollDialog(actor, actor.token, item.data.name, item.data.img, action);
     }
 
     /**
@@ -269,6 +269,10 @@ export class CofRoll {
         const arr = formula.split(">");
         let result = arr[0].trim();
         let difficulty = arr.length > 1 ? arr[1].trim() : undefined;
+        if(difficulty && (typeof difficulty) !== "number" && difficulty.indexOf("@target") >=0 ){
+            const target = CofRoll.getTargets("selected")[0];
+            difficulty = eval(difficulty.replace("@target","target.actor.data.data"));
+        }
 
         if (result.indexOf("@rank") >= 0) {
             const rank = actor.data.data.paths[capacity.data.pathIndex].rank;
@@ -289,6 +293,9 @@ export class CofRoll {
         const matches = [...result.matchAll(wRE)];
         if (matches && matches.length) {
             const weapon = actor.items.find(i => i.data.data.subtype === "melee" && i.data.data.worn && i.data.data.properties.weapon);
+            if(!weapon){
+                return ui.notifications.error(game.i18n.localize("COF.notification.noWeaponEquiped"));
+            }
             superior = eval(`actor.data.data.${weapon.data.data.skill.replace("@", "").replace("mod", "superior")}`);
             for (const match of matches) {
                 for (let i = 1; i < match.length; i += 2) {
@@ -334,8 +341,8 @@ export class CofRoll {
         };
         return results.targets[target.data._id];
     }
-    
-    static applyEffect(results, action, effectLabel, sourceToken){
+
+    static applyEffect(results, action, effectLabel, sourceToken) {
         for (let [key, value] of action[effectLabel]) {
             const trgs = CofRoll.getTargets(key, sourceToken);
             for (const target of trgs) {
@@ -345,12 +352,24 @@ export class CofRoll {
                 }
                 data[effectLabel] = value;
                 data[effectLabel].tooltip = value.label;
+                 if(data[effectLabel].duration.rounds == 128){
+                    data[effectLabel].tooltip += `<br>${game.i18n.localize("COF.message.undefinedDuration")}`;
+                } else if(data[effectLabel].duration.rounds == 1){
+                    data[effectLabel].tooltip += `<br>${data[effectLabel].duration.rounds} ${game.i18n.localize("COF.message.round")}`;
+                } else {
+                    data[effectLabel].tooltip += `<br>${data[effectLabel].duration.rounds} ${game.i18n.localize("COF.message.rounds")}`;
+                }
+                if (!value.changes) {
+                    continue;
+                }
                 for (const change of value.changes) {
-                    if(!change.key.length){
+                    if (!change.key.length) {
                         continue;
                     }
-                    data[effectLabel].tooltip += `<br>${game.i18n.localize(change.key)} ${change.value>=0?'+':''}${change.value}`;
+                    data[effectLabel].tooltip += `<br>${game.i18n.localize(change.key)} ${change.value >= 0 ? '+' : ''}${change.value}`;
                 }
+               
+                
             }
         }
     }
@@ -395,7 +414,7 @@ export class CofRoll {
             targets = CofRoll.getTargets(skillRoll.target, sourceToken);
             if (game.settings.get("cof", "displayDifficulty")) {
                 if (skillRoll.difficulty) {
-                    diff = difficulty;
+                    diff = skillRoll.difficulty;
                 } else if (targets.length) {
                     diff = [];
                     for (let i = 0; i < targets.length; i++) {
@@ -464,14 +483,25 @@ export class CofRoll {
                         let dmgFormula = (dmgCustomFormula) ? dmgCustomFormula : dmgBaseFormula;
                         if (dmgBonus > 0) dmgFormula = dmgFormula.concat('+', dmgBonus);
                         else if (dmgBonus < 0) dmgFormula = dmgFormula.concat(' ', dmgBonus);
-                        
+
+                        let difficulty;
+                        if(diff && diff.indexOf(",") < 0){
+                            try{ 
+                                difficulty = parseInt(diff,10);
+                            } catch(e){
+                                difficulty = diff;
+                            }
+                        } else {
+                            difficulty = diff;
+                        }
+
                         let results = {
                             name: label,
                             img: img,
                             source: {
                                 img: actor.data.token.img
                             },
-                            targets: {}                            
+                            targets: {}
                         };
                         for (const target of targets) {
                             this.makeTarget(results, target);
@@ -480,10 +510,16 @@ export class CofRoll {
                         if (skillRoll) {
                             results.fateValue = actor.data.data.attributes.fp.value;
                             results.fateMax = actor.data.data.attributes.fp.max;
-                            let r = new CofSkillRoll(label, dice, m, b, diff, critrange);
+                            let r = new CofSkillRoll(label, dice, m, b, difficulty, critrange);
                             if (targets.length) {
-                                for (const target of targets) {
-                                    let result = r.getRollResult(target.actor.data.data.attributes.def.value);
+                                for (const target of targets) { 
+                                    let result;    
+                                    if((typeof difficulty) !== "number"){
+                                        result = r.getRollResult(target.actor.data.data.attributes.def.value);                                        
+                                    } else{
+                                        result = r.getRollResult();
+                                    }
+                                    
                                     results.targets[target.data._id].skill = result;
                                 }
                             } else {
@@ -513,39 +549,39 @@ export class CofRoll {
                             }
                         }
 
-                        
-                        if(action.uncheckedEffects){
+
+                        if (action.uncheckedEffects) {
                             CofRoll.applyEffect(results, action, "uncheckedEffects", sourceToken)
                         }
 
-                        if(action.effects){
+                        if (action.effects) {
                             CofRoll.applyEffect(results, action, "effects", sourceToken)
                         }
 
                         const targetObject = Object.keys(results.targets);
 
                         // if only one target copy the target to global (single target roll)
-                        if(targetObject.length === 1 ){
+                        if (targetObject.length === 1) {
                             results.global = results.targets[targetObject[0]];
                         }
-                        
-                        
+
+
                         results.displayTargets = targetObject.length > 0;
-                        
-                        if(targetObject.length === 0 ){
-                            if(!results.global){
-                                 return ui.notifications.warn(game.i18n.localize("COF.message.missingTarget"));
+
+                        if (targetObject.length === 0) {
+                            if (!results.global) {
+                                return ui.notifications.warn(game.i18n.localize("COF.message.missingTarget"));
                             }
                             results.targets.global = results.global;
                             results.targets.global.img = "icons/svg/mystery-man.svg";
                             results.targets.global.name = "???";
                             results.displayTargets |= (results.global.damage !== undefined);
-                            if(!results.global.skill || !results.global.skill.difficulty){
+                            if (!results.global.skill || !results.global.skill.difficulty) {
                                 results.targets.global.forceDisplay = true;
                             }
                         }
-                        
-                        if( action.hideFate){
+
+                        if (action.hideFate) {
                             results.hideFate = action.hideFate;
                         }
 
@@ -559,7 +595,8 @@ export class CofRoll {
         }, this.options());
         return d.render(true);
     }
-   static async toMessage(rollResult = {}, actor, { rollMode = null, create = true } = {}) {
+    
+    static async toMessage(rollResult = {}, actor, { rollMode = null, create = true } = {}) {
         const rollOptionTpl = 'systems/cof/templates/chat/roll-card.hbs';
         const rollOptionContent = await renderTemplate(rollOptionTpl, rollResult);
         console.log(rollResult);
@@ -569,9 +606,9 @@ export class CofRoll {
             user: game.user._id,
             content: rollOptionContent,
             sound: CONFIG.sounds.dice,
-            speaker: ChatMessage.getSpeaker({actor: actor}),
+            speaker: ChatMessage.getSpeaker({ actor: actor }),
             "flags.rollResult": rollResult
-        };        
+        };
 
         // Either create the message or just return the chat data
         return create ? CONFIG.ChatMessage.entityClass.create(messageData) : messageData;
@@ -583,53 +620,53 @@ export class CofRoll {
             return;
         }
         const button = html.find('.chat-message-apply-button');
-        if(!button){
+        if (!button) {
             return;
         }
 
         button.click(ev => {
             ev.stopPropagation();
 
-            if(flags.applied){
+            if (flags.applied) {
                 ui.notifications.error(game.i18n.localize("COF.message.alreadyApplied"));
                 return;
-            }            
+            }
 
             if (!game.user.isGM) {
                 ui.notifications.error(game.i18n.localize("COF.message.notAllowedButton"));
                 return;
             }
             const targets = flags.rollResult.targets;
-           
-            for (const targetId in targets) {                
+
+            for (const targetId in targets) {
                 let data = targets[targetId];
-                let target = Traversal.findTargetToken(targetId);                
-                if(!target){
+                let target = Traversal.findTargetToken(targetId);
+                if (!target) {
                     ui.notifications.error(game.i18n.localize("COF.message.missingTarget"));
                     return;
                 }
-                if(data.damage){
-                    if(!data.skill || data.skill.isSuccess){
+                if (data.damage) {
+                    if (!data.skill || data.skill.isSuccess) {
                         target.actor.applyDamage(data.damage.type === 'damage' ? data.damage.total : -data.damage.total);
-                    }                    
+                    }
                 }
-                if(data.uncheckedEffects){
+                if (data.uncheckedEffects) {
                     target.actor.createEmbeddedEntity("ActiveEffect", data.uncheckedEffects);
                 }
 
-                if(data.effects){
-                    if(!data.skill || data.skill.isSuccess){
+                if (data.effects) {
+                    if (!data.skill || data.skill.isSuccess) {
                         target.actor.createEmbeddedEntity("ActiveEffect", data.effects);
                     }
-                }               
+                }
             }
             message.update({
                 "flags.applied": true
-            });   
+            });
         });
     }
 
-     // roll messages hooks    
+    // roll messages hooks    
     static handleFateReroll(message, html, data) {
         const flags = message.data.flags;
         if (!flags.rollResult) {
@@ -650,7 +687,7 @@ export class CofRoll {
                 ui.notifications.error(game.i18n.localize("COF.message.fateAlreadyRolled"));
                 return;
             }
-            
+
             const actor = game.actors.get(message.data.speaker.actor);
 
             if (!actor) {
@@ -666,17 +703,17 @@ export class CofRoll {
 
             const rollResult = flags.rollResult;
             let entry = rollResult.global;
-            if(Object.keys(rollResult.targets).length){
+            if (Object.keys(rollResult.targets).length) {
                 entry = rollResult.targets[Object.keys(rollResult.targets)[0]];
             }
 
             entry.skill.total += 10;
             entry.skill.result += "+ 10";
 
-            if(entry.skill.total >= entry.skill.difficulty){
+            if (entry.skill.total >= entry.skill.difficulty) {
                 entry.skill.isSuccess = true;
             }
-           
+
             rollResult.global = entry;
             rollResult.hideFate = true;
 
@@ -685,7 +722,7 @@ export class CofRoll {
             actor.update({
                 "data.attributes.fp.value": fp
             });
-          
+
             message.update({
                 "flags.rolled": true
             });

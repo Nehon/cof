@@ -327,6 +327,7 @@
   "COF.notification.MacroItemUnequiped" : "Item is unequiped",
   "COF.notification.NoActorSelected": "No character selected",
   "COF.notification.NoCapacity": "The character doesn't know the capacity",
+  "COF.notification.noWeaponEquiped": "The character has no weapon equiped",
 
   "COF.message.damageRoll": "Damage roll",
   "COF.message.healRoll": "Heal roll",  
@@ -350,13 +351,22 @@
   "COF.message.dissipate": "dissipates for",
   "COF.message.for": "For",
   "COF.message.rounds": "rounds",
+  "COF.message.round": "round",
   "COF.message.hours": "hours",
   "COF.message.apply":"Apply",
+  "COF.message.undefinedDuration":"Until removed",
+
+  "COF.weapon.skillmod": "Weapon attack modifier",
+  "COF.weapon.dmg": "Weapon damage",
 
   "data.attributes.def.buff":"DEF",
   "data.attributes.init.buff":"INIT",
   "data.attacks.melee.buff":"ATK_MLE",
   "data.attacks.ranged.buff":"ATK_RNG",
-  "data.attacks.magic.buff":"ATK_MAG"
+  "data.attacks.magic.buff":"ATK_MAG",
+  "data.globalRollBonus":"TESTS",
+  
+  "EFFECT.StatusSurprise": "Surprise",
+  "EFFECT.StatusDisarmed": "Disarmed"
   
 }

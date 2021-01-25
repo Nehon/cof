@@ -327,6 +327,7 @@
   "COF.notification.MacroItemUnequiped" : "L'objet n'est pas équipé",
   "COF.notification.NoActorSelected": "Aucun personnage n'est sélectionné",
   "COF.notification.NoCapacity": "Le personnage ne connait pas la capacité",
+  "COF.notification.noWeaponEquiped": "Le personage n'a pas d'arme équipée",
   
   "COF.message.damageRoll": "Jet de dommages",
   "COF.message.healRoll": "Jet de soin",
@@ -350,13 +351,39 @@
   "COF.message.dissipate": "se dissipe pour",
   "COF.message.for": "Pour",
   "COF.message.rounds": "tours",
+  "COF.message.round": "tour",
   "COF.message.hours": "heures",
   "COF.message.apply":"Appliquer",
+  "COF.message.undefinedDuration":"Durée indéfinie",
 
   "data.attributes.def.buff":"DEF",
   "data.attributes.init.buff":"INIT",
   "data.attacks.melee.buff":"ATK_MLE",
   "data.attacks.ranged.buff":"ATK_DST",
-  "data.attacks.magic.buff":"ATK_MAG"
+  "data.attacks.magic.buff":"ATK_MAG",
+  "data.globalRollBonus":"TESTS",
+
+  "COF.weapon.skillmod": "Mod d'attaque de l'arme",
+  "COF.weapon.dmg": "Dégâts de l'arme",
+
+  "EFFECT.StatusDead": "Mort",
+  "EFFECT.StatusUnconscious": "Inconscient",
+  "EFFECT.StatusAsleep": "Endormi",
+  "EFFECT.StatusStunned": "Etourdi",
+  "EFFECT.StatusProne": "Renversé",
+  "EFFECT.StatusRestrained": "Immobilisé", 
+  "EFFECT.StatusParalysis": "Paralysé",
+  "EFFECT.StatusFlying": "En vol",
+  "EFFECT.StatusBlind": "Aveuglé",
+  "EFFECT.StatusSilenced": "Muet",
+  "EFFECT.StatusFear": "Effrayé",
+  "EFFECT.StatusBurning": "En feu",
+  "EFFECT.StatusBleeding": "Saigne",
+  "EFFECT.StatusDisease": "Malade",
+  "EFFECT.StatusRegen": "Régénération",
+  "EFFECT.StatusDowngrade": "Affaibli",
+
+  "EFFECT.StatusSurprise": "Surpris",
+  "EFFECT.StatusDisarmed": "Désarmé"
   
 }

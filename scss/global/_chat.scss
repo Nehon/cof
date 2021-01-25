@@ -70,10 +70,14 @@
     text-overflow: ellipsis;
   }
   .tooltip-left{
-    top: -5px;
+    top: -5px;        
     bottom: auto;
     right: 60px;
   }
+  .tooltip-left:after{
+    top: 18px;
+  }
+  
   .baseline{
     align-items: baseline;
   }

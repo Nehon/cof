@@ -313,6 +313,16 @@ strong {
   border-color: transparent transparent #555 transparent;
 }
 
+#token-hud .status-effects {
+  grid-template-columns: 33px 33px 33px 33px;
+  width: 132px;
+}
+
+#token-hud .status-effects .effect-control {
+  width: 32px;
+  height: 32px;
+}
+
 /* ----------------------------------------- */
 /* Scrollbar
 /* ----------------------------------------- */
@@ -711,6 +721,10 @@ strong {
   top: -5px;
   bottom: auto;
   right: 60px;
+}
+
+.target .tooltip-left:after {
+  top: 18px;
 }
 
 .target .baseline {

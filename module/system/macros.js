@@ -100,14 +100,14 @@ export class Macros {
             effects: new Map(), // ActiveEffects to apply only when a skill roll succeeded for each type of targets.
             uncheckedEffects: new Map(), // ActiveEffect data map to apply in any case when the capacity is triggerred for each type of targets.
         }
+        let activable = false;
         // only activable effects are considered, all effects found after a skill roll are considered applied only if the skill roll succeeded.
         // gather effects
         for (let key in effects) {
             const effect = effects[key];
             if (!effect.activable) {
                 continue;
-            }
-
+            }            
             let rank = 0;
             if (cap.data.pathIndex != undefined) {
                 rank = actor.data.data.paths[cap.data.pathIndex].rank;
@@ -115,6 +115,7 @@ export class Macros {
                     continue;
                 }
             }
+            activable = true;
 
             if (effect.testRoll) {
                 if (action.skillRoll != undefined) {
@@ -167,8 +168,12 @@ export class Macros {
                 continue;
             }
         }
+        if(!activable){
+            CofItem.logItem(cap, actor);
+            return;
+        }
 
-        console.log(action);
+        //console.log(action);
         const source = canvas.tokens.controlled[0];
         CofRoll.rollDialog(actor, source, cap.name, cap.img, action);
     };
