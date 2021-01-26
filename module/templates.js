@@ -28,6 +28,7 @@ export const preloadHandlebarsTemplates = async function () {
 
         "systems/cof/templates/actors/character/parts/inventory/character-inventory.hbs",
         "systems/cof/templates/actors/character/parts/inventory/character-inventory-item.hbs",
+        "systems/cof/templates/actors/character/parts/character-effects.hbs",
 
         // ENCOUNTER
         "systems/cof/templates/actors/encounter/parts/encounter-combat.hbs",

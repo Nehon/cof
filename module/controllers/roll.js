@@ -660,12 +660,12 @@ export class CofRoll {
                     }
                 }
                 if (data.uncheckedEffects) {
-                    target.actor.createEmbeddedEntity("ActiveEffect", data.uncheckedEffects);
+                    target.actor.applyEffect(data.uncheckedEffects);
                 }
 
                 if (data.effects) {
                     if (!data.skill || data.skill.isSuccess) {
-                        target.actor.createEmbeddedEntity("ActiveEffect", data.effects);
+                        target.actor.applyEffect(data.effects);                        
                     }
                 }
             }

@@ -33,9 +33,24 @@ export class UpdateUtils {
         });
     }
 
+    static updateNonCoreEffects(actor){
+        for (const effect of actor.effects) {
+            const coreEffect = CONFIG.statusEffects.find((e) => e.id === effect.data.flags.core.statusId);
+            if(!coreEffect){
+                CONFIG.statusEffects.push({
+                    icon: effect.data.icon,
+                    id: effect.data.flags.core.statusId,
+                    label: effect.data.label,
+                    changes: effect.data.changes
+                })
+            }
+        }
+    }
+
     static updateActorsPathRank() {
         for(let actor of game.actors.entries){
             actor.prepareData();            
+            UpdateUtils.updateNonCoreEffects(actor);
         }        
         // update tokens actor in case of unlinked tokens
         for(let token of canvas.tokens.objects.children){            
@@ -43,6 +58,7 @@ export class UpdateUtils {
                 continue;
             }
             token.actor.prepareData();            
+            UpdateUtils.updateNonCoreEffects(token.actor);
         }
     }
 

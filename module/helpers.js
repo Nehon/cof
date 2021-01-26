@@ -1,4 +1,4 @@
-import {Traversal} from "./utils/traversal.js";
+import { Traversal } from "./utils/traversal.js";
 
 export const registerHandlebarsHelpers = function () {
 
@@ -9,43 +9,42 @@ export const registerHandlebarsHelpers = function () {
         } else return null;
     });
 
-    Handlebars.registerHelper('disabled', function(value) {
+    Handlebars.registerHelper('disabled', function (value) {
         return Boolean(value) ? "disabled" : "";
     });
 
-    Handlebars.registerHelper('readonly', function(value) {
+    Handlebars.registerHelper('readonly', function (value) {
         return Boolean(value) ? "readonly" : "";
     });
 
 
-    Handlebars.registerHelper('or', function(value1, value2) {
+    Handlebars.registerHelper('or', function (value1, value2) {
         return Boolean(value1) || Boolean(value2);
     });
 
-    Handlebars.registerHelper('and', function(value1, value2) {
+    Handlebars.registerHelper('and', function (value1, value2) {
         return Boolean(value1) && Boolean(value2);
     });
-    Handlebars.registerHelper('safeString', function(string) {
-
-        return  new Handlebars.SafeString(string);
+    Handlebars.registerHelper('safeString', function (string) {
+        return new Handlebars.SafeString(string);
     });
 
-    Handlebars.registerHelper('info', function(align, label1, value1, label2, value2, label3, value3) {
-        const v2Sign = value2 < 0?'':'+';
-        const v3Sign = value3 < 0?'':'+';        
-        return  new Handlebars.SafeString(`<span class="tooltiptext tooltip-${align}">` +
-                `<span class="flexrow"><span class="flex1 right">${label1}&nbsp;</span><span class="flex1 left">&nbsp;${value1}</span></span>` +
-                `<span class="flexrow"><span class="flex1 right">${label2}&nbsp;</span><span class="flex1 left">&nbsp;${v2Sign}${value2}</span></span>` +
-                `<span class="flexrow"><span class="flex1 right">${label3}&nbsp;</span><span class="flex1 left">&nbsp;${v3Sign}${value3}</span></span>` +
-                '</span>');
+    Handlebars.registerHelper('info', function (align, label1, value1, label2, value2, label3, value3) {
+        const v2Sign = value2 < 0 ? '' : '+';
+        const v3Sign = value3 < 0 ? '' : '+';
+        return new Handlebars.SafeString(`<span class="tooltiptext tooltip-${align}">` +
+            `<span class="flexrow"><span class="flex1 right">${label1}&nbsp;</span><span class="flex1 left">&nbsp;${value1}</span></span>` +
+            `<span class="flexrow"><span class="flex1 right">${label2}&nbsp;</span><span class="flex1 left">&nbsp;${v2Sign}${value2}</span></span>` +
+            `<span class="flexrow"><span class="flex1 right">${label3}&nbsp;</span><span class="flex1 left">&nbsp;${v3Sign}${value3}</span></span>` +
+            '</span>');
     });
 
-    Handlebars.registerHelper('forin', function(object, elementName, block) {
+    Handlebars.registerHelper('forin', function (object, elementName, block) {
         let accum = "";
         let i = 0;
-        if(!elementName) elementName= "element";
+        if (!elementName) elementName = "element";
         for (const key in object) {
-            let obj = {key:key, i:i};
+            let obj = { key: key, i: i };
             obj[elementName] = object[key];
             accum += block.fn(obj);
             i++;
@@ -53,35 +52,35 @@ export const registerHandlebarsHelpers = function () {
         return accum;
     });
 
-    
-    Handlebars.registerHelper('getClass', function(skillRoll) {
-        if (skillRoll.isCritical){
+
+    Handlebars.registerHelper('getClass', function (skillRoll) {
+        if (skillRoll.isCritical) {
             return "critical";
         }
-        if (skillRoll.isSuccess){
+        if (skillRoll.isSuccess) {
             return "success";
         }
-        if (skillRoll.isFumble){
+        if (skillRoll.isFumble) {
             return "fumble";
         }
-        if (skillRoll.isSuccess === false){
+        if (skillRoll.isSuccess === false) {
             return "failure";
         }
         return "roll";
     });
-       
-    Handlebars.registerHelper('info4', function(align, label1, value1, label2, value2, label3, value3, label4, value4) {
-        const v2Sign = value2 < 0?'':'+';
-        const v3Sign = value3 < 0?'':'+';        
-        const v4Sign = value4 < 0?'':'+';       
-        return  new Handlebars.SafeString(`<span class="tooltiptext tooltip-${align} tooltip-move-up">` +
-                `<span class="flexrow"><span class="flex1 right">${label1}&nbsp;</span><span class="flex1 left">&nbsp;${value1}</span></span>` +
-                `<span class="flexrow"><span class="flex1 right">${label2}&nbsp;</span><span class="flex1 left">&nbsp;${v2Sign}${value2}</span></span>` +
-                `<span class="flexrow"><span class="flex1 right">${label3}&nbsp;</span><span class="flex1 left">&nbsp;${v3Sign}${value3}</span></span>` +
-                `<span class="flexrow"><span class="flex1 right">${label4}&nbsp;</span><span class="flex1 left">&nbsp;${v4Sign}${value4}</span></span>` +
-                '</span>');
+
+    Handlebars.registerHelper('info4', function (align, label1, value1, label2, value2, label3, value3, label4, value4) {
+        const v2Sign = value2 < 0 ? '' : '+';
+        const v3Sign = value3 < 0 ? '' : '+';
+        const v4Sign = value4 < 0 ? '' : '+';
+        return new Handlebars.SafeString(`<span class="tooltiptext tooltip-${align} tooltip-move-up">` +
+            `<span class="flexrow"><span class="flex1 right">${label1}&nbsp;</span><span class="flex1 left">&nbsp;${value1}</span></span>` +
+            `<span class="flexrow"><span class="flex1 right">${label2}&nbsp;</span><span class="flex1 left">&nbsp;${v2Sign}${value2}</span></span>` +
+            `<span class="flexrow"><span class="flex1 right">${label3}&nbsp;</span><span class="flex1 left">&nbsp;${v3Sign}${value3}</span></span>` +
+            `<span class="flexrow"><span class="flex1 right">${label4}&nbsp;</span><span class="flex1 left">&nbsp;${v4Sign}${value4}</span></span>` +
+            '</span>');
     });
-          
+
 
     Handlebars.registerHelper('getPaths', function (items) {
         return items.filter(item => item.type === "path");
@@ -94,8 +93,8 @@ export const registerHandlebarsHelpers = function () {
     Handlebars.registerHelper('getInventory', function (items) {
         let inventory = items.filter(item => item.type === "item");
         inventory.sort(function (a, b) {
-            const aKey = a.data.subtype + "-" + a.name.slugify({strict: true});
-            const bKey = b.data.subtype + "-" + b.name.slugify({strict: true});
+            const aKey = a.data.subtype + "-" + a.name.slugify({ strict: true });
+            const bKey = b.data.subtype + "-" + b.name.slugify({ strict: true });
             return (aKey > bKey) ? 1 : -1
         });
         return inventory;
@@ -104,8 +103,8 @@ export const registerHandlebarsHelpers = function () {
     Handlebars.registerHelper('getWorn', function (items) {
         let worn = items.filter(item => item.type === "item" && item.data.worn);
         worn.sort(function (a, b) {
-            const aKey = a.data.subtype + "-" + a.name.slugify({strict: true});
-            const bKey = b.data.subtype + "-" + b.name.slugify({strict: true});
+            const aKey = a.data.subtype + "-" + a.name.slugify({ strict: true });
+            const bKey = b.data.subtype + "-" + b.name.slugify({ strict: true });
             return (aKey > bKey) ? 1 : -1
         });
         return worn;

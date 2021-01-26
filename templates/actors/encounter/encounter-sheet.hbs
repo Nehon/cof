@@ -62,22 +62,8 @@
                     </div>
                      {{#if options.isGM}}
                         {{!-- Effects Tab --}}                    
-                        <div class="tab effects" data-group="primary" data-tab="effects">                      
-                            <a class="header-field-add add-effect" data-transfer="true">
-                            <i class="fa fa-plus">effect</i>
-                            </a><br>
-                            {{#each actor.effects as |effect id|}}
-                                <div>
-                                    <img src="{{effect.icon}}" width="32" height="32"/>
-                                    {{effect.label}}
-                                    <a class="header-field-add edit-effect" data-id="{{effect._id}}">
-                                        <i class="fa fa-edit"></i>
-                                    </a>
-                                    <a class="header-field-add delete-effect" data-id="{{effect._id}}">
-                                        <i class="fa fa-minus"></i>
-                                    </a>
-                                </div>
-                            {{/each}}
+                        <div class="tab effects" data-group="primary" data-tab="effects">      
+                             {{> "systems/cof/templates/actors/character/parts/character-effects.hbs"}}
                         </div>     
                      {{/if}}            
                 </section>

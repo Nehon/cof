@@ -229,6 +229,37 @@ export class CofActor extends Actor {
         })
     }
 
+    applyEffect(effectData){
+        const alreadyAppliedeffects = this.effects.filter((e) => e.data.flags.core.statusId === effectData.flags.core.statusId);
+
+
+        for (const alreadyApplied of alreadyAppliedeffects) {
+            if(alreadyApplied.data.disabled){
+                continue;
+            }
+            // extend duration
+            if(!alreadyApplied.data.duration){
+                return;                
+            }
+            if(!alreadyApplied.data.duration.combat || !game.combat){
+                return; // TODO handle duration outside of combat
+            }
+
+            // extends the duration so that the effect span from the start of 
+            // the original application to the end of the current application
+            const currentRound = game.combat.current.round;
+            const startRound = alreadyApplied.data.duration.startRound;
+            const duration = effectData.duration.rounds;
+            this.updateEmbeddedEntity("ActiveEffect", {
+                _id: alreadyApplied.data._id, 
+                "duration.rounds": duration + currentRound - startRound
+            });
+
+            return;            
+        }
+        this.createEmbeddedEntity("ActiveEffect", effectData);
+    }
+
     /* -------------------------------------------- */
 
     getMagicMod(stats, profile) {

@@ -1,0 +1,43 @@
+{{!-- <a class="header-field-add add-effect" data-transfer="true">
+<i class="fa fa-plus">effect</i>
+</a><br> --}}
+    <div class="flexrow center" style="margin-bottom:3px;">
+        <div class="flex4 center bg-darkgreen" style="margin:1px;">Effect</div>        
+        <div class="flex1 center bg-darkgreen" style="margin:1px;">Start</div>
+        <div class="flex2 center bg-darkgreen" style="margin:1px;">Duration</div>
+        <div class="flex5 center bg-darkgreen" style="margin:1px;">Changes</div>
+        <div class="flex1 center bg-darkgreen" style="margin:1px;"> edit</div>        
+    </div>
+{{#each actor.effects as |effect id|}}
+    <div class="flexrow" style="margin-bottom:3px;text-align:right;{{#if effect.disabled}}background-color:#999999;{{/if}}">
+        <div class="flex1 left" ><img src="{{effect.icon}}" width="32" height="32" style="background-color: #646464;"/></div>
+        <div  class="flex3 left" >{{effect.label}}</div>        
+        <div  class="flex1 center" >
+            {{#if effect.duration.startRound}}
+                {{localize "COF.message.round"}} {{effect.duration.startRound}}
+            {{/if}}
+        </div>        
+        <div  class="flex2 center" >
+            {{#if effect.duration.rounds}}
+                {{effect.duration.rounds}} {{localize "COF.message.rounds"}}
+            {{else}}
+                &infin;
+            {{/if}}         
+        </div>
+        <div class="flex5 left" >
+            {{#if effect.changes}}
+                {{#each effect.changes as |change i|}}
+                    {{localize change.key}}{{numberFormat change.value decimals=0 sign=true}},&nbsp;  
+                {{/each}}
+            {{/if}}
+        </div>
+        <div class="flex1 center" >
+            <a class="edit-effect" data-id="{{effect._id}}">
+                <i class="fa fa-edit"></i>
+            </a>
+            <a class="delete-effect" data-id="{{effect._id}}">
+                <i class="fa fa-trash"></i>
+            </a>
+        </div>
+    </div>
+{{/each}}
