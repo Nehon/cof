@@ -87,7 +87,8 @@
   "COF.ui.noTarget": "No target",
   "COF.ui.attribute": "Attribute",
   "COF.ui.self": "Self",
-  "COF.ui.selected": "Selected",
+  "COF.ui.selected": "Selected (Single)",
+  "COF.ui.selectedMultiple": "Selected (Multiple)",
   "COF.ui.addEffecct": "Add effect",
   "COF.ui.deleteEffect": "Delete effect",
   "COF.ui.ranks": "From rank",
@@ -102,6 +103,7 @@
   "COF.ui.day": "Day",
   "COF.ui.round": "Round",
   "COF.ui.allies": "Allies",
+  "COF.ui.alliesSelf": "Allies and Self",
   "COF.ui.enemies": "Enemies",
   "COF.ui.all": "All",
 

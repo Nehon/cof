@@ -316,15 +316,24 @@ export class CofRoll {
     static getTargets(targetType, source) {
 
         switch (targetType) {
-            case "selected":
+            case "selectedMultiple":
                 if (game.user.targets.size) {
                     return [...game.user.targets];
+                }
+                break;
+            case "selected":
+                if (game.user.targets.size) {
+                    return [[...game.user.targets][0]];
                 }
                 break;
             case "self":
                 return [source];
             case "allies":
                 return Traversal.getTokensForDisposition(source.data.disposition, source.data._id);
+            case "alliesSelf":
+                const t = Traversal.getTokensForDisposition(source.data.disposition, source.data._id);
+                t.push(source);
+                return t;
             case "enemies":
                 return Traversal.getTokensForDisposition(source.data.disposition * -1);
             case "all":
@@ -434,7 +443,7 @@ export class CofRoll {
             targetName = targetType;
             if (targets.length === 1) {
                 targetName = Traversal.getTokenName(targets[0]);
-            } else if (targetType === "selected") {
+            } else if (targetType === "selectedMultiple") {
                 targetName = "Multiple";
             }
         }
