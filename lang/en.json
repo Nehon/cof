@@ -106,6 +106,7 @@
   "COF.ui.alliesSelf": "Allies and Self",
   "COF.ui.enemies": "Enemies",
   "COF.ui.all": "All",
+  "COF.ui.maxUse": "Max Usage",
 
   "COF.roll.success" : "Success",
   "COF.roll.critical" : "Critical",
@@ -330,6 +331,7 @@
   "COF.notification.NoActorSelected": "No character selected",
   "COF.notification.NoCapacity": "The character doesn't know the capacity",
   "COF.notification.noWeaponEquiped": "The character has no weapon equiped",
+  "COF.notification.capacityDepleted": "You can't use this capacity for the moment",
 
   "COF.message.damageRoll": "Damage roll",
   "COF.message.healRoll": "Heal roll",  

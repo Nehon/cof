@@ -389,7 +389,10 @@
       "rank": null,
       "pathIndex": null,
       "limited": false,
-      "spell": false,      
+      "spell": false,  
+      "nbUse": null,
+      "maxUse": null,
+      "frequency":null,    
       "effects":[{
         "rank": 1,
         "maxRank": 5,
@@ -401,9 +404,7 @@
         "testRoll": false,
         "testDice": "1d20",
         "testMod": null,        
-        "duration": null,
-        "nbUses": null,
-        "frequency":null
+        "duration": null
       }]
     },
     "profile": {

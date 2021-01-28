@@ -3,13 +3,13 @@ export class Traversal {
     static async getEntity(id, type, pack) {
         let entity = null;
         // Case 1 - Import from World entities
-        if(type === "item") entity = game.items.get(id);
-        else if(type === "actor") entity = game.actors.get(id);
-        else if(type === "journal") entity = game.journal.get(id);
+        if (type === "item") entity = game.items.get(id);
+        else if (type === "actor") entity = game.actors.get(id);
+        else if (type === "journal") entity = game.journal.get(id);
         // Case 2 - Import from a Compendium pack
         if (!entity && pack) {
             const compendiums = game.packs.filter(c => c.metadata.tag === pack)
-            for(let compendium of compendiums){
+            for (let compendium of compendiums) {
                 await compendium.getEntity(id).then(e => entity = e);
                 if (entity) {
                     return entity;
@@ -17,6 +17,16 @@ export class Traversal {
             }
         }
         return entity;
+    }
+
+    static findActor(id) {
+        let token  = canvas.tokens.placeables.find((t) => t.data.actorId === id);
+
+        if (token) {
+            return token.actor;
+        }
+        let actor = game.actors.get(id);
+        return actor;
     }
 
     // static async getEntity(id, type, pack) {
@@ -56,12 +66,12 @@ export class Traversal {
     static getItemsOfType(type) {
         let compendium = [];
         let ingame = [];
-        switch(type){
-            case "path" :
+        switch (type) {
+            case "path":
                 compendium = game.cof.config.paths;
                 ingame = game.items.filter(item => item.type === "path").map(entity => entity.data);
                 break;
-            case "capacity" :
+            case "capacity":
                 compendium = game.cof.config.capacities;
                 ingame = game.items.filter(item => item.type === "capacity").map(entity => entity.data);
                 break;
@@ -73,50 +83,50 @@ export class Traversal {
      * DATA
      */
 
-    static getInGameEntitiesDataOfType (type) {
+    static getInGameEntitiesDataOfType(type) {
         return game.items.filter(item => item.type === type).map(entity => entity.data);
     }
 
-    static getAllCapacitiesData () {        
+    static getAllCapacitiesData() {
         const compendium = game.cof.config.capacities;
         const ingame = this.getInGameEntitiesDataOfType("capacity");
         return ingame.concat(compendium);
     }
 
-    static getAllPathsData () {        
+    static getAllPathsData() {
         const compendium = game.cof.config.paths;
         const ingame = this.getInGameEntitiesDataOfType("path");
         return ingame.concat(compendium);
     }
 
-    static getAllProfilesData () {        
+    static getAllProfilesData() {
         const compendium = game.cof.config.profiles;
         const ingame = this.getInGameEntitiesDataOfType("profile");
         return ingame.concat(compendium);
     }
 
-    static getAllSpeciesData () {        
+    static getAllSpeciesData() {
         const compendium = game.cof.config.species;
         const ingame = this.getInGameEntitiesDataOfType("species");
         return ingame.concat(compendium);
     }
 
-    static findTargetToken(id){
-        if(!id) return undefined;
+    static findTargetToken(id) {
+        if (!id) return undefined;
         return canvas.tokens.placeables.find(token => token.data._id === id);
     }
 
     // Hostile is -1, Friendly is +1
     // optional exclude id.
-    static getTokensForDisposition(disposition, excludeId = undefined){        
+    static getTokensForDisposition(disposition, excludeId = undefined) {
         return canvas.tokens.placeables.filter(token => token.data.disposition === disposition && (token.data._id !== excludeId));
     }
 
-    static getTokenName(token){
-        return (token.data.displayName === 30 || token.data.displayName ===50)? token.name:"???";
+    static getTokenName(token) {
+        return (token.data.displayName === 30 || token.data.displayName === 50) ? token.name : "???";
     }
 
-    static rollResultToString(r){
+    static rollResultToString(r) {
         let diceResult = "";
         for (const term of r.terms) {
             if ((typeof term) === "string" || (typeof term) === "number") {
@@ -124,7 +134,7 @@ export class Traversal {
                 continue;
             }
             for (const res of term.results) {
-                 diceResult += diceResult.length ? `+ (${res.result}) ` : `(${res.result}) `;
+                diceResult += diceResult.length ? `+ (${res.result}) ` : `(${res.result}) `;
             }
         }
         return diceResult;

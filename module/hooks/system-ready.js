@@ -28,6 +28,6 @@ Hooks.once("ready", async () => {
     // await UpdateUtils.updateEncounters();
     
     UpdateUtils.updateActorsPathRank();
+    ui.hotbar.render();
     console.info("System Initialized.");
-
 });

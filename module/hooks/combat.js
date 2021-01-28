@@ -37,20 +37,35 @@ const updateCombattant = (combatant, combat, progress) => {
 }
 
 Hooks.on('preUpdateCombat', (combat, snap, progress ) => {   
-
     combat.combatants.forEach(combattant =>{
         updateCombattant(combattant, combat, progress);
     });
 });
 
-Hooks.on('updateCombat', (combat, snap, progress) => {   
-    // TODO start actor turn 
-    //  -> apply hot and dots
+Hooks.on('createCombatant', (combat, snap, progress ) => {   
+    let actor = canvas.tokens.placeables.find((t) => t.data._id === snap.tokenId).actor;
+    actor.updateForCombat().then(()=>{ui.hotbar.render()});
 });
+
+Hooks.on('updateCombat', (combat, snap, progress) => {  
+    if(snap.round){
+        combat.combatants.forEach(combatant =>{
+            combatant.actor.updateForRound().then(()=>{ui.hotbar.render()});
+        });
+    }
+});
+
+Hooks.on("CWCalendar.newDay", (time) => { 
+    game.actors.forEach((a) => {
+        a.updateForDay().then(() => ui.hotbar.render());
+    });   
+});
+
 
 Hooks.on('deleteCombat', (combat, snap, progress) => {   
     combat.combatants.forEach(combatant =>{
         let updates = [] 
+        combatant.actor.updateForCombat().then(()=>{ui.hotbar.render()});;
         combatant.actor.effects.forEach(effect => {
             if(combat._id != effect.data.duration.combat ){
                 return;
@@ -63,6 +78,7 @@ Hooks.on('deleteCombat', (combat, snap, progress) => {
             combatant.actor.deleteEmbeddedEntity("ActiveEffect", updates);
         }
     });
+    
 });
 
  

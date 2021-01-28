@@ -139,7 +139,7 @@ Hooks.once("init", async function () {
     CONFIG.Actor.entityClass = CofActor;
     CONFIG.Item.entityClass = CofItem;
     CONFIG.ActiveEffect.entityClass = CofEffect;
-    CONFIG.time.turnTime = 1;
+    //CONFIG.time.turnTime = 1;
     
     // Create a namespace within the game global
     game.cof = {

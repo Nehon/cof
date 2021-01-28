@@ -260,6 +260,62 @@ export class CofActor extends Actor {
         this.createEmbeddedEntity("ActiveEffect", effectData);
     }
 
+    
+    getMaxUse(item){
+        let maxUse = item.data.maxUse;
+        if (maxUse === "@rank") {
+            if (this.data.data.paths) {
+                maxUse = this.data.data.paths[item.data.pathIndex].rank;
+            } else {
+                maxUse = 0;
+            }
+        }
+        return maxUse;
+    }
+
+    async updateForRound(){
+        let updates = [];
+        for (const item of this.data.items) {
+            if(!item.data.maxUse || item.data.frequency !== 'round'){
+                continue;
+            }
+            updates.push({_id:item._id, "data.nbUse": this.getMaxUse(item)});            
+        }
+        if (!updates.length) {
+            return;
+        }
+        return this.updateEmbeddedEntity("OwnedItem", updates);
+    }
+
+    async updateForCombat(){
+        let updates = [];
+        for (const item of this.data.items) {
+            if(!item.data.maxUse || (item.data.frequency !== 'round' && item.data.frequency !== 'combat')){
+                continue;
+            }
+            
+            updates.push({_id:item._id, "data.nbUse": this.getMaxUse(item)});            
+        }
+        if (!updates.length) {
+            return;
+        }
+        return this.updateEmbeddedEntity("OwnedItem", updates);
+    }
+
+    async updateForDay(){
+        let updates = [];
+        for (const item of this.data.items) {
+            if(!item.data.maxUse || item.data.frequency !== 'day'){
+                continue;
+            }
+           updates.push({_id:item._id, "data.nbUse": this.getMaxUse(item)});            
+        }
+        if (!updates.length) {
+            return;
+        }
+        return this.updateEmbeddedEntity("OwnedItem", updates);
+    }
+
     /* -------------------------------------------- */
 
     getMagicMod(stats, profile) {

@@ -16,29 +16,20 @@ export class Macros {
 
     static rollStatMacro = async function (actor, stat, onEnter = "submit") {
         if (actor) {
-            let statObj;
-            switch (stat) {
-                case "for":
-                case "str": statObj = eval(`actor.data.data.stats.str`); break;
-                case "dex": statObj = eval(`actor.data.data.stats.dex`); break;
-                case "con": statObj = eval(`actor.data.data.stats.con`); break;
-                case "int": statObj = eval(`actor.data.data.stats.int`); break;
-                case "sag":
-                case "wis": statObj = eval(`actor.data.data.stats.wis`); break;
-                case "cha": statObj = eval(`actor.data.data.stats.cha`); break;
-                case "atc":
-                case "melee": statObj = eval(`actor.data.data.attacks.melee`); break;
-                case "atd":
-                case "ranged": statObj = eval(`actor.data.data.attacks.ranged`); break;
-                case "atm":
-                case "magic": statObj = eval(`actor.data.data.attacks.magic`); break;
-                default:
-                    ui.notifications.error("La compétence à tester n'a pas été reconnue.");
-                    break;
+            let key;
+            switch (stat) {                                
+                case "melee": 
+                case "ranged":
+                case "magic": 
+                     key = `data.attacks.${stat}`;       
+                break;                
             }
-            await CofRoll.skillRollDialog(actor, game.i18n.localize(statObj.label), statObj.mod, 0, 20, statObj.superior, onEnter);
+            if(!key){
+                key = `data.stats.${stat}`;
+            }
+            CofRoll.skillCheckDialog(actor, key);            
         } else {
-            ui.notifications.error("Vous devez sélectionner un token pour pouvoir exécuter cette macro.");
+            ui.notifications.error(game.i18n.localize("COF.notification.NoActorSelected"));
         }
     };
 
@@ -80,7 +71,7 @@ export class Macros {
     static rollCapacityMacro = async function (itemKey, itemName) {
         const actor = Macros.getSpeakersActor()
         if (!actor) {
-            return ui.notifications.warn(`${game.i18n.localize("COF.notification.NoActorSelected")}`);
+            return ui.notifications.warn(game.i18n.localize("COF.notification.NoActorSelected"));
         }
 
         const cap = actor.getCapacityByKey(actor.data.items, itemKey);
@@ -93,12 +84,19 @@ export class Macros {
             return;
         }
 
+        if(cap.data.maxUse !== undefined && cap.data.maxUse !== null && (cap.data.nbUse <= 0)){
+            ui.notifications.warn(`${game.i18n.localize("COF.notification.capacityDepleted")}: ${cap.name}, ${cap.data.nbUse} / ${cap.data.maxUse} per ${cap.data.frequency}`);
+            return;
+        }
+
         // register actions and effects for each type of targets. + one entry for the skill roll
         let action = {
             skillRoll: undefined, // optional skill roll
             damageRoll: undefined, // optional damage roll. if SkillRoll damage are only applied on success.
             effects: new Map(), // ActiveEffects to apply only when a skill roll succeeded for each type of targets.
             uncheckedEffects: new Map(), // ActiveEffect data map to apply in any case when the capacity is triggerred for each type of targets.
+            itemId: cap._id,
+            forceDisplayApply: !!cap.data.maxUse
         }
         let activable = false;
         // only activable effects are considered, all effects found after a skill roll are considered applied only if the skill roll succeeded.

@@ -12,15 +12,35 @@
 </style>
 <h3 class="form-header">{{localize "COF.ui.properties"}}</h3>
 <input class="field-value" name="data.key" type="hidden" value="{{data.key}}" placeholder="{{ localize "COF.ui.key" }}" data-dtype="String">
-<div class="form-group stacked">
-    <label>{{localize "COF.ui.properties"}}</label>
-    <div class="form-fields">        
-        <label class="checkbox">
-            <input type="checkbox" name="data.limited" {{checked data.limited}}> {{localize "COF.ui.limited"}}
-        </label>
-        <label class="checkbox">
-            <input type="checkbox" name="data.spell" {{checked data.spell}}> {{localize "COF.ui.spell"}}
-        </label>            
+<div class="form-group stacked">   
+    <div class="form-group stacked">
+        <div class="form-fields flexrow">        
+            <label class="checkbox flex1">
+                <input type="checkbox" name="data.limited" {{checked data.limited}}> {{localize "COF.ui.limited"}}
+            </label>
+            <label class="checkbox flex1">
+                <input type="checkbox" name="data.spell" {{checked data.spell}}> {{localize "COF.ui.spell"}}
+            </label>            
+            <div class='flex4 cell'>
+                <label class="checkbox">
+                    {{localize "COF.ui.maxUse"}}
+                </label>
+                <input type="text" value="{{data.maxUse}}" name="data.maxUse" data-dtype="String"  placeholder="{{localize "COF.ui.formula"}}">
+            </div>
+            <div class='flex4 cell'>
+                <label class="checkbox">
+                    {{localize "COF.ui.frequency"}}:
+                </label>            
+                <select name="data.frequency" data-dtype="String">
+                {{#select data.frequency}}                
+                    <option value="">{{localize "COF.None"}}</option>
+                    <option value="round">{{localize "COF.ui.round"}}</option>
+                    <option value="combat">{{localize "COF.ui.combat"}}</option>
+                    <option value="day">{{localize "COF.ui.day"}}</option>                    
+                {{/select}}
+            </select>
+            </div>
+        </div>
     </div>
     </div>
     <h3 class="form-header">{{localize "COF.ui.effects"}}
@@ -160,26 +180,9 @@
             <label class="checkbox">
                 {{localize "COF.ui.effectDuration"}}
             </label>
-            <input type="text" value="{{effect.duration}}" name="data.effects.{{@key}}.duration" data-dtype="String"  placeholder="{{localize "COF.ui.formula"}}">
+            <input type="text" value="{{effect.duration}}" name="data.effects.{{@key}}.duration" data-dtype="String"  placeholder="{{localize "COF.ui.formula"}}">        
         </div>
-        <div class='flex4 cell'>
-            <label class="checkbox">
-                {{localize "COF.ui.effectNbUsage"}}
-            </label>
-            <input type="text" value="{{effect.nbUsage}}" name="data.effects.{{@key}}.nbUsage" data-dtype="String"  placeholder="{{localize "COF.ui.formula"}}">
-        </div>
-        <div class='flex4 cell'>
-            <label class="checkbox {{disabled ( not (equals effect.type 'buff'))}}">
-                {{localize "COF.ui.frequency"}}:
-            </label>            
-            <select name="data.effects.{{@key}}.frequency" data-dtype="String" {{disabled ( not (equals effect.nbUsage null))}}>
-            {{#select effect.frequency}}                
-                <option value="combat">{{localize "COF.ui.combat"}}</option>
-                <option value="day">{{localize "COF.ui.day"}}</option>                
-                <option value="day">{{localize "COF.ui.round"}}</option>                
-            {{/select}}
-        </select>
-        </div>
+        <div class='flex8 cell'></div>        
     </div>
 
  {{/each}}

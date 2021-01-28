@@ -122,6 +122,16 @@ export const registerHandlebarsHelpers = function () {
         return items.filter(item => item.type === "path").length;
     });
 
+    Handlebars.registerHelper('getPathRank', function (actor, pathIndex) {        
+        return actor.data.paths[pathIndex].rank;
+    });
+
+
+    Handlebars.registerHelper('logItem', function (item) {        
+        console.log("logitem", item);
+    });
+
+
     Handlebars.registerHelper('getCapacities', function (items) {
         let caps = items.filter(item => item.type === "capacity");
         caps.sort(function (a, b) {

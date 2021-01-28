@@ -48,6 +48,11 @@ export class CofRoll {
     static skillCheck(data, actor, event) {
         const elt = $(event.currentTarget)[0];
         let key = elt.attributes["data-rolling"].value;
+        CofRoll.skillCheckDialog(actor,key);
+    }
+
+    static skillCheckDialog(actor, key){
+        const data = actor.data.data;
         let label = eval(`${key}.label`);
         const mod = eval(`${key}.mod`);
         // let bonus = eval(`${key}.bonus`);
@@ -62,7 +67,6 @@ export class CofRoll {
         }
         CofRoll.rollDialog(actor, actor.token, label, iconsMap[key], { skillRoll: skillRoll });
     }
-
 
     /**
      *  Handles weapon check rolls
@@ -352,8 +356,9 @@ export class CofRoll {
     }
 
     static applyEffect(results, action, effectLabel, sourceToken) {
+        let apply = false;
         for (let [key, value] of action[effectLabel]) {
-            const trgs = CofRoll.getTargets(key, sourceToken);
+            const trgs = CofRoll.getTargets(key, sourceToken);            
             for (const target of trgs) {
                 let data = results.targets[target.data._id];
                 if (!data) {
@@ -368,6 +373,7 @@ export class CofRoll {
                 } else {
                     data[effectLabel].tooltip += `<br>${data[effectLabel].duration.rounds} ${game.i18n.localize("COF.message.rounds")}`;
                 }
+                apply |= (!data.skill) || data.skill.isSuccess;
                 if (!value.changes) {
                     continue;
                 }
@@ -381,6 +387,7 @@ export class CofRoll {
                 
             }
         }
+        return apply;
     }
 
     // let skillRoll = {
@@ -506,9 +513,12 @@ export class CofRoll {
 
                         let results = {
                             name: label,
+                            displayApply: action.forceDisplayApply,
+                            itemId: action.itemId,
                             img: img,
                             source: {
-                                img: actor.data.token.img
+                                img: actor.data.token.img,
+                                id: actor._id
                             },
                             targets: {}
                         };
@@ -545,26 +555,29 @@ export class CofRoll {
                                 for (const target of targets) {
                                     results.targets[target.data._id].damage = dmg;
                                 }
+                                results.displayApply = true;
                             } else {
                                 // dmg roll for each target
                                 for (const target of targets) {
                                     const result = results.targets[target.data._id];
                                     result.damage = r.getRollResult(result.skill.isCritical);
+                                    results.displayApply |= results.targets[target.data._id].skill.isSuccess;
                                 }
                             }
                             if (!targets.length) {
                                 if (!results.global) results.global = {};
-                                results.global.damage = dmg
+                                results.global.damage = dmg;                                
                             }
                         }
 
 
                         if (action.uncheckedEffects) {
-                            CofRoll.applyEffect(results, action, "uncheckedEffects", sourceToken)
+                            CofRoll.applyEffect(results, action, "uncheckedEffects", sourceToken);
+                            results.displayApply |= action.uncheckedEffects.size > 0;
                         }
 
                         if (action.effects) {
-                            CofRoll.applyEffect(results, action, "effects", sourceToken)
+                            results.displayApply |= CofRoll.applyEffect(results, action, "effects", sourceToken);
                         }
 
                         const targetObject = Object.keys(results.targets);
@@ -669,6 +682,15 @@ export class CofRoll {
                     }
                 }
             }
+            
+            const actor = Traversal.findActor(flags.rollResult.source.id);
+            const capacity = actor.getCapacity(actor.data.items, flags.rollResult.itemId);
+            if( capacity.data.maxUse ){
+               actor.updateEmbeddedEntity("OwnedItem",{ _id:capacity._id,
+                    "data.nbUse": capacity.data.nbUse - 1
+               }).then(()=>ui.hotbar.render());               
+            }
+
             message.update({
                 "flags.applied": true
             });

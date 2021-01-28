@@ -106,6 +106,18 @@ export class CofActorSheet extends ActorSheet {
             li.find(".capacity-description").slideToggle(200);
         });
 
+        html.find('.capacity-nb-use').change(ev => {
+            ev.preventDefault();
+            const li = $(ev.currentTarget);
+            const value = li.val();
+            const id = li.data("item-id");
+            
+            this.object.updateEmbeddedEntity("OwnedItem",{
+                _id: id,
+                "data.nbUse" : value
+            }).then(()=> ui.hotbar.render());
+        });
+
         // Equip/Unequip items
         html.find('.item-equip').click(ev => {
             ev.preventDefault();

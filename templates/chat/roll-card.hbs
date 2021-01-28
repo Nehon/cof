@@ -73,7 +73,7 @@
     </div> 
     {{/forin}}
 {{/if}}
-{{#if (or (or (not global.skill) global.skill.isSuccess) global.uncheckedEffects)}}    
+{{#if displayApply}}
     <button class="chat-message-apply-button" style="line-height: 20px;margin-top:3px" >
         <i class="fas fa-check-circle" style="vertical-align:middle;"> {{localize "COF.message.apply"}}</i>
     </button
