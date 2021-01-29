@@ -83,9 +83,9 @@ export class Macros {
             CofItem.logItem(cap, actor);
             return;
         }
-
-        if(cap.data.maxUse !== undefined && cap.data.maxUse !== null && (cap.data.nbUse <= 0)){
-            ui.notifications.warn(`${game.i18n.localize("COF.notification.capacityDepleted")}: ${cap.name}, ${cap.data.nbUse} / ${cap.data.maxUse} per ${cap.data.frequency}`);
+        
+        if(actor.getMaxUse(cap) !== null && (cap.data.nbUse <= 0)){
+            ui.notifications.warn(`${game.i18n.localize("COF.notification.capacityDepleted")}: ${cap.name}, ${cap.data.nbUse} / ${actor.getMaxUse(cap)} per ${cap.data.frequency}`);
             return;
         }
 

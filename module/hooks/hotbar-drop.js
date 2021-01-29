@@ -14,7 +14,7 @@ Hooks.on("hotbarDrop", async (bar, data, slot) => {
         let displayUsage = false
         if (item.type === "capacity") {
             command = `game.cof.macros.rollCapacityMacro("${item.data.key}", "${item.name}");`;
-            displayUsage = item.data.maxUse !== undefined && item.data.maxUse !== null;
+            displayUsage = item.data.maxUse !== undefined && item.data.maxUse !== null && item.data.maxUse !== "";
         } else {
             command = `game.cof.macros.rollItemMacro("${item._id}", "${item.name}", "${item.type}");`;
         }
@@ -79,14 +79,7 @@ Hooks.on("renderHotbar", async (bar, html, info) => {
         }
         const actor = game.actors.get(macro.data.flags.actorId);
         const capacity = actor.getCapacityByKey(actor.data.items, macro.data.flags.itemKey);
-        let maxUse = capacity.data.maxUse;
-        if (maxUse === "@rank") {
-            if (actor.data.data.paths) {
-                maxUse = actor.data.data.paths[capacity.data.pathIndex].rank;
-            } else {
-                maxUse = 2;
-            }
-        }
+        let maxUse = actor.getMaxUse(capacity);      
         let elem = macros[i];
         let div = $("<div></div>");
         div.addClass("macro-use");

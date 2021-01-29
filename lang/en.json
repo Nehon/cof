@@ -85,6 +85,7 @@
   "COF.ui.effectType": "Effect type",
   "COF.ui.target": "Target",
   "COF.ui.noTarget": "No target",
+  "COF.ui.noTargetMessage": "This roll needs a target, are you sure you want to roll without target?",  
   "COF.ui.attribute": "Attribute",
   "COF.ui.self": "Self",
   "COF.ui.selected": "Selected (Single)",

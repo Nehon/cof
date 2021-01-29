@@ -270,16 +270,20 @@ export class CofActor extends Actor {
                 maxUse = 0;
             }
         }
+        if(maxUse === "" || maxUse === undefined){
+            return null;
+        }
         return maxUse;
     }
 
     async updateForRound(){
         let updates = [];
         for (const item of this.data.items) {
-            if(!item.data.maxUse || item.data.frequency !== 'round'){
+            const maxUse = this.getMaxUse(item);
+            if(!maxUse || item.data.frequency !== 'round'){
                 continue;
             }
-            updates.push({_id:item._id, "data.nbUse": this.getMaxUse(item)});            
+            updates.push({_id:item._id, "data.nbUse":maxUse});            
         }
         if (!updates.length) {
             return;
@@ -290,11 +294,12 @@ export class CofActor extends Actor {
     async updateForCombat(){
         let updates = [];
         for (const item of this.data.items) {
-            if(!item.data.maxUse || (item.data.frequency !== 'round' && item.data.frequency !== 'combat')){
+            const maxUse = this.getMaxUse(item);
+            if(!maxUse || (item.data.frequency !== 'round' && item.data.frequency !== 'combat')){
                 continue;
             }
             
-            updates.push({_id:item._id, "data.nbUse": this.getMaxUse(item)});            
+            updates.push({_id:item._id, "data.nbUse": maxUse});            
         }
         if (!updates.length) {
             return;
@@ -305,10 +310,11 @@ export class CofActor extends Actor {
     async updateForDay(){
         let updates = [];
         for (const item of this.data.items) {
-            if(!item.data.maxUse || item.data.frequency !== 'day'){
+            const maxUse = this.getMaxUse(item);
+            if(!maxUse || item.data.frequency !== 'day'){
                 continue;
             }
-           updates.push({_id:item._id, "data.nbUse": this.getMaxUse(item)});            
+           updates.push({_id:item._id, "data.nbUse": maxUse});            
         }
         if (!updates.length) {
             return;

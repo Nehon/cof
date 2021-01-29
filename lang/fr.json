@@ -85,6 +85,7 @@
   "COF.ui.effectType": "Type d'effet",
   "COF.ui.target": "Cible",
   "COF.ui.noTarget": "Pas de cible",
+  "COF.ui.noTargetMessage": "Ce jet a besoin d'une cible, êtes vous sûr de vouloir jetter les dés sans cible?",  
   "COF.ui.attribute": "Attribut",
   "COF.ui.self": "Soi même",
   "COF.ui.selected": "Sélectionnée (première)",

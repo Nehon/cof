@@ -455,6 +455,24 @@ export class CofRoll {
             }
         }
 
+        if(targetType && targetType.startsWith("selected") && !targets.length){
+            let confirm = async function(){
+                return new Promise((resolve =>{
+                    Dialog.confirm({
+                        title: game.i18n.localize("COF.ui.noTarget"),
+                        content: `<strong>${game.i18n.localize("COF.ui.noTargetMessage")}</strong>`,
+                        yes: () => resolve(true),
+                        no: () => resolve(false),
+                        defaultYes: false
+                    });
+                }));
+            };
+            let result = await confirm();
+            if(result === false){
+                return;
+            }
+        }
+
 
         const type = dmgRoll ? dmgRoll.type : "";
         const rollOptionContent = await renderTemplate(rollOptionTpl, {
@@ -511,6 +529,17 @@ export class CofRoll {
                             difficulty = diff;
                         }
 
+                        if(targetType && targetType.startsWith("selected") && !targets.length){
+                            // retry to find targets
+                            if(action.skillRoll){
+                                targets= CofRoll.getTargets(action.skillRoll.target, sourceToken);
+                            } else if(action.damageRoll){
+                                targets= CofRoll.getTargets(action.damageRoll.target, sourceToken);
+                            }                            
+                        }
+
+                        let skillRoll = action.skillRoll;
+                        let dmgRoll = action.damageRoll;
                         let results = {
                             name: label,
                             displayApply: action.forceDisplayApply,
@@ -685,7 +714,7 @@ export class CofRoll {
             
             const actor = Traversal.findActor(flags.rollResult.source.id);
             const capacity = actor.getCapacity(actor.data.items, flags.rollResult.itemId);
-            if( capacity.data.maxUse ){
+            if(capacity && actor.getMaxUse(capacity) ){
                actor.updateEmbeddedEntity("OwnedItem",{ _id:capacity._id,
                     "data.nbUse": capacity.data.nbUse - 1
                }).then(()=>ui.hotbar.render());               
