@@ -108,6 +108,10 @@
   "COF.ui.eanemies": "Ennemis",
   "COF.ui.all": "Tous",
   "COF.ui.maxUse": "Max nb utilisation",
+  "COF.ui.resistanceRoll":"Test de résistance",
+  "COF.ui.resistanceEffect":"Effet de résistance",
+  "COF.ui.duration": "Durée",
+  "COF.ui.resistance": "Résistance",
 
   "COF.roll.success" : "Succès",
   "COF.roll.critical" : "Critique",

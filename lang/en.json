@@ -108,6 +108,10 @@
   "COF.ui.enemies": "Enemies",
   "COF.ui.all": "All",
   "COF.ui.maxUse": "Max Usage",
+  "COF.ui.resistanceRoll":"Resistance roll",
+  "COF.ui.resistanceEffect":"Resistance effect",
+  "COF.ui.duration": "Duration",
+  "COF.ui.resistance": "Resistance",
 
   "COF.roll.success" : "Success",
   "COF.roll.critical" : "Critical",

@@ -71,14 +71,14 @@
             </div>
         </div>
     {{/if}}
-    {{#if (isEnabled "displayDifficulty")}}
+    {{#if (and (isEnabled "displayDifficulty") displayDifficulty)}}
         <!-- DIFFICULTY -->
         <div class="row flexrow" style="margin-bottom: 5px;">
             <div class="flex1 center bg-darkslate">
                 <span class="field-label">{{localize 'COF.ui.difficulty'}}</span>
             </div>
             <div class="flex1 center cell">
-                <input class="field-value" id="difficulty" name="difficulty" {{readonly difficultyReadonly}} type="text" value="{{difficulty}}" data-dtype="Number"/>
+                <input class="field-value" id="difficulty" name="difficulty" type="text" value="{{difficulty}}" data-dtype="Number"/>
             </div>
         </div>
         <hr/>

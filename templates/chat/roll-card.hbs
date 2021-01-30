@@ -1,7 +1,7 @@
 <h2>{{name}}</h2>
 {{#if (and global global.skill)}}
 <div class="flexrow flex-center message-skill-roll">
-<div class="flex1"><img  style="border:none" src="{{img}}" width="48" height="48" /></div>
+<div class="flex1"><img style="border:1px solid #555" src="{{img}}" width="48" height="48" /></div>
 <h1 class="flex3 {{getClass global.skill}} tooltip" >{{global.skill.total}}    
     <span class="tooltiptext tooltip-bottom">{{safeString global.skill.result}}</span>
     <i class="fas overlay"></i>
@@ -16,7 +16,7 @@
 </div>
 </div>
 {{else}}
-<div class="center"><img  style="border:none" src="{{img}}" width="48" height="48" /></div>
+<div class="center"><img style="border:1px solid #555" src="{{img}}" width="48" height="48" /></div>
 {{/if}}
 {{#if displayTargets}}
     <hr/>
@@ -35,14 +35,19 @@
             {{#if target.uncheckedEffects}}
                 <div class="flex3 tooltip center"><img style="border:none;vertical-align: bottom;border-radius: 12px;" src="{{target.uncheckedEffects.icon}}" width="24" height="24" />
                     <span class="tooltiptext tooltip-left">{{safeString target.uncheckedEffects.tooltip}}</span>
-                    <i class="overlay" style="font-size:0.8em;margin-top: 10px;">EFF</i>                        
-                    <i class="overlay name" style="font-size:1.0em;margin-top: -16px;margin-left: -18px;">
-                        {{#if (equals target.uncheckedEffects.duration.rounds 128)}}
-                            <span style="font-size:1.3em;"">&infin;</span>
-                        {{else}}
-                            {{target.uncheckedEffects.duration.rounds}}
-                        {{/if}}
-                    </i>
+                    <i class="overlay" style="font-size:0.8em;margin-top: 10px;">EFF</i>
+                    {{#if target.uncheckedEffects.resisted}}
+                        <i class="overlay name" style="font-size:0.8em;margin-top: -16px; margin-left:-38px; color:yellow;">RESIST</i> 
+                    {{else}}
+                        <i class="overlay name" style="font-size:1.0em;margin-top: -16px;margin-left: -18px;">
+                            {{#if (equals target.uncheckedEffects.duration.rounds 128)}}
+                                <span style="font-size:1.3em;"">&infin;</span>
+                            {{else}}
+                                {{target.uncheckedEffects.duration.rounds}}
+                            {{/if}}
+                        </i>
+                    {{/if}}
+                    
                 </div>            
             {{else}}    
                 {{#if (and target.effects (and target.skill target.skill.isSuccess))}}

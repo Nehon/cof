@@ -126,6 +126,9 @@ export const registerHandlebarsHelpers = function () {
         return actor.data.paths[pathIndex].rank;
     });
 
+    Handlebars.registerHelper('state', function () {        
+        console.log(arguments);
+    });
 
     Handlebars.registerHelper('logItem', function (item) {        
         console.log("logitem", item);

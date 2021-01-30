@@ -99,6 +99,7 @@ export class Macros {
             forceDisplayApply: !!cap.data.maxUse
         }
         let activable = false;
+
         // only activable effects are considered, all effects found after a skill roll are considered applied only if the skill roll succeeded.
         // gather effects
         for (let key in effects) {
@@ -140,6 +141,10 @@ export class Macros {
                 action.damageRoll.formula = new Roll(value, actor.data.data).formula;
                 action.damageRoll.type = effect.type;
                 action.damageRoll.target = effect.target.length ? effect.target : undefined;
+                if(effect.restsitanceFormula){
+                    action.damageRoll.restsitanceFormula = effect.restsitanceFormula;
+                    action.damageRoll.resistanceEffect = effect.restsitanceFormula;
+                }
                 continue;
             }
 
@@ -152,8 +157,7 @@ export class Macros {
                     const durationFormula = CofRoll.replaceSpecialAttributes(effect.duration, actor, cap).formula;
                     duration = new Roll(durationFormula, actor.data.data).roll().total;
                 }
-
-
+              
                 const effectKey = hasSkillRoll ? "effects" : "uncheckedEffects";
                 let activeEffect = action[effectKey].get(effect.target);
                 if (!activeEffect) {
@@ -164,7 +168,7 @@ export class Macros {
                 // active effect already exists for this target, let's just add a change to it                
                 Capacity.addActiveEffectChange(activeEffect, effect.stat, value);
                 continue;
-            }
+            }            
         }
         if(!activable){
             CofItem.logItem(cap, actor);

@@ -371,41 +371,47 @@
           "spell" : false,
           "consumable" : false
         }
+      },
+      "effect":{
+        "nbUse": null,
+        "maxUse": null,
+        "frequency":null,    
+        "effects":[{
+          "rank": 1,
+          "maxRank": 5,
+          "type": null,
+          "target": null,
+          "stat": null,
+          "values": null,
+          "activable": false,
+          "testRoll": false,
+          "testDice": "1d20",
+          "testMod": null,        
+          "duration": null,
+          "resistanceFormula": null,
+          "resistanceEffect": null
+        }]
       }
     },
     "item" : {
       "templates": [
         "base",
-        "equipment"
+        "equipment",
+        "effect"
       ],
       "subtype" : ""
     },
     "capacity": {
       "templates": [
-        "base"
+        "base",
+        "effect"
       ],
       "key": "",
       "summary" : "",
       "rank": null,
       "pathIndex": null,
       "limited": false,
-      "spell": false,  
-      "nbUse": null,
-      "maxUse": null,
-      "frequency":null,    
-      "effects":[{
-        "rank": 1,
-        "maxRank": 5,
-        "type": null,
-        "target": null,
-        "stat": null,
-        "values": null,
-        "activable": false,
-        "testRoll": false,
-        "testDice": "1d20",
-        "testMod": null,        
-        "duration": null
-      }]
+      "spell": false     
     },
     "profile": {
       "templates": [

@@ -273,11 +273,7 @@ export class CofRoll {
         const arr = formula.split(">");
         let result = arr[0].trim();
         let difficulty = arr.length > 1 ? arr[1].trim() : undefined;
-        if(difficulty && (typeof difficulty) !== "number" && difficulty.indexOf("@target") >=0 ){
-            const target = CofRoll.getTargets("selected")[0];
-            difficulty = eval(difficulty.replace("@target","target.actor.data.data"));
-        }
-
+       
         if (result.indexOf("@rank") >= 0) {
             const rank = actor.data.data.paths[capacity.data.pathIndex].rank;
             result = result.replace(/@rank/g, rank);
@@ -364,8 +360,16 @@ export class CofRoll {
                 if (!data) {
                     data = CofRoll.makeTarget(results, target);
                 }
-                data[effectLabel] = value;
+                data[effectLabel] = duplicate(value);
+
                 data[effectLabel].tooltip = value.label;
+                const resist = CofRoll.rollResistance(value["flags.resistanceFormula"], sourceToken, target);
+                if(resist.resisted){
+                    data[effectLabel].resisted = true;
+                    data[effectLabel].tooltip = `${value.label}<br>Resist.<br>${resist.result}`;
+                    continue;
+                }
+                
                  if(data[effectLabel].duration.rounds == 128){
                     data[effectLabel].tooltip += `<br>${game.i18n.localize("COF.message.undefinedDuration")}`;
                 } else if(data[effectLabel].duration.rounds == 1){
@@ -383,11 +387,36 @@ export class CofRoll {
                     }
                     data[effectLabel].tooltip += `<br>${game.i18n.localize(change.key)} ${change.value >= 0 ? '+' : ''}${change.value}`;
                 }
-               
-                
             }
         }
         return apply;
+    }
+
+    static rollResistance(formula, source, target){
+        let resist = {
+            resisted:false,
+            result: ""
+        };
+        if(!formula){
+            return resist;
+        }        
+        const arr = formula.split(">");
+        if(arr.length != 2){
+            //warn
+            ui.notifications.warning(`Invalid roll formula : ${formula}`);
+            return resist;
+        }
+        let rollFormula = arr[0].trim();
+        let difficultyFormula = arr[1].trim();
+        let modResult = new Roll(rollFormula, {target: target.actor.data.data});
+        modResult.roll();
+        let difficultyResult = new Roll(difficultyFormula, source.actor.data.data);
+        difficultyResult.roll();
+        let roll = new CofSkillRoll("", "1d20", modResult.total, 0, difficultyResult.total, "20");
+        const result = roll.getRollResult();
+        resist.resisted = result.isSuccess;
+        resist.result = result.result + ` > ${difficultyResult.total}`;
+        return resist;
     }
 
     // let skillRoll = {
@@ -411,9 +440,16 @@ export class CofRoll {
     //     uncheckedEffects: new Map(), // ActiveEffect data map to apply in any case when the capacity is triggerred for each type of targets.
     // }
     static async rollDialog(actor, sourceToken, label, img, action) {
+
+        const time = new Date().getTime();
+        if(time - window.lastRollDialog < 800){            
+            return;
+        }
+        window.lastRollDialog = time;
+
         const rollOptionTpl = 'systems/cof/templates/dialogs/roll-dialog.hbs';
-        let diff = "";
-        let diffReadonly = false;
+        let diff = "";      
+        let displayDifficulty = true;  
         let targetName, mod, critRange, dice, displayTarget = false;
 
         const skillRoll = action.skillRoll;
@@ -425,28 +461,15 @@ export class CofRoll {
             critRange = skillRoll.critRange;
             dice = skillRoll.dice;
             if (skillRoll.superior && !dice.endsWith("kh")) dice = `2${dice.substring(1, dice.length)}kh`;
-
             targetType = skillRoll.target;
-            targets = CofRoll.getTargets(skillRoll.target, sourceToken);
-            if (game.settings.get("cof", "displayDifficulty")) {
-                if (skillRoll.difficulty) {
-                    diff = skillRoll.difficulty;
-                } else if (targets.length) {
-                    diff = [];
-                    for (let i = 0; i < targets.length; i++) {
-                        const target = targets[i];
-                        diff.push(target.actor.data.data.attributes.def.value);
-                        //diff += (i > 0 ? " / " : "") + target.actor.data.data.attributes.def.value;
-                        diffReadonly = i != 0;
-                    }
-                }
-            }
+            targets = CofRoll.getTargets(skillRoll.target, sourceToken);        
         } else if (dmgRoll) {
             targetType = dmgRoll.target
             targets = CofRoll.getTargets(dmgRoll.target, sourceToken);
         }
 
         if (targetType && targets.length) {
+            displayDifficulty = false
             targetName = targetType;
             if (targets.length === 1) {
                 targetName = Traversal.getTokenName(targets[0]);
@@ -473,15 +496,14 @@ export class CofRoll {
             }
         }
 
-
         const type = dmgRoll ? dmgRoll.type : "";
         const rollOptionContent = await renderTemplate(rollOptionTpl, {
             useSkillRoll: skillRoll !== undefined,
             mod: mod,
             bonus: actor.data.data.globalRollBonus,
             critrange: critRange,
-            difficulty: diff,
-            difficultyReadonly: diffReadonly,
+            difficulty: diff,            
+            displayDifficulty: displayDifficulty,
             displayTarget: targetType !== undefined,
             targetName: targetName,
             dice: dice,
@@ -518,17 +540,6 @@ export class CofRoll {
                         if (dmgBonus > 0) dmgFormula = dmgFormula.concat('+', dmgBonus);
                         else if (dmgBonus < 0) dmgFormula = dmgFormula.concat(' ', dmgBonus);
 
-                        let difficulty;
-                        if(diff && diff.indexOf(",") < 0){
-                            try{ 
-                                difficulty = parseInt(diff,10);
-                            } catch(e){
-                                difficulty = diff;
-                            }
-                        } else {
-                            difficulty = diff;
-                        }
-
                         if(targetType && targetType.startsWith("selected") && !targets.length){
                             // retry to find targets
                             if(action.skillRoll){
@@ -558,16 +569,17 @@ export class CofRoll {
                         if (skillRoll) {
                             results.fateValue = actor.data.data.attributes.fp.value;
                             results.fateMax = actor.data.data.attributes.fp.max;
-                            let r = new CofSkillRoll(label, dice, m, b, difficulty, critrange);
+                            let r = new CofSkillRoll(label, dice, m, b, diff, critrange);
                             if (targets.length) {
                                 for (const target of targets) { 
-                                    let result;    
-                                    if((typeof difficulty) !== "number"){
-                                        result = r.getRollResult(target.actor.data.data.attributes.def.value);                                        
-                                    } else{
-                                        result = r.getRollResult();
+                                    let result;
+                                    let difficulty = target.actor.data.data.attributes.def.value;
+                                    if(skillRoll.difficulty){
+                                         let r= new Roll(skillRoll.difficulty, {target: target.actor.data.data});
+                                         r.roll();
+                                         difficulty = r.total;
                                     }
-                                    
+                                    result = r.getRollResult(difficulty);                                        
                                     results.targets[target.data._id].skill = result;
                                 }
                             } else {
@@ -581,9 +593,9 @@ export class CofRoll {
                             const dmg = r.getRollResult();
                             if (!skillRoll) {
                                 // apply the dmg on each target
-                                for (const target of targets) {
-                                    results.targets[target.data._id].damage = dmg;
-                                }
+                                for (const target of targets) {                                    
+                                    results.targets[target.data._id].damage = dmg;                                    
+                                }   
                                 results.displayApply = true;
                             } else {
                                 // dmg roll for each target
@@ -701,11 +713,11 @@ export class CofRoll {
                         target.actor.applyDamage(data.damage.type === 'damage' ? data.damage.total : -data.damage.total);
                     }
                 }
-                if (data.uncheckedEffects) {
+                if (data.uncheckedEffects && !data.uncheckedEffects.resisted) {
                     target.actor.applyEffect(data.uncheckedEffects);
                 }
 
-                if (data.effects) {
+                if (data.effects && !data.effects.resisted) {
                     if (!data.skill || data.skill.isSuccess) {
                         target.actor.applyEffect(data.effects);                        
                     }

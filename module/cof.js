@@ -180,3 +180,57 @@ Hooks.once("init", async function () {
     registerHandlebarsHelpers();
 
 });
+
+// types of DM
+// Physic
+// Bludgeoning
+// Piercing
+// Slashing
+// magic
+// fire
+// ice
+// électricity
+// acid
+// Psychic
+// poison
+// desease
+// bleeding
+// holy
+// silver
+// cursed
+
+// Types of creature
+// humanoide
+// undead
+// all races
+
+//Type of resistance
+// RD                                                           // rd(5)
+// def bonus                                                    // def(5)               // macro(<name>)
+// bonus for resistance test                                    // test(5)              // macro(<name>)
+// Halves (maybe multiplier?)                                   // x(0.5)
+// Immunity                                                     // immune
+// special test ( magic resistance : roll 1D6 > spell rank)     // misc(1d6>@cap.rank)  // macro(<name>)
+
+// Exemple:
+// Réduction des DM : le cube gélatineux
+// réduit tous les DM de type contondant
+// ou perçant de 5 points. Il est immunisé
+// au DM d’électricité et d’acide.
+
+//-> Bludgeoining {RD:5}
+//-> Piercing {RD:5}
+//-> electricity [Immunity]
+//-> acid [Immunity]
+
+// Damage types are handled like tags added to an item or a cpaacity. example:  Physic piercing
+// Creature type are handled like tags added to an actor. example: humanoid high_elf 
+// an actor can have a global RD (all damage) or resistance to specific damage
+// for each type of damage/affliction the actor has a resistance entry.
+
+
+
+// Capacity resistance roll: for each effect
+// - resistanceFormula. example 1d20+@stats.dex.mod > 10 + @source.stats.cha.mod
+// - resistanceEffect. type of resistance
+

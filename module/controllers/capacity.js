@@ -72,6 +72,11 @@ export class Capacity {
             duration: durationObj,
             "flags.core.statusId" : capacity.data.key
         }
+        
+        if(effect.resistanceFormula){
+            effectData["flags.resistanceFormula"] = effect.resistanceFormula;
+            effectData["flags.resistanceEffect"] = effect.resistanceEffect;            
+        }
 
         // Standard effects
         let ae = CONFIG.statusEffects.find(e => e.id === effect.value ||  e.id === capacity.data.key);
