@@ -151,6 +151,15 @@ export class CofActorSheet extends ActorSheet {
         });
         html.find('.item-link').click(this._onLinkItem.bind(this));
 
+        html.find('.capacity-use').click(ev => {
+            ev.preventDefault();
+            const li = $(ev.currentTarget);
+            const id = li.closest("li").data("item-id");
+            const item = this.actor.getOwnedItem(id);
+            game.cof.macros.rollCapacityMacro(item.data.data.key, item.data.name);
+        });
+
+
         html.find('.capacity').hover(ev =>{
             ev.preventDefault();
             let li = $(ev.currentTarget);

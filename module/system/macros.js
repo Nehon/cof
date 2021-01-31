@@ -1,6 +1,7 @@
 import { CofRoll } from "../controllers/roll.js";
 import { CofItem } from "../items/item.js";
 import { Capacity } from "../controllers/capacity.js";
+import { Traversal } from "../utils/traversal.js";
 
 export class Macros {
 
@@ -79,7 +80,7 @@ export class Macros {
             return ui.notifications.warn(`${game.i18n.localize("COF.notification.NoCapacity")}: "${itemName}"`);
         }
         const effects = cap.data.effects;
-        if (!effects || !effects["0"]) {
+        if (!effects || !Object.keys(effects).length) {
             CofItem.logItem(cap, actor);
             return;
         }
@@ -149,25 +150,23 @@ export class Macros {
             }
 
             if (effect.type == 'buff') {
-                const valueFormula = CofRoll.replaceSpecialAttributes(effect.value, actor, cap).formula;
-                let value = 0;
-                try { value = new Roll(valueFormula, actor.data.data).roll().total; } catch (e) { }
                 let duration = 0;
                 if (effect.duration) {
                     const durationFormula = CofRoll.replaceSpecialAttributes(effect.duration, actor, cap).formula;
                     duration = new Roll(durationFormula, actor.data.data).roll().total;
                 }
-              
-                const effectKey = hasSkillRoll ? "effects" : "uncheckedEffects";
-                let activeEffect = action[effectKey].get(effect.target);
-                if (!activeEffect) {
-                    // no active effect, let's create it
-                    action[effectKey].set(effect.target, Capacity.makeActiveEffect(cap, effect, value, duration));
-                    continue;
+                let changes = Traversal.getChangesFromBuffValue(effect.value);
+                for (let change of changes) {
+                    if(!change.key || change.key.trim() === ""){
+                        continue;
+                    }
+                    const valueFormula = CofRoll.replaceSpecialAttributes(change.value, actor, cap).formula;
+                    let value = 0;
+                    try { value = new Roll(valueFormula, actor.data.data).roll().total; } catch (e) { }
+                    change.value = value;
                 }
-                // active effect already exists for this target, let's just add a change to it                
-                Capacity.addActiveEffectChange(activeEffect, effect.stat, value);
-                continue;
+                const effectKey = hasSkillRoll ? "effects" : "uncheckedEffects";
+                action[effectKey].set(effect.target, Capacity.makeActiveEffect(cap, effect, changes, duration));
             }            
         }
         if(!activable){

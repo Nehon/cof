@@ -2,7 +2,9 @@
  * Extend the base Actor entity by defining a custom roll data structure which is ideal for the Simple system.
  * @extends {Actor}
  */
+import { CofRoll } from "../controllers/roll.js";
 import {Stats} from "../system/stats.js";
+import { Traversal } from "../utils/traversal.js";
 
 export class CofActor extends Actor {
 
@@ -430,21 +432,21 @@ export class CofActor extends Actor {
                    continue;
                 } 
                 if(effect.type == 'buff' && effect.target == 'self'){
-                    const value = effect.value.replace("@rank", `@paths.${cap.data.pathIndex}.rank`)
-                    const roll = new Roll(value, actorData.data);
-                    roll.roll();
-                    const result = roll.total;                    
-                    const attr = effect.stat.replace('@', '');
-                    if ((statPass && !attr.startsWith("stats."))
-                        || (!statPass && attr.startsWith("stats."))) {
-                        continue;
-                    }                    
-                    let attrValue = Stats.getObjectValueForPath(actorData.data, attr);
-                    attrValue += result;
-                    Stats.setPath(actorData.data, attr, attrValue);
+                    const changes = Traversal.getChangesFromBuffValue(effect.value);                    
+                    for (const change of changes) {
+                        if ((statPass && !change.key.startsWith("data.stats."))
+                            || (!statPass && change.key.startsWith("data.stats."))) {
+                            continue;
+                        }                    
+                        let formula = CofRoll.replaceSpecialAttributes(change.value, this, cap).formula;
+                        const roll = new Roll(formula, actorData.data);
+                        roll.roll();
+                        const data = actorData.data;
+                        const value = eval(change.key) + roll.total
+                        Stats.setPath(actorData, change.key, value);
+                    }                   
                 }
             }
-            
         }
     }
     

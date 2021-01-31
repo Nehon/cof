@@ -137,57 +137,23 @@
                     {{/select}}
                 </select> 
             </div>   
+            {{#if (equals effect.type "buff")}}
             <div class='flex4 cell'>
+                <label class="checkbox">
+                    {{localize "COF.ui.buff"}}
+                </label>
+                {{buffWidget effect.value @key}}
+            </div>          
+            {{else}}
+             <div class='flex7 cell'>
                 <label class="checkbox">
                     {{localize "COF.ui.effectValueFormula"}}
                 </label>
                 <input type="text" value="{{effect.value}}" name="data.effects.{{@key}}.value" data-dtype="String"  placeholder="{{localize "COF.ui.formula"}}">
-            </div>
-            {{#if (equals effect.type "buff")}}
-            <div class='flex3 cell'>
-                <label class="checkbox {{disabled ( not (equals effect.type 'buff'))}}">
-                    {{localize "COF.ui.buffedAttribute"}}:
-                </label>            
-                <select name="data.effects.{{@key}}.stat" data-dtype="String" {{disabled ( not (equals effect.type 'buff'))}}>
-                {{#select effect.stat}}
-                    {{#if (or (equals effect.target 'melee') (equals effect.target 'ranged'))}}
-                        <option value="">{{localize "COF.None"}}</option>
-                        <option value="@dmg">{{localize "COF.weapon.dmg"}}</option>
-                        <option value="@mod">{{localize "COF.weapon.skillmod"}}</option>
-                    {{else}}
-                        <option value="">{{localize "COF.None"}}</option>
-                        <option value="@stats.str.buff">{{localize "COF.stats.str.label"}}</option>
-                        <option value="@stats.dex.buff">{{localize "COF.stats.dex.label"}}</option>
-                        <option value="@stats.con.buff">{{localize "COF.stats.con.label"}}</option>
-                        <option value="@stats.int.buff">{{localize "COF.stats.int.label"}}</option>
-                        <option value="@stats.wis.buff">{{localize "COF.stats.wis.label"}}</option>
-                        <option value="@stats.cha.buff">{{localize "COF.stats.cha.label"}}</option>
-                        <option value="@attacks.melee.buff">{{localize "COF.attacks.melee.label"}}</option>
-                        <option value="@attacks.ranged.buff">{{localize "COF.attacks.ranged.label"}}</option>
-                        <option value="@attacks.magic.buff">{{localize "COF.attacks.magic.label"}}</option>
-                        <option value="@attributes.hp.buff">{{localize "COF.attributes.hp.label"}}</option>
-                        <option value="@attributes.def.buff">{{localize "COF.attributes.def.label"}}</option>
-                        <option value="@attributes.init.buff">{{localize "COF.attributes.init.label"}}</option>
-                        <option value="@attributes.rp.buff">{{localize "COF.attributes.rp.label"}}</option>
-                        <option value="@attributes.fp.buff">{{localize "COF.attributes.fp.label"}}</option>
-                        <option value="@attributes.mp.buff">{{localize "COF.attributes.mp.label"}}</option>`
-                        <option value="@attributes.dr.buff">{{localize "COF.attributes.dr.label"}}</option>
-                        <option value="@globalRollBonus">{{localize "COF.globalRollBonus"}}</option>
-                        <option value="@stats.str.superior">{{localize "COF.stats.str.label"}} Sup</option>
-                        <option value="@stats.dex.superior">{{localize "COF.stats.dex.label"}} Sup</option>
-                        <option value="@stats.con.superior">{{localize "COF.stats.con.label"}} Sup</option>
-                        <option value="@stats.int.superior">{{localize "COF.stats.int.label"}} Sup</option>
-                        <option value="@stats.wis.superior">{{localize "COF.stats.wis.label"}} Sup</option>
-                        <option value="@stats.cha.superior">{{localize "COF.stats.cha.label"}} Sup</option>
-                        <option value="@attacks.melee.superior">{{localize "COF.attacks.melee.label"}} Sup</option>
-                        <option value="@attacks.ranged.superior">{{localize "COF.attacks.ranged.label"}} Sup</option>
-                        <option value="@attacks.magic.superior">{{localize "COF.attacks.magic.label"}} Sup</option>                
-                    {{/if}}
-                {{/select}}
-                </select>
-            </div>
+            </div>           
             {{/if}}
         </div>
+       
     {{/if}}
     {{#if (or (or effect.useDuration effect.duration) (or effect.useResistance effect.resistanceFormula))}}
         <div class="form-fields flexrow flex-between">        

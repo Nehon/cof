@@ -5,6 +5,7 @@
  * Journal   - open journal sheet
  */
 import { Macros } from "../system/macros.js";
+import { Traversal } from "../utils/traversal.js";
 
 Hooks.on("hotbarDrop", async (bar, data, slot) => {
     // Create item macro if rollable item - weapon, spell, prayer, trait, or skill
@@ -77,8 +78,12 @@ Hooks.on("renderHotbar", async (bar, html, info) => {
         if (!macro || !macro.data.flags.displayUsage) {
             continue;
         }
-        const actor = game.actors.get(macro.data.flags.actorId);
+        const actor = Traversal.findActor(macro.data.flags.actorId);
         const capacity = actor.getCapacityByKey(actor.data.items, macro.data.flags.itemKey);
+        if(!capacity){
+            console.warn(`Hotbar: ${actor.name} doesn't have the capacity ${macro.data.flags.itemKey}`);
+            continue;
+        }
         let maxUse = actor.getMaxUse(capacity);      
         let elem = macros[i];
         let div = $("<div></div>");

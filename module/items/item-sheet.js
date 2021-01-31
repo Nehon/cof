@@ -76,18 +76,81 @@ export class CofItemSheet extends ItemSheet {
             const length = Object.keys(data.data.effects).length
 
             data.data.effects[length] = {
-                type: 'damage',
-                target: 'selected',
-                roll: '1d6+@stats.str.mod',
-                stat: '@common.attributes.hp',
-                value: '0',
+                type: '',
+                target: '',
+                roll: '',                
+                value: "",
                 rank: 1,
                 maxRank: 5,
-                nbUses: '1',                
-                frequency: 'combat'
             };
             this.item.update(data)
         });
+        
+        html.find('.remove-buff').click(ev => {
+            ev.preventDefault();
+            const li = $(ev.currentTarget);
+            const key = li.data("key");
+            const value = li.data("value");
+            const data = duplicate(this.item.data);
+            data.data.effects[key].value = data.data.effects[key].value.replace(value,"");            
+            this.item.update(data);
+        });
+
+        html.find('.add-buff').click(async ev => {
+            ev.preventDefault();
+            const li = $(ev.currentTarget);
+            const key = li.data("key");            
+            const data = duplicate(this.item.data);
+          
+            const rollOptionContent = await renderTemplate('systems/cof/templates/dialogs/buff-dialog.hbs', {
+                stat: "",
+                value: ""
+            });
+            let d = new Dialog({
+                title: "Buff",
+                content: rollOptionContent,
+                buttons: {
+                    cancel: {
+                        icon: '<i class="fas fa-times"></i>',
+                        label: "Cancel",
+                        callback: () => {
+                        }
+                    },
+                    submit: {
+                        icon: '<i class="fas fa-check"></i>',
+                        label: "Add",
+                        callback: (html) => {
+                            var type = $("input[name='type']:checked").val();
+                            switch(type){
+                                case "buffedAttribute":
+                                    const stat = html.find("#stat").val();
+                                    let value = html.find('#value').val();
+                                    if(!value.startsWith("+") && !value.startsWith("-")){
+                                        value = `+${value}`;
+                                    }
+                                    data.data.effects[key].value += `${stat}(${value}),`;
+                                    break;
+                                case "predefinedBuff":
+                                    const predefinedValue = html.find("#predefinedValue").val();                                    
+                                    data.data.effects[key].value += `${predefinedValue},`;
+                                    break;
+                                case "customBuff":
+                                    const customValue = html.find("#customValue").val();                                    
+                                    data.data.effects[key].value += `${customValue},`;
+                                    break;
+                            }                            
+                            this.item.update(data);
+                        }
+                    }
+                },
+                default: "submit",
+                close: () => {
+                }
+            },  { classes: ["cof", "dialog"] });
+            d.render(true);
+        });
+
+
 
         html.find('.capacity-effect-delete').click(ev => {
             ev.preventDefault();

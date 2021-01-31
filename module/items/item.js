@@ -2,8 +2,8 @@
  * Extend the basic ItemSheet with some very simple modifications
  * @extends {ItemSheet}
  */
-import { CofRoll } from "../controllers/roll.js";
-
+import { Traversal } from "../utils/traversal.js";
+import {Stats} from "../system/stats.js";
 export class CofItem extends Item {
 
     initialize() {
@@ -62,20 +62,23 @@ export class CofItem extends Item {
                     continue;
                 }
                 
-                const attr = effect.stat.replace("@", "");
-                let val = itemData.data[attr];                
-                
-                let r = new Roll(effect.value, itemData.data);
-                if((typeof val) === "number"){
-                    r.roll();
-                    val += r.total;
-                } else if(!r.formula.match(/[0-9]*d[0-9]*/gi)){
-                    r.roll();
-                    val += "+" + r.total;
-                } else {
-                    val += "+" + r.formula;
-                }
-                itemData.data[attr] = val
+                const changes = Traversal.getChangesFromBuffValue(effect.value);
+                for (const change of changes) {
+                    const data = itemData.data;
+                    let val = eval(change.key);
+
+                    let r = new Roll(change.value, itemData.data);
+                    if((typeof val) === "number"){
+                        r.roll();
+                        val += r.total;
+                    } else if(!r.formula.match(/[0-9]*d[0-9]*/gi)){
+                        r.roll();
+                        val += "+" + r.total;
+                    } else {
+                        val += "+" + r.formula;
+                    }
+                    Stats.setPath(itemData, change.key, val);
+                }                
             }
         });
     }

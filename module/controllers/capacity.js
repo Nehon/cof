@@ -51,7 +51,7 @@ export class Capacity {
         }
     }
 
-    static makeActiveEffect(capacity, effect, value, duration) {
+    static makeActiveEffect(capacity, effect, changes, duration) {
         if (effect.type != 'buff') {
             return undefined
         }
@@ -78,25 +78,37 @@ export class Capacity {
             effectData["flags.resistanceEffect"] = effect.resistanceEffect;            
         }
 
-        // Standard effects
-        let ae = CONFIG.statusEffects.find(e => e.id === effect.value ||  e.id === capacity.data.key);
-        if (ae) {            
-            effectData.icon = ae.icon;
-            effectData.label = game.i18n.localize(ae.label);
-            effectData["flags.core.statusId"] = ae.id;
-            effectData.changes = ae.changes;
-        } else {            
-            CONFIG.statusEffects.push({id:capacity.data.key, label:capacity.name, icon:capacity.img});
+        if(!changes.length){
+            return effectData;
         }
-
-        if(effect.stat.length){
-            effectData.changes = [{
-                key: effect.stat.replace('@','data.'),
-                mode: 2,
-                value: value
-            }];
-        }
-
+        effectData.changes = [];
+        for (const change of changes) {
+            let ae = CONFIG.statusEffects.find(e => e.id === change.value ||  e.id === capacity.data.key);
+            if(!change.key || change.key.trim() ===""){
+                // Standard effects                
+                if (ae) {    
+                    if(!effectData.changes.length){
+                        // no changes yet let's use this effect
+                        effectData.icon = ae.icon;
+                        effectData.label = game.i18n.localize(ae.label);
+                        effectData["flags.core.statusId"] = ae.id;
+                        if(ae.changes) effectData.changes = duplicate(ae.changes);
+                    } else {
+                        // push standard effect changes 
+                        for (const ch of ae.changes) {
+                            effectData.changes.push(ch);
+                        }
+                    }
+                } else {            
+                    CONFIG.statusEffects.push({id:capacity.data.key, label:capacity.name, icon:capacity.img});
+                }
+                continue;
+            }
+            effectData.changes.push(change);
+            if(!ae){
+                CONFIG.statusEffects.push({id:capacity.data.key, label:capacity.name, icon:capacity.img});
+            }
+        }      
         return effectData;
     }
 

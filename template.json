@@ -382,7 +382,7 @@
           "type": null,
           "target": null,
           "stat": null,
-          "values": null,
+          "value": null,
           "activable": false,
           "testRoll": false,
           "testDice": "1d20",

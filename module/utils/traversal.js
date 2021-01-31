@@ -20,6 +20,9 @@ export class Traversal {
     }
 
     static findActor(id) {
+        if(!canvas){
+            return game.actors.get(id);
+        }
         let token  = canvas.tokens.placeables.find((t) => t.data.actorId === id);
 
         if (token) {
@@ -56,6 +59,31 @@ export class Traversal {
     //     // return entity.sheet.render(true);
     //     return entity;
     // }
+
+
+    static getChangesFromBuffValue(value){
+        let changes=[];
+        const values = value.split(",");
+        for (const val of values) {
+            if(val.trim()===""){
+                continue;
+            }
+            const m = val.match(/\s*([^(]*)\((.*)\)$/);
+            if(!m){
+                changes.push({                 
+                    value: val
+                });                
+                continue;
+            }
+            changes.push({
+                key: m[1],
+                mode:2,
+                value: m[2]
+            });            
+        }
+        return changes;
+    }
+
 
     static async getAllEntitiesOfType(type, pack) {
         const compendium = await game.packs.get(pack).getContent();

@@ -39,6 +39,28 @@ export const registerHandlebarsHelpers = function () {
             '</span>');
     });
 
+    Handlebars.registerHelper('buffWidget', function (value, key) {
+        const changes = Traversal.getChangesFromBuffValue(value);
+        let html = `<div class="left">`;
+        for (const change of changes) {    
+            if(!change.key){
+                html += `<div class="buff">${change.value}<i data-value="${change.value}," data-key="${key}" class="fas fa-times remove-buff"></i></div>`;
+                continue;
+            }
+            html += `<div class="buff">${game.i18n.localize(change.key)} ${change.value}<i data-value="${change.key}(${change.value})," data-key="${key}" class="fas fa-times remove-buff"></i></div>`;
+        }
+        html += `<i class="fas fa-plus add-buff right" data-key="${key}"></i></div>`;
+        return new Handlebars.SafeString(html);
+    });
+
+    Handlebars.registerHelper('optionEffects', function () {
+        let html = "";
+        for (const effect of CONFIG.statusEffects) {     
+           html += `<option value="${effect.id}">${game.i18n.localize(effect.label)}</option>`;
+        }
+        return new Handlebars.SafeString(html);
+    });     
+
     Handlebars.registerHelper('forin', function (object, elementName, block) {
         let accum = "";
         let i = 0;
@@ -122,7 +144,10 @@ export const registerHandlebarsHelpers = function () {
         return items.filter(item => item.type === "path").length;
     });
 
-    Handlebars.registerHelper('getPathRank', function (actor, pathIndex) {        
+    Handlebars.registerHelper('getPathRank', function (actor, pathIndex) {  
+        if(!actor.data.paths){
+            return 0;
+        }
         return actor.data.paths[pathIndex].rank;
     });
 

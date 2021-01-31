@@ -323,6 +323,33 @@ strong {
   height: 32px;
 }
 
+.buff {
+  color: #fff;
+  background-color: #305371;
+  padding: 2px 5px;
+  border-radius: 4px;
+  font-size: 0.9em;
+  margin-right: 1px;
+}
+
+.buff .remove-buff {
+  margin-left: 5px;
+  cursor: pointer;
+}
+
+.add-buff {
+  color: #fff;
+  background-color: #3d77a9;
+  padding: 4px;
+  border-radius: 10px;
+  font-size: 0.9em;
+  cursor: pointer;
+}
+
+.hidden {
+  display: none;
+}
+
 /* ----------------------------------------- */
 /* Scrollbar
 /* ----------------------------------------- */

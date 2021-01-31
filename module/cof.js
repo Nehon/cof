@@ -202,6 +202,9 @@ Hooks.once("init", async function () {
 // Types of creature
 // humanoide
 // undead
+// demons
+// elementals
+// summoned creatures
 // all races
 
 //Type of resistance

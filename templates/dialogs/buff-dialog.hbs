@@ -1,0 +1,91 @@
+
+<script>
+    if(!window.setBuffVisibleDialogBox){
+        window.setBuffVisibleDialogBox = function(id){
+            $('#predefinedBuff').addClass('hidden');
+            $('#buffedAttribute').addClass('hidden');
+            $('#customBuff').addClass('hidden');
+            $('#predefinedBuff').removeClass('flexrow');
+            $('#buffedAttribute').removeClass('flexrow');
+            $('#customBuff').removeClass('flexrow');
+            $(id).addClass('flexrow');
+        }
+    }
+</script>
+<div class="flexrow">    
+    <label class="checkbox flex1">
+        <input type="radio" name="type" id="radioBuffedAttribute" checked onchange="window.setBuffVisibleDialogBox('#buffedAttribute')" value="buffedAttribute"> {{localize "COF.ui.buffedAttribute"}}
+    </label>
+    <label class="checkbox flex1">
+        <input type="radio" name="type" id="radioPredefinedBuff" onchange="window.setBuffVisibleDialogBox('#predefinedBuff')" value="predefinedBuff"> {{localize "COF.ui.predefinedBuff"}}
+    </label>
+    <label class="checkbox flex1">
+        <input type="radio" name="type" id="radioCustomBuff" onchange="window.setBuffVisibleDialogBox('#customBuff')" value="customBuff"> {{localize "COF.ui.customBuff"}}
+    </label>    
+</div>
+<div class="flexrow" id="buffedAttribute">
+    <div class='flex3'>
+        <label class="checkbox">
+            {{localize "COF.ui.buffedAttribute"}}:
+        </label>            
+        <select id="stat" data-dtype="String"}}>
+        {{#select stat}}
+                <option value="">{{localize "COF.None"}}</option>
+                <option value="data.stats.str.buff">{{localize "COF.stats.str.label"}}</option>
+                <option value="data.stats.dex.buff">{{localize "COF.stats.dex.label"}}</option>
+                <option value="data.stats.con.buff">{{localize "COF.stats.con.label"}}</option>
+                <option value="data.stats.int.buff">{{localize "COF.stats.int.label"}}</option>
+                <option value="data.stats.wis.buff">{{localize "COF.stats.wis.label"}}</option>
+                <option value="data.stats.cha.buff">{{localize "COF.stats.cha.label"}}</option>
+                <option value="data.attacks.melee.buff">{{localize "COF.attacks.melee.label"}}</option>
+                <option value="data.attacks.ranged.buff">{{localize "COF.attacks.ranged.label"}}</option>
+                <option value="data.attacks.magic.buff">{{localize "COF.attacks.magic.label"}}</option>
+                <option value="data.attributes.hp.buff">{{localize "COF.attributes.hp.label"}}</option>
+                <option value="data.attributes.def.buff">{{localize "COF.attributes.def.label"}}</option>
+                <option value="data.attributes.init.buff">{{localize "COF.attributes.init.label"}}</option>
+                <option value="data.attributes.rp.buff">{{localize "COF.attributes.rp.label"}}</option>
+                <option value="data.attributes.fp.buff">{{localize "COF.attributes.fp.label"}}</option>
+                <option value="data.attributes.mp.buff">{{localize "COF.attributes.mp.label"}}</option>`
+                <option value="data.attributes.dr.buff">{{localize "COF.attributes.dr.label"}}</option>
+                <option value="data.globalRollBonus">{{localize "COF.globalRollBonus"}}</option>
+                <option value="data.stats.str.superior">{{localize "COF.stats.str.label"}} Sup</option>
+                <option value="data.stats.dex.superior">{{localize "COF.stats.dex.label"}} Sup</option>
+                <option value="data.stats.con.superior">{{localize "COF.stats.con.label"}} Sup</option>
+                <option value="data.stats.int.superior">{{localize "COF.stats.int.label"}} Sup</option>
+                <option value="data.stats.wis.superior">{{localize "COF.stats.wis.label"}} Sup</option>
+                <option value="data.stats.cha.superior">{{localize "COF.stats.cha.label"}} Sup</option>
+                <option value="data.attacks.melee.superior">{{localize "COF.attacks.melee.label"}} Sup</option>
+                <option value="data.attacks.ranged.superior">{{localize "COF.attacks.ranged.label"}} Sup</option>
+                <option value="data.attacks.magic.superior">{{localize "COF.attacks.magic.label"}} Sup</option>                
+                <option value="data.dmg">{{localize "COF.weapon.dmg"}}</option>
+                <option value="data.mod">{{localize "COF.weapon.skillmod"}}</option>
+        {{/select}}
+        </select>
+    </div>
+    <div class='flex2'>
+        <label class="checkbox">
+            {{localize "COF.ui.value"}}
+        </label>
+        <input type="text" value="{{value}}" id="value" data-dtype="String">
+    </div>
+</div>
+<div class="hidden" id="predefinedBuff">    
+    <div class='flex3'>
+        <label class="checkbox">
+            {{localize "COF.ui.predefinedBuff"}}:
+        </label>            
+        <select id="predefinedValue" data-dtype="String"}}>
+                <option value="" selected>{{localize "COF.None"}}</option>
+                {{#optionEffects}}
+                {{/optionEffects}}
+        </select>
+    </div>
+</div>
+<div class="hidden" id="customBuff">    
+    <div class='flex3'>
+        <label class="checkbox">
+            {{localize "COF.ui.value"}}
+        </label>
+        <input type="text" value="{{customValue}}" id="customValue" data-dtype="String">
+    </div>
+</div>
