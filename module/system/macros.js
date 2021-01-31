@@ -61,12 +61,21 @@ export class Macros {
                     }
                 };
                 CofRoll.rollDialog(actor, actor.token, itemData.name, itemData.img, action);
+                return
             }
             else return ui.notifications.warn(`${game.i18n.localize("COF.notification.MacroItemUnequiped")}: "${itemName}"`);
         }
-        else {
-            return item.sheet.render(true);
+        
+        if(itemData.data.effects && Object.keys(itemData.data.effects).length){
+            if(itemData.data.properties.consumable && itemData.data.qty <= 0){
+                ui.notifications.warn(`${game.i18n.localize("COF.notification.itemDepleted")} ${itemData.name}`);
+                return;
+            }
+            Macros.rollEffects(actor, itemData.data.effects, itemData);
+            return;
         }
+        return item.sheet.render(true);
+        
     };
 
     static rollCapacityMacro = async function (itemKey, itemName) {
@@ -89,7 +98,11 @@ export class Macros {
             ui.notifications.warn(`${game.i18n.localize("COF.notification.capacityDepleted")}: ${cap.name}, ${cap.data.nbUse} / ${actor.getMaxUse(cap)} per ${cap.data.frequency}`);
             return;
         }
+        Macros.rollEffects(actor,effects,cap);
+    };
 
+    static rollEffects = async function (actor, effects, cap) {
+        
         // register actions and effects for each type of targets. + one entry for the skill roll
         let action = {
             skillRoll: undefined, // optional skill roll
@@ -177,7 +190,5 @@ export class Macros {
         //console.log(action);
         const source = canvas.tokens.controlled[0];
         CofRoll.rollDialog(actor, source, cap.name, cap.img, action);
-    };
-
-
+    }
 }

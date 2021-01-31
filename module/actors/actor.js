@@ -218,6 +218,10 @@ export class CofActor extends Actor {
     getItemById(id){
         return this.data.items.find(i => i._id === id)
     }    
+
+    getItemByKey(items, key){
+        return items.find(i => i.data.key === key)
+    }
     
     getCapacityByKey(items, key){
         return items.find(i => i.type === "capacity" && i.data.key === key)

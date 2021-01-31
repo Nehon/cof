@@ -13,11 +13,12 @@ Hooks.on("hotbarDrop", async (bar, data, slot) => {
         let item = data.data;
         let command;
         let displayUsage = false
+        displayUsage = item.data.maxUse !== undefined && item.data.maxUse !== null && item.data.maxUse !== "";
         if (item.type === "capacity") {
-            command = `game.cof.macros.rollCapacityMacro("${item.data.key}", "${item.name}");`;
-            displayUsage = item.data.maxUse !== undefined && item.data.maxUse !== null && item.data.maxUse !== "";
+            command = `game.cof.macros.rollCapacityMacro("${item.data.key}", "${item.name}");`;            
         } else {
             command = `game.cof.macros.rollItemMacro("${item._id}", "${item.name}", "${item.type}");`;
+            displayUsage |= item.data.properties.consumable;
         }
         let macro = game.macros.entities.find(m => (m.name === item.name) && (m.command === command));
         if (!macro) {
@@ -79,12 +80,17 @@ Hooks.on("renderHotbar", async (bar, html, info) => {
             continue;
         }
         const actor = Traversal.findActor(macro.data.flags.actorId);
-        const capacity = actor.getCapacityByKey(actor.data.items, macro.data.flags.itemKey);
-        if(!capacity){
-            console.warn(`Hotbar: ${actor.name} doesn't have the capacity ${macro.data.flags.itemKey}`);
+        const item = actor.getItemByKey(actor.data.items, macro.data.flags.itemKey);
+        if(!item){
+            console.warn(`Hotbar: ${actor.name} doesn't have the item/capacity ${macro.data.flags.itemKey}`);
             continue;
         }
-        let maxUse = actor.getMaxUse(capacity);      
+        let maxUse = actor.getMaxUse(item);
+        let nbUse = item.data.nbUse;
+        if(!maxUse && item.data.properties && item.data.properties.consumable){
+            maxUse = item.data.qty;
+            nbUse = maxUse;
+        }
         let elem = macros[i];
         let div = $("<div></div>");
         div.addClass("macro-use");
@@ -92,7 +98,7 @@ Hooks.on("renderHotbar", async (bar, html, info) => {
         div.addClass("between");
         for (let i = 0; i < maxUse; i++) {
             let span = $("<span></span>");
-            if (i < capacity.data.nbUse) {
+            if (i < nbUse) {
                 span.addClass("active");
             }
             span.addClass("flex1");

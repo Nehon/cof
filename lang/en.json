@@ -339,6 +339,7 @@
   "COF.notification.NoCapacity": "The character doesn't know the capacity",
   "COF.notification.noWeaponEquiped": "The character has no weapon equiped",
   "COF.notification.capacityDepleted": "You can't use this capacity for the moment",
+  "COF.notification.itemDepleted": "You don't have any more",
 
   "COF.message.damageRoll": "Damage roll",
   "COF.message.healRoll": "Heal roll",  

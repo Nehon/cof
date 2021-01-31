@@ -24,8 +24,7 @@ export class CofItem extends Item {
             case "item":
             case "spell":
                 this._prepareArmorData(itemData, actorData);
-                this._prepareWeaponData(itemData, actorData);
-                break;
+                this._prepareWeaponData(itemData, actorData);                
             case "capacity":
             case "path":
             case "profile":

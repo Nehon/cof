@@ -725,13 +725,21 @@ export class CofRoll {
             }
             
             const actor = Traversal.findActor(flags.rollResult.source.id);
-            const capacity = actor.getCapacity(actor.data.items, flags.rollResult.itemId);
-            if(capacity && actor.getMaxUse(capacity) ){
-               actor.updateEmbeddedEntity("OwnedItem",{ _id:capacity._id,
-                    "data.nbUse": capacity.data.nbUse - 1
-               }).then(()=>ui.hotbar.render());               
+            const item = actor.getItemById(flags.rollResult.itemId);            
+            if (item) {
+                if (actor.getMaxUse(item)) {
+                    actor.updateEmbeddedEntity("OwnedItem", {
+                        _id: item._id,
+                        "data.nbUse": item.data.nbUse - 1
+                    }).then(() => ui.hotbar.render());
+                } else if (item.data.properties && item.data.properties.consumable) {
+                    actor.updateEmbeddedEntity("OwnedItem", {
+                        _id: item._id,
+                        "data.qty": item.data.qty - 1
+                    }).then(() => ui.hotbar.render());
+                }
             }
-
+           
             message.update({
                 "flags.applied": true
             });

@@ -339,6 +339,7 @@
   "COF.notification.NoCapacity": "Le personnage ne connait pas la capacité",
   "COF.notification.noWeaponEquiped": "Le personage n'a pas d'arme équipée",
   "COF.notification.capacityDepleted": "Vous ne pouvez plus utiliser cette capacité pour le moment",
+  "COF.notification.itemDepleted": "Il ne vous reste plus de",  
   
   "COF.message.damageRoll": "Jet de dommages",
   "COF.message.healRoll": "Jet de soin",
