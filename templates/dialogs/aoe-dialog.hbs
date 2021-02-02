@@ -1,0 +1,31 @@
+
+<style>
+.grid-container {
+  width:50px;
+  display: grid;
+  grid-template-columns: 1fr 1fr 1fr;
+  grid-template-rows: 1fr 1fr 1fr;
+  gap: 0px 0px;
+  grid-template-areas:
+    ". a ."
+    "b . c"
+    ". d .";
+}
+</style>
+{{#if displayRange}}
+{{localize "COF.ui.aoe"}} <output>{{range}}</output>
+<input type='range' min='{{minRange}}', max='{{maxRange}}' step='1' id='range' oninput='this.previousElementSibling.value = this.value; window.updateAOETemplateRange(this.value);' value ='{{range}}'/>
+{{/if}}
+{{#if displayOrientation}}
+{{localize "COF.ui.orientation"}} <output>{{orientation}}</output>
+<input type='range' min='0', max='360' step='1' id='range' oninput='this.previousElementSibling.value = this.value; window.updateAOETemplateOrientation(this.value);' value ='{{orientation}}'/>
+{{/if}}
+{{#if displayPosition}}
+{{localize "COF.ui.position"}}
+<div class="grid-container">
+    <a style="grid-area:a"><i class="fas fa-arrow-alt-circle-up" onclick="window.updateAOETemplatePosition(0,-1);"></i></a>
+    <a style="grid-area:b"><i class="fas fa-arrow-alt-circle-left" onclick="window.updateAOETemplatePosition(-1,0);"></i></a>
+    <a style="grid-area:c"><i class="fas fa-arrow-alt-circle-right" onclick="window.updateAOETemplatePosition(1,0);"></i></a>    
+    <a style="grid-area:d"><i class="fas fa-arrow-alt-circle-down" onclick="window.updateAOETemplatePosition(0,1);"></i></a>
+</div>
+{{/if}}

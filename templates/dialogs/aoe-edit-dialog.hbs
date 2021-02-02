@@ -1,0 +1,64 @@
+<div class="flexrow">
+    <div class='flex6'>
+        <label class="checkbox">
+            Type of area
+        </label>            
+        <select id="type" data-dtype="String"}}>
+        {{#select type}}
+                <option value="">{{localize "COF.None"}}</option>
+                <option value="circle">Circle</option>
+                <option value="cone">Cone</option>                
+        {{/select}}
+        </select>
+    </div>    
+</div>
+<div class="flexrow">    
+    <div class='flex3'>
+        <label class="checkbox">
+            Min range
+        </label>
+        <input type="text" value="{{minRange}}" id="minRange" data-dtype="String">
+    </div>
+    <div class='flex3'>
+        <label class="checkbox">
+            Max range
+        </label>
+        <input type="text" value="{{maxRange}}" id="maxRange" data-dtype="String">
+    </div>
+</div>
+<div class="flexrow">    
+    <div class='flex3'>
+        <label class="checkbox">
+            Min distance
+        </label>
+        <input type="text" value="{{minDistance}}" id="minDistance" data-dtype="String">
+    </div>
+    <div class='flex3'>
+        <label class="checkbox">
+            Max distance
+        </label>
+        <input type="text" value="{{maxDistance}}" id="maxDistance" data-dtype="String">
+    </div>
+</div>
+<div class="flexrow">    
+    <div class='flex6'>
+        <label class="checkbox">
+            Angle (cone only)
+        </label>
+        <input type="text" value="{{angle}}" id="angle" data-dtype="String">
+    </div>
+</div>
+<div class="flexrow">
+    <div class='flex6'>
+        <label class="checkbox">
+            Targets
+        </label>            
+        <select id="targets" data-dtype="String"}}>
+        {{#select targets}}
+                <option value="all">{{localize "COF.ui.all"}}</option>
+                <option value="enemies">{{localize "COF.ui.enemies"}}</option>
+                <option value="allies">{{localize "COF.ui.allies"}}</option>                
+        {{/select}}
+        </select>
+    </div>    
+</div>

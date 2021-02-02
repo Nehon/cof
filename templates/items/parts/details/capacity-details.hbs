@@ -1,21 +1,23 @@
 <h3 class="form-header">{{localize "COF.ui.properties"}}</h3>
 <input class="field-value" name="data.key" type="hidden" value="{{data.key}}" placeholder="{{ localize "COF.ui.key" }}" data-dtype="String">
-<div class="form-group stacked">   
-    <div class="form-group stacked">
+<div  class="form-fields">   
         <div class="form-fields flexrow">        
             <label class="checkbox flex1">
                 <input type="checkbox" name="data.limited" {{checked data.limited}}> {{localize "COF.ui.limited"}}
             </label>
             <label class="checkbox flex1">
                 <input type="checkbox" name="data.spell" {{checked data.spell}}> {{localize "COF.ui.spell"}}
+            </label>  
+            <label class="checkbox flex1">
+                <input type="checkbox" name="data.isAoe" {{checked data.isAoe}}> {{localize "COF.ui.aoe"}}
             </label>            
-            <div class='flex4 cellEffect'>
+            <div class='flex2 cellEffect'>
                 <label class="checkbox">
                     {{localize "COF.ui.maxUse"}}
                 </label>
                 <input type="text" value="{{data.maxUse}}" name="data.maxUse" data-dtype="String"  placeholder="{{localize "COF.ui.formula"}}">
-            </div>
-            <div class='flex4 cellEffect'>
+            </div>          
+            <div class='flex3 cellEffect'>
                 <label class="checkbox">
                     {{localize "COF.ui.frequency"}}
                 </label>            
@@ -29,8 +31,20 @@
             </select>
             </div>
         </div>
-    </div>
-    </div>
+        {{#if data.isAoe}}
+        <div class="form-fields flexrow">
+            <div class='flex4 cellEffect'>                
+                <label class="checkbox">
+                    {{localize "COF.ui.aoe"}}
+                </label>
+                <div class="flexrow">
+                    <a class="item-control edit-aoe center flex1" title="Edit aoe" data-key="{{@key}}"><i class="fas fa-edit"></i></a>
+                    <input class="flex9" type="text" value="{{data.aoe}}" readonly name="data.aoe" data-dtype="String">
+                </div>
+            </div>
+        </div>
+        {{/if}}
+</div>
     <h3 class="form-header flexrow">{{localize "COF.ui.effects"}}
         <div class="item-controls right">
                 <a class="item-control item-create capacity-effect-add" title="{{localize "COF.ui.addEffect"}}"><i class="fas fa-plus"></i>&nbsp;</a>

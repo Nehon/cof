@@ -114,6 +114,9 @@
   "COF.ui.resistance": "Résistance",
   "COF.ui.predefinedBuff":"Statut prédéfinit",
   "COF.ui.customBuff":"Status personalisé",
+  "COF.ui.aoe":"Aire d'effet",
+  "COF.ui.orientation": "Orientation",
+  "COF.ui.position": "Position (Vous pouvez utilisez les flèches du clavier)",
 
   "COF.roll.success" : "Succès",
   "COF.roll.critical" : "Critique",

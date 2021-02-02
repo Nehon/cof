@@ -492,6 +492,9 @@ export class CofRoll {
             };
             let result = await confirm();
             if(result === false){
+                if(action.template){
+                    action.template.delete();
+                }
                 return;
             }
         }
@@ -527,7 +530,7 @@ export class CofRoll {
                 submit: {
                     icon: '<i class="fas fa-check"></i>',
                     label: "Submit",
-                    callback: (html) => {
+                    callback: (html) => {                       
                         const dice = html.find("#dice").val();
                         const diff = html.find('#difficulty').val();
                         const critrange = html.find('input#critrange').val();
@@ -649,11 +652,17 @@ export class CofRoll {
                         }
 
                         CofRoll.toMessage(results, actor);
+                        if(action.template){
+                            action.template.delete();
+                        }
                     }
                 }
             },
             default: "submit",
             close: () => {
+                if(action.template){
+                    action.template.delete();
+                }
             }
         }, this.options());
         return d.render(true);
@@ -782,6 +791,7 @@ export class CofRoll {
             }
 
             const rollResult = flags.rollResult;
+            rollResult.displayApply = true;
             let entry = rollResult.global;
             if (Object.keys(rollResult.targets).length) {
                 entry = rollResult.targets[Object.keys(rollResult.targets)[0]];

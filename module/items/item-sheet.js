@@ -2,9 +2,9 @@
  * Extend the basic ItemSheet with some very simple modifications
  * @extends {ItemSheet}
  */
-import {ArrayUtils} from "../utils/array-utils.js";
-import {Traversal} from "../utils/traversal.js";
-import {System} from "../config.js";
+import { ArrayUtils } from "../utils/array-utils.js";
+import { Traversal } from "../utils/traversal.js";
+import { System } from "../config.js";
 
 export class CofItemSheet extends ItemSheet {
 
@@ -15,8 +15,8 @@ export class CofItemSheet extends ItemSheet {
             template: System.templatesPath + "/items/item-sheet.hbs",
             width: 600,
             height: 600,
-            tabs: [{navSelector: ".sheet-navigation", contentSelector: ".sheet-body", initial: "description"}],
-            dragDrop: [{dragSelector: ".item-list .item", dropSelector: null}]
+            tabs: [{ navSelector: ".sheet-navigation", contentSelector: ".sheet-body", initial: "description" }],
+            dragDrop: [{ dragSelector: ".item-list .item", dropSelector: null }]
         });
     }
 
@@ -31,19 +31,19 @@ export class CofItemSheet extends ItemSheet {
 
         // html.find('.editor-content[data-edit]').each((i, div) => this._activateEditor(div));
 
-        html.find('.droppable').on("dragover", function(event) {
+        html.find('.droppable').on("dragover", function (event) {
             event.preventDefault();
             event.stopPropagation();
             $(event.currentTarget).addClass('dragging');
         });
 
-        html.find('.droppable').on("dragleave", function(event) {
+        html.find('.droppable').on("dragleave", function (event) {
             event.preventDefault();
             event.stopPropagation();
             $(event.currentTarget).removeClass('dragging');
         });
 
-        html.find('.droppable').on("drop", function(event) {
+        html.find('.droppable').on("drop", function (event) {
             event.preventDefault();
             event.stopPropagation();
             $(event.currentTarget).removeClass('dragging');
@@ -53,7 +53,7 @@ export class CofItemSheet extends ItemSheet {
         html.find('.compendium-pack').click(ev => {
             ev.preventDefault();
             let li = $(ev.currentTarget), pack = game.packs.get(li.data("pack"));
-            if ( li.attr("data-open") === "1" ) pack.close();
+            if (li.attr("data-open") === "1") pack.close();
             else {
                 li.attr("data-open", "1");
                 li.find("i.folder").removeClass("fa-folder").addClass("fa-folder-open");
@@ -78,79 +78,27 @@ export class CofItemSheet extends ItemSheet {
             data.data.effects[length] = {
                 type: '',
                 target: '',
-                roll: '',                
+                roll: '',
                 value: "",
                 rank: 1,
                 maxRank: 5,
             };
             this.item.update(data)
         });
-        
+
         html.find('.remove-buff').click(ev => {
             ev.preventDefault();
             const li = $(ev.currentTarget);
             const key = li.data("key");
             const value = li.data("value");
             const data = duplicate(this.item.data);
-            data.data.effects[key].value = data.data.effects[key].value.replace(value,"");            
+            data.data.effects[key].value = data.data.effects[key].value.replace(value, "");
             this.item.update(data);
         });
 
-        html.find('.add-buff').click(async ev => {
-            ev.preventDefault();
-            const li = $(ev.currentTarget);
-            const key = li.data("key");            
-            const data = duplicate(this.item.data);
-          
-            const rollOptionContent = await renderTemplate('systems/cof/templates/dialogs/buff-dialog.hbs', {
-                stat: "",
-                value: ""
-            });
-            let d = new Dialog({
-                title: "Buff",
-                content: rollOptionContent,
-                buttons: {
-                    cancel: {
-                        icon: '<i class="fas fa-times"></i>',
-                        label: "Cancel",
-                        callback: () => {
-                        }
-                    },
-                    submit: {
-                        icon: '<i class="fas fa-check"></i>',
-                        label: "Add",
-                        callback: (html) => {
-                            var type = $("input[name='type']:checked").val();
-                            switch(type){
-                                case "buffedAttribute":
-                                    const stat = html.find("#stat").val();
-                                    let value = html.find('#value').val();
-                                    if(!value.startsWith("+") && !value.startsWith("-")){
-                                        value = `+${value}`;
-                                    }
-                                    data.data.effects[key].value += `${stat}(${value}),`;
-                                    break;
-                                case "predefinedBuff":
-                                    const predefinedValue = html.find("#predefinedValue").val();                                    
-                                    data.data.effects[key].value += `${predefinedValue},`;
-                                    break;
-                                case "customBuff":
-                                    const customValue = html.find("#customValue").val();                                    
-                                    data.data.effects[key].value += `${customValue},`;
-                                    break;
-                            }                            
-                            this.item.update(data);
-                        }
-                    }
-                },
-                default: "submit",
-                close: () => {
-                }
-            },  { classes: ["cof", "dialog"] });
-            d.render(true);
-        });
+        html.find('.add-buff').click(this._onAddBuff.bind(this));
 
-
+        html.find('.edit-aoe').click(this._onEditAOE.bind(this));
 
         html.find('.capacity-effect-delete').click(ev => {
             ev.preventDefault();
@@ -216,13 +164,13 @@ export class CofItemSheet extends ItemSheet {
         const item = await Item.fromDropData(data);
         const itemData = duplicate(item.data);
         switch (itemData.type) {
-            case "path"    :
+            case "path":
                 return await this._onDropPathItem(event, itemData);
-            case "profile" :
+            case "profile":
                 return await this._onDropProfileItem(event, itemData);
-            case "species" :
+            case "species":
                 return await this._onDropSpeciesItem(event, itemData);
-            case "capacity" :
+            case "capacity":
                 return await this._onDropCapacityItem(event, itemData);
             default:
                 return;
@@ -257,8 +205,8 @@ export class CofItemSheet extends ItemSheet {
         event.preventDefault();
         let data = duplicate(this.item.data);
         const id = itemData._id;
-        if(data.type === "profile" || data.type === "species"){
-            if(!data.data.paths.includes(id)){
+        if (data.type === "profile" || data.type === "species") {
+            if (!data.data.paths.includes(id)) {
                 data.data.paths.push(id);
                 return this.item.update(data);
             }
@@ -273,7 +221,7 @@ export class CofItemSheet extends ItemSheet {
         event.preventDefault();
         let data = duplicate(this.item.data);
         const id = itemData._id;
-        if(data.data.capacities && !data.data.capacities.includes(id)){
+        if (data.data.capacities && !data.data.capacities.includes(id)) {
             let caps = data.data.capacities;
             caps.push(id);
             return this.item.update(data);
@@ -283,28 +231,147 @@ export class CofItemSheet extends ItemSheet {
 
     /* -------------------------------------------- */
 
-    async _onEditItem(ev){
+    async _onEditItem(ev) {
         ev.preventDefault();
         const li = $(ev.currentTarget).closest(".item");
         const id = li.data("itemId");
-        const itemType = li.data("itemType");        
-        return Traversal.getEntity(id, "item", itemType).then(e => { if(e) e.sheet.render(true) });
+        const itemType = li.data("itemType");
+        return Traversal.getEntity(id, "item", itemType).then(e => { if (e) e.sheet.render(true) });
     }
 
+
+    async _onAddBuff(ev) {
+        ev.preventDefault();
+        const li = $(ev.currentTarget);
+        const key = li.data("key");
+        const data = duplicate(this.item.data);
+
+        const rollOptionContent = await renderTemplate('systems/cof/templates/dialogs/buff-dialog.hbs', {
+            stat: "",
+            value: ""
+        });
+        let d = new Dialog({
+            title: "Buff",
+            content: rollOptionContent,
+            buttons: {
+                cancel: {
+                    icon: '<i class="fas fa-times"></i>',
+                    label: "Cancel",
+                    callback: () => {
+                    }
+                },
+                submit: {
+                    icon: '<i class="fas fa-check"></i>',
+                    label: "Add",
+                    callback: (html) => {
+                        var type = $("input[name='type']:checked").val();
+                        switch (type) {
+                            case "buffedAttribute":
+                                const stat = html.find("#stat").val();
+                                let value = html.find('#value').val();
+                                if (!value.startsWith("+") && !value.startsWith("-")) {
+                                    value = `+${value}`;
+                                }
+                                data.data.effects[key].value += `${stat}(${value}),`;
+                                break;
+                            case "predefinedBuff":
+                                const predefinedValue = html.find("#predefinedValue").val();
+                                data.data.effects[key].value += `${predefinedValue},`;
+                                break;
+                            case "customBuff":
+                                const customValue = html.find("#customValue").val();
+                                data.data.effects[key].value += `${customValue},`;
+                                break;
+                        }
+                        this.item.update(data);
+                    }
+                }
+            },
+            default: "submit",
+            close: () => {
+            }
+        }, { classes: ["cof", "dialog"] });
+        d.render(true);
+    }
+    async _onEditAOE(ev) {
+        ev.preventDefault();
+        const li = $(ev.currentTarget);
+        const key = li.data("key");
+        const data = duplicate(this.item.data);
+
+        const rollOptionContent = await renderTemplate('systems/cof/templates/dialogs/aoe-edit-dialog.hbs', {
+            type: "circle",
+            minRange: "10",
+            maxRange: "10",
+            minDistance: "0",
+            maxDistance: "0",
+            angle: "0",
+            targets:"all"            
+        });
+        let d = new Dialog({
+            title: "Buff",
+            content: rollOptionContent,
+            buttons: {
+                cancel: {
+                    icon: '<i class="fas fa-times"></i>',
+                    label: "Cancel",
+                    callback: () => {
+                    }
+                },
+                submit: {
+                    icon: '<i class="fas fa-check"></i>',
+                    label: "Set",
+                    callback: (html) => {
+                        const type = html.find("#type").val();
+                        const minRange = html.find("#minRange").val();
+                        const maxRange = html.find("#maxRange").val();
+                        const minDistance = html.find("#minDistance").val();
+                        const maxDistance = html.find("#maxDistance").val();
+                        const angle = html.find("#angle").val();
+                        const targets = html.find("#targets").val();
+                        let value = `${type}(${minRange}`;
+                        if(minRange !== maxRange){
+                            value+= `-${maxRange}`;
+                        }
+                        value += ",";
+                        value += minDistance;
+                        if(minDistance !== maxDistance){
+                            value+= `-${maxDistance}`;
+                        }
+                        if(type=== "cone"){
+                            value+= `,${angle}`;
+                        }
+                        value += ")";
+
+                        if(targets !== "all"){
+                            value += ` ${targets}`;
+                        }
+                        data.data.aoe = value;                        
+                        this.item.update(data);
+                    }
+                }
+            },
+            default: "submit",
+            close: () => {
+            }
+        }, { classes: ["cof", "dialog"] });
+        d.render(true);
+    }
+    
     /* -------------------------------------------- */
 
-    _onDeleteItem(ev){
+    _onDeleteItem(ev) {
         ev.preventDefault();
         let data = duplicate(this.item.data);
         const li = $(ev.currentTarget).closest(".item");
         const id = li.data("itemId");
         const itemType = li.data("itemType");
         let array = null;
-        switch(itemType){
-            case "path" : array = data.data.paths; break;
-            case "capacity" : array = data.data.capacities; break;
+        switch (itemType) {
+            case "path": array = data.data.paths; break;
+            case "capacity": array = data.data.capacities; break;
         }
-        if(array && array.includes(id)) {
+        if (array && array.includes(id)) {
             ArrayUtils.remove(array, id)
             return this.item.update(data);
         }
@@ -351,7 +418,7 @@ export class CofItemSheet extends ItemSheet {
         const props = [];
         // const labels = this.item.labels;
 
-        if ( item.type === "item" ) {
+        if (item.type === "item") {
             const entries = Object.entries(item.data.properties)
             props.push(...entries.filter(e => e[1] === true).map(e => {
                 return game.cof.config.itemProperties[e[0]]

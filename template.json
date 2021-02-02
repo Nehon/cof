@@ -375,13 +375,14 @@
       "effect":{
         "nbUse": null,
         "maxUse": null,
-        "frequency":null,    
+        "frequency":null,
+        "isAoe": false,
+        "aoe":null,
         "effects":[{
           "rank": 1,
           "maxRank": 5,
           "type": null,
           "target": null,
-          "stat": null,
           "value": null,
           "activable": false,
           "testRoll": false,

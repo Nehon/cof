@@ -208,6 +208,10 @@ export class CofActor extends Actor {
     /* -------------------------------------------- */
 
     getActiveCapacities(items) {
+        return items.filter(i => i.type === "capacity" && i.data.rank)
+    }
+
+    getCapacities(items) {
         return items.filter(i => i.type === "capacity")
     }
 
@@ -425,7 +429,7 @@ export class CofActor extends Actor {
         if(!this.pathRanksUpdated){
             return;
         }
-        const caps = this.getActiveCapacities(actorData.items);
+        const caps = this.getCapacities(actorData.items);
         for(let cap of caps){
             if(!cap.data.effects){
                 continue;

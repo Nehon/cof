@@ -18,17 +18,17 @@ export class Macros {
     static rollStatMacro = async function (actor, stat, onEnter = "submit") {
         if (actor) {
             let key;
-            switch (stat) {                                
-                case "melee": 
+            switch (stat) {
+                case "melee":
                 case "ranged":
-                case "magic": 
-                     key = `data.attacks.${stat}`;       
-                break;                
+                case "magic":
+                    key = `data.attacks.${stat}`;
+                    break;
             }
-            if(!key){
+            if (!key) {
                 key = `data.stats.${stat}`;
             }
-            CofRoll.skillCheckDialog(actor, key);            
+            CofRoll.skillCheckDialog(actor, key);
         } else {
             ui.notifications.error(game.i18n.localize("COF.notification.NoActorSelected"));
         }
@@ -65,9 +65,9 @@ export class Macros {
             }
             else return ui.notifications.warn(`${game.i18n.localize("COF.notification.MacroItemUnequiped")}: "${itemName}"`);
         }
-        
-        if(itemData.data.effects && Object.keys(itemData.data.effects).length){
-            if(itemData.data.properties.consumable && itemData.data.qty <= 0){
+
+        if (itemData.data.effects && Object.keys(itemData.data.effects).length) {
+            if (itemData.data.properties.consumable && itemData.data.qty <= 0) {
                 ui.notifications.warn(`${game.i18n.localize("COF.notification.itemDepleted")} ${itemData.name}`);
                 return;
             }
@@ -75,7 +75,7 @@ export class Macros {
             return;
         }
         return item.sheet.render(true);
-        
+
     };
 
     static rollCapacityMacro = async function (itemKey, itemName) {
@@ -93,16 +93,196 @@ export class Macros {
             CofItem.logItem(cap, actor);
             return;
         }
-        
-        if(actor.getMaxUse(cap) !== null && (cap.data.nbUse <= 0)){
+
+        if (actor.getMaxUse(cap) !== null && (cap.data.nbUse <= 0)) {
             ui.notifications.warn(`${game.i18n.localize("COF.notification.capacityDepleted")}: ${cap.name}, ${cap.data.nbUse} / ${actor.getMaxUse(cap)} per ${cap.data.frequency}`);
             return;
         }
-        Macros.rollEffects(actor,effects,cap);
+        Macros.rollEffects(actor, effects, cap);
     };
 
-    static rollEffects = async function (actor, effects, cap) {
+    static targetTokensInArea = function (templates, source, releaseOthers, isTarget) {
+        if (releaseOthers) {
+            game.user.targets.forEach(token =>
+                token.setTarget(false, { releaseOthers: false, groupSelection: true }));
+        }
+
+        canvas.tokens.objects.children.filter(token => {
+            if (token === source || !isTarget(source, token)) {
+                return false;
+            }
+            
+            const { x: ox, y: oy } = token.center;
+            return templates.some(template => {
+                const { x: cx, y: cy } = template.center;
+                return template.shape.contains(ox - cx, oy - cy);
+            });
+        }).forEach(token => token.setTarget(true, { releaseOthers: false, groupSelection: true }));
+        game.user.broadcastActivity({ targets: game.user.targets.ids });
+    };
+
+
+    static displayAdjustAOEDialog = async function (source, values, isTarget) {
+        Macros.targetTokensInArea([window.aoeTemplate], source, true, isTarget);
         
+         //return canvas.tokens.placeables.filter(token => token.data.disposition === disposition && (token.data._id !== excludeId));
+        window.aoeTemplateSource = source;
+        if (!window.updateAOETemplateRange) {
+            window.updateAOETemplateRange = (range) => {
+                if (!window.aoeTemplate) {
+                    return;
+                }
+                window.aoeTemplate.data.distance = range;
+                window.aoeTemplate.draw();
+                Macros.targetTokensInArea([window.aoeTemplate], window.aoeTemplateSource, true, isTarget);
+            };
+        }
+        if (!window.updateAOETemplateOrientation) {
+            window.updateAOETemplateOrientation = (orientation) => {
+                if (!window.aoeTemplate) {
+                    return;
+                }
+                window.aoeTemplate.data.direction = orientation;
+                window.aoeTemplate.draw();
+                Macros.targetTokensInArea([window.aoeTemplate], window.aoeTemplateSource, true, isTarget);
+            };
+        }
+        if (!window.updateAOETemplatePosition) {
+            window.updateAOETemplatePosition = (x,y) => {
+                if (!window.aoeTemplate) {
+                    return;
+                }
+                const gridSize = game.scenes.viewed.data.grid;
+                window.aoeTemplate.data.x += x * gridSize;
+                window.aoeTemplate.data.y += y * gridSize;
+                window.aoeTemplate.draw();
+                Macros.targetTokensInArea([window.aoeTemplate], window.aoeTemplateSource, true, isTarget);
+            };
+        }
+        const displayPosition = values[1].min !== values[1].max;
+        const dialogContent = await renderTemplate("systems/cof/templates/dialogs/aoe-dialog.hbs", {
+            displayRange: values[0].min !== values[0].max,
+            range: values[0].max,
+            minRange: values[0].min,
+            maxRange: values[0].max,
+            displayPosition: displayPosition,
+            positionMax: values[1],
+            displayOrientation: window.aoeTemplate.data.t === "cone",
+            orientation: 0            
+        });
+
+        let resolved = false;
+        return new Promise((resolve => {
+            const d = new Dialog({
+                title: game.i18n.localize("COF.ui.aoe"),
+                content: dialogContent,
+                buttons: {
+                    no: {
+                        label: "Cancel", callback: () => {
+                            resolved = true;
+                            window.aoeTemplate.delete();
+                            window.aoeTemplate = undefined;                            
+                            resolve(false);
+                        }
+                    },
+                    yes: { label: "Roll", callback: html => { resolved = true; resolve(true) } }
+                },
+                close: ()=>{
+                    if(!resolved){
+                        window.aoeTemplate.delete();
+                        window.aoeTemplate = undefined;                            
+                        resolve(false);
+                    }
+                },
+                default: 'yes'
+            }, { top: 100 });
+            if(displayPosition){
+                const keyDown = d._onKeyDown
+                d._onKeyDown = (event) => {
+                    keyDown.call(d, event);
+                    event.preventDefault();
+                    event.stopPropagation();    
+                    switch(event.key){
+                        case "ArrowUp":window.updateAOETemplatePosition(0,-1); break;
+                        case "ArrowDown":window.updateAOETemplatePosition(0,1); break;
+                        case "ArrowRight":window.updateAOETemplatePosition(1,0); break;
+                        case "ArrowLeft":window.updateAOETemplatePosition(-1,0); break;
+                    }                    
+                }
+            }
+            d.render(true);
+        }));
+
+    }
+
+    static displayAOE = async function (source, cap) {
+        // <templatetype>(<minDist>-<maxDist>,<minPos>-<maxPos,<angle>). ex: cone(3-10,0-30,170) -> cone template distance = 3 to 10, position = 0 to 30, angle = 170
+        const m = cap.data.aoe.match(/([^(]*)\((.*)\)\s*(.*$)/);
+        if (!m) {
+            return;
+        }
+        const type = m[1];
+        const args = m[2].split(",");
+        let isTarget = (source, token) => true;         
+        if(m[3] === "enemies"){
+            isTarget = (source, token) => source.data.disposition !== token.data.disposition;
+        } else if(m[3] === "allies"){
+            isTarget = (source, token) => source.data.disposition === token.data.disposition;
+        }
+        let values = [{ min: 0, max: 0 }, { min: 0, max: 0 }, { min: 1, max: 1 }];
+        let needAdjust = false;
+        for (let i = 0; i < args.length; i++) {
+            const arg = args[i];
+            const range = arg.split("-");
+            let entry = values[i];
+            entry.min = range[0];
+            entry.max = entry.min;
+            if (range.length > 1) {
+                needAdjust = true;
+                entry.max = range[1];
+            }
+        }
+        if (type === "cone") {
+            needAdjust = true;
+        }
+        const gridSize = game.scenes.viewed.data.grid;
+        const x = source.x + gridSize * 0.5;
+        const y = source.y + gridSize * 0.5;
+        const template = MeasuredTemplate.create({
+            t: type,
+            user: game.user._id,
+            x: x,
+            y: y,
+            direction: 0,
+            angle: values[2].min,
+            distance: values[0].max,
+            fillColor: "#999999",
+        });
+        if (!needAdjust) {
+            template.then((t)=>Macros.targetTokensInArea([t], source, true, isTarget));
+            return template;
+        }
+
+        window.aoeTemplate = await template;
+        let result = await Macros.displayAdjustAOEDialog(source, values, isTarget);
+        if (result) {
+            return template;
+        }
+
+    }
+
+    static rollEffects = async function (actor, effects, cap) {
+
+        const source = canvas.tokens.controlled[0];
+        let template;
+        // AOE
+        if (cap.data.isAoe) {
+            template = await Macros.displayAOE(source, cap);
+            if (!template) {
+                return;
+            }
+        }
+
         // register actions and effects for each type of targets. + one entry for the skill roll
         let action = {
             skillRoll: undefined, // optional skill roll
@@ -110,7 +290,8 @@ export class Macros {
             effects: new Map(), // ActiveEffects to apply only when a skill roll succeeded for each type of targets.
             uncheckedEffects: new Map(), // ActiveEffect data map to apply in any case when the capacity is triggerred for each type of targets.
             itemId: cap._id,
-            forceDisplayApply: !!cap.data.maxUse
+            forceDisplayApply: !!cap.data.maxUse,
+            template: template
         }
         let activable = false;
 
@@ -120,7 +301,7 @@ export class Macros {
             const effect = effects[key];
             if (!effect.activable) {
                 continue;
-            }            
+            }
             let rank = 0;
             if (cap.data.pathIndex != undefined) {
                 rank = actor.data.data.paths[cap.data.pathIndex].rank;
@@ -155,7 +336,7 @@ export class Macros {
                 action.damageRoll.formula = new Roll(value, actor.data.data).formula;
                 action.damageRoll.type = effect.type;
                 action.damageRoll.target = effect.target.length ? effect.target : undefined;
-                if(effect.restsitanceFormula){
+                if (effect.restsitanceFormula) {
                     action.damageRoll.restsitanceFormula = effect.restsitanceFormula;
                     action.damageRoll.resistanceEffect = effect.restsitanceFormula;
                 }
@@ -170,7 +351,7 @@ export class Macros {
                 }
                 let changes = Traversal.getChangesFromBuffValue(effect.value);
                 for (let change of changes) {
-                    if(!change.key || change.key.trim() === ""){
+                    if (!change.key || change.key.trim() === "") {
                         continue;
                     }
                     const valueFormula = CofRoll.replaceSpecialAttributes(change.value, actor, cap).formula;
@@ -180,15 +361,13 @@ export class Macros {
                 }
                 const effectKey = hasSkillRoll ? "effects" : "uncheckedEffects";
                 action[effectKey].set(effect.target, Capacity.makeActiveEffect(cap, effect, changes, duration));
-            }            
+            }
         }
-        if(!activable){
+        if (!activable) {
             CofItem.logItem(cap, actor);
             return;
         }
 
-        //console.log(action);
-        const source = canvas.tokens.controlled[0];
         CofRoll.rollDialog(actor, source, cap.name, cap.img, action);
     }
 }

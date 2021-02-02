@@ -114,6 +114,9 @@
   "COF.ui.resistance": "Resistance",
   "COF.ui.predefinedBuff":"Predefined Status",
   "COF.ui.customBuff":"Custom Status",
+  "COF.ui.aoe":"Area of Effect",
+  "COF.ui.orientation": "Orientation",
+  "COF.ui.position": "Position (you can use arrow keys)",
 
   "COF.roll.success" : "Success",
   "COF.roll.critical" : "Critical",
