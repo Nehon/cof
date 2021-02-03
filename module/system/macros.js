@@ -134,6 +134,7 @@ export class Macros {
                 }
                 window.aoeTemplate.data.distance = range;
                 window.aoeTemplate.draw();
+                window.aoeTemplate.update(window.aoeTemplate.data, {diff:false});
                 Macros.targetTokensInArea([window.aoeTemplate], window.aoeTemplateSource, true, isTarget);
             };
         }
@@ -144,6 +145,7 @@ export class Macros {
                 }
                 window.aoeTemplate.data.direction = orientation;
                 window.aoeTemplate.draw();
+                window.aoeTemplate.update(window.aoeTemplate.data, {diff:false});
                 Macros.targetTokensInArea([window.aoeTemplate], window.aoeTemplateSource, true, isTarget);
             };
         }
@@ -156,6 +158,7 @@ export class Macros {
                 window.aoeTemplate.data.x += x * gridSize;
                 window.aoeTemplate.data.y += y * gridSize;
                 window.aoeTemplate.draw();
+                window.aoeTemplate.update(window.aoeTemplate.data, {diff:false});
                 Macros.targetTokensInArea([window.aoeTemplate], window.aoeTemplateSource, true, isTarget);
             };
         }

@@ -108,3 +108,11 @@ Hooks.on("renderHotbar", async (bar, html, info) => {
     }
 
 });
+
+
+Hooks.on("updateOwnedItem", async (actor, item, change) => {
+    if(change.data.hasOwnProperty("nbUse") || change.data.hasOwnProperty("maxUse") || change.data.hasOwnProperty("qty")){
+        ui.hotbar.render();
+    }
+    
+});
