@@ -339,9 +339,9 @@ export class Macros {
                 action.damageRoll.formula = new Roll(value, actor.data.data).formula;
                 action.damageRoll.type = effect.type;
                 action.damageRoll.target = effect.target.length ? effect.target : undefined;
-                if (effect.restsitanceFormula) {
-                    action.damageRoll.restsitanceFormula = effect.restsitanceFormula;
-                    action.damageRoll.resistanceEffect = effect.restsitanceFormula;
+                if (effect.resistanceFormula) {
+                    action.damageRoll.resistanceFormula = effect.resistanceFormula;
+                    action.damageRoll.resistanceEffect = effect.resistanceEffect;
                 }
                 continue;
             }

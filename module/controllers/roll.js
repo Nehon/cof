@@ -7,7 +7,7 @@ import { Traversal } from "../utils/traversal.js";
 const iconsMap = {
     "data.stats.str": "systems/cof/ui/macros/icons/FOR.png",
     "data.stats.dex": "systems/cof/ui/macros/icons/DEX.png",
-    "data.stats.con,": "systems/cof/ui/macros/icons/STAM.png",
+    "data.stats.con": "systems/cof/ui/macros/icons/STAM.png",
     "data.stats.int": "systems/cof/ui/macros/icons/INT.png",
     "data.stats.wis": "systems/cof/ui/macros/icons/WIS.png",
     "data.stats.cha": "systems/cof/ui/macros/icons/CHA.png",
@@ -402,8 +402,8 @@ export class CofRoll {
         }        
         const arr = formula.split(">");
         if(arr.length != 2){
-            //warn
-            ui.notifications.warning(`Invalid roll formula : ${formula}`);
+            //warn            
+            ui.notifications.warn(`Invalid roll formula : ${formula}`);
             return resist;
         }
         let rollFormula = arr[0].trim();
@@ -417,6 +417,22 @@ export class CofRoll {
         resist.resisted = result.isSuccess;
         resist.result = result.result + ` > ${difficultyResult.total}`;
         return resist;
+    }
+
+    static computeDamageResistance(dmgRoll, result, sourceToken, target){
+        if (!dmgRoll.resistanceFormula){
+            return;
+        }
+        const resist = CofRoll.rollResistance(dmgRoll.resistanceFormula, sourceToken, target)
+        if(!resist.resisted){
+            return;
+        }        
+        result.damage.resist = resist;
+        try{
+            result.damage.final = Math.ceil(eval(`result.damage.total ${dmgRoll.resistanceEffect}`));          
+        } catch (e){
+            ui.notifications.error(`Wrong resistance effect "${dmgRoll.resistanceEffect}" : ${e.message}`);
+        }
     }
 
     // let skillRoll = {
@@ -596,8 +612,11 @@ export class CofRoll {
                             const dmg = r.getRollResult();
                             if (!skillRoll) {
                                 // apply the dmg on each target
-                                for (const target of targets) {                                    
-                                    results.targets[target.data._id].damage = dmg;                                    
+                                for (const target of targets) {       
+                                    const result = results.targets[target.data._id];                             
+                                    result.damage = dmg;  
+                                    result.damage.final = dmg.total;
+                                    CofRoll.computeDamageResistance(dmgRoll, result, sourceToken, target);                                    
                                 }   
                                 results.displayApply = true;
                             } else {
@@ -605,9 +624,12 @@ export class CofRoll {
                                 for (const target of targets) {
                                     const result = results.targets[target.data._id];
                                     result.damage = r.getRollResult(result.skill.isCritical);
+                                    result.damage.final = result.damage.total;
                                     results.displayApply |= results.targets[target.data._id].skill.isSuccess;
+                                    CofRoll.computeDamageResistance(dmgRoll, result, sourceToken, target);                                    
                                 }
                             }
+                            
                             if (!targets.length) {
                                 if (!results.global) results.global = {};
                                 results.global.damage = dmg;                                
@@ -719,7 +741,7 @@ export class CofRoll {
                 }
                 if (data.damage) {
                     if (!data.skill || data.skill.isSuccess) {
-                        target.actor.applyDamage(data.damage.type === 'damage' ? data.damage.total : -data.damage.total);
+                        target.actor.applyDamage(data.damage.type === 'damage' ? data.damage.final : -data.damage.final);
                     }
                 }
                 if (data.uncheckedEffects && !data.uncheckedEffects.resisted) {

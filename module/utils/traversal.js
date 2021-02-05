@@ -84,7 +84,6 @@ export class Traversal {
         return changes;
     }
 
-
     static async getAllEntitiesOfType(type, pack) {
         const compendium = await game.packs.get(pack).getContent();
         const ingame = game.items.filter(item => item.type === type);
