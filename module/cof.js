@@ -20,7 +20,7 @@ import { System, COF } from "./config.js";
 import { Macros } from "./system/macros.js";
 import { overrides079Bugs } from "./overridesBugs.js";
 import { overrideTokenRender } from "./hooks/tokenOverride.js";
-
+import { DefaultVFX } from "./visualFX/defaultVFX.js";
 
 
 // 0: {id: "dead", label: "EFFECT.StatusDead", icon: "icons/svg/skull.svg"}                             "Mort" -> ...
@@ -116,6 +116,8 @@ Hooks.once("init", async function () {
 
     console.info("System Initializing...");
     console.info(System.ASCII);
+
+    DefaultVFX.initialize();
 
     // patching foundry bugs
     overrides079Bugs();

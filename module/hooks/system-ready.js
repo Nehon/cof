@@ -4,8 +4,10 @@
 
 import {DataLoader} from "../data.js";
 import {UpdateUtils} from "../utils/update-utils.js";
+import {FXMasterOverride} from "../hooks/fxMasterOverrides.js";
 
 Hooks.once("ready", async () => {
+    FXMasterOverride();
 
     //     console.debug("Importing data");
         // DataLoader.loadData("capacities");

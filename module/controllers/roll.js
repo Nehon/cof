@@ -2,7 +2,8 @@ import { CharacterGeneration } from "../system/chargen.js";
 import { CofSkillRoll } from "../system/skill-roll.js";
 import { CofDamageRoll } from "../system/dmg-roll.js";
 import { Traversal } from "../utils/traversal.js";
-
+import { MacroDispatcher } from "../system/macroDispatcher.js";
+import { DefaultVFX } from "../visualFX/defaultVFX.js";
 
 const iconsMap = {
     "data.stats.str": "systems/cof/ui/macros/icons/FOR.png",
@@ -571,7 +572,8 @@ export class CofRoll {
                         let skillRoll = action.skillRoll;
                         let dmgRoll = action.damageRoll;
                         let results = {
-                            name: label,
+                            name: label,    
+                            key: label.slugify(),                        
                             displayApply: action.forceDisplayApply,
                             itemId: action.itemId,
                             img: img,
@@ -579,6 +581,7 @@ export class CofRoll {
                                 img: actor.data.token.img,
                                 id: actor._id
                             },
+                            template: action.template? action.template.data: undefined,
                             targets: {}
                         };
                         for (const target of targets) {
@@ -718,7 +721,7 @@ export class CofRoll {
             return;
         }
 
-        button.click(ev => {
+        button.click(async ev => {
             ev.stopPropagation();
 
             if (flags.applied) {
@@ -731,32 +734,51 @@ export class CofRoll {
                 return;
             }
             const targets = flags.rollResult.targets;
+            const targetTokens = [];
 
             for (const targetId in targets) {
-                let data = targets[targetId];
+               
                 let target = Traversal.findTargetToken(targetId);
                 if (!target) {
                     ui.notifications.error(game.i18n.localize("COF.message.missingTarget"));
                     return;
                 }
-                if (data.damage) {
-                    if (!data.skill || data.skill.isSuccess) {
-                        target.actor.applyDamage(data.damage.type === 'damage' ? data.damage.final : -data.damage.final);
-                    }
-                }
-                if (data.uncheckedEffects && !data.uncheckedEffects.resisted) {
-                    target.actor.applyEffect(data.uncheckedEffects);
-                }
-
-                if (data.effects && !data.effects.resisted) {
-                    if (!data.skill || data.skill.isSuccess) {
-                        target.actor.applyEffect(data.effects);                        
+                targetTokens.push(target);               
+            }            
+            const actor = Traversal.findActor(flags.rollResult.source.id);
+            const item = actor.getItemById(flags.rollResult.itemId);            
+            const source = Traversal.findSourceToken(flags.rollResult.source.id);
+            const found = await MacroDispatcher.onVisualEffect(flags.rollResult.key, source, flags.rollResult, targetTokens);
+            if( !found ) {
+                if(flags.rollResult.global && flags.rollResult.global.damage){
+                    if(flags.rollResult.global.damage.type === "damage"){
+                        DefaultVFX.playRandomAttack(targetTokens[0]);
+                    } else {
+                        DefaultVFX.playRandomHeal(source);
                     }
                 }
             }
-            
-            const actor = Traversal.findActor(flags.rollResult.source.id);
-            const item = actor.getItemById(flags.rollResult.itemId);            
+
+            setTimeout(()=>{
+                for (const target of targetTokens) {       
+                     let data = targets[target.data._id];            
+                    if (data.damage) {
+                        if (!data.skill || data.skill.isSuccess) {
+                            target.actor.applyDamage(data.damage.type === 'damage' ? data.damage.final : -data.damage.final);
+                        }
+                    }
+                    if (data.uncheckedEffects && !data.uncheckedEffects.resisted) {
+                        target.actor.applyEffect(data.uncheckedEffects);
+                    }
+
+                    if (data.effects && !data.effects.resisted) {
+                        if (!data.skill || data.skill.isSuccess) {
+                            target.actor.applyEffect(data.effects);                        
+                        }
+                    }
+                }            
+            }, 300);
+           
             if (item) {
                 if (actor.getMaxUse(item)) {
                     actor.updateEmbeddedEntity("OwnedItem", {

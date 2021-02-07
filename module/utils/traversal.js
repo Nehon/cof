@@ -19,6 +19,10 @@ export class Traversal {
         return entity;
     }
 
+    static findSourceToken(id) {
+        return canvas.tokens.placeables.find((t) => t.data.actorId === id);
+    }
+
     static findActor(id) {
         if(!canvas){
             return game.actors.get(id);
