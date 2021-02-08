@@ -165,7 +165,7 @@ export class Traversal {
                 continue;
             }
             for (const res of term.results) {
-                diceResult += diceResult.length ? `+ (${res.result}) ` : `(${res.result}) `;
+                diceResult += !diceResult.length || diceResult.endsWith(" + ") ? `(${res.result}) ` : `+ (${res.result}) `;
             }
         }
         return diceResult;

@@ -76,10 +76,14 @@ export class CofRoll {
      * @private
      */
     static rollWeapon(data, actor, event) {
-        const li = $(event.currentTarget).parents(".item");
-        let item = actor.getOwnedItem(li.data("itemId"));
+        let id = data._id;
+        if(event){
+            const li = $(event.currentTarget).parents(".item");
+            id = li.data("itemId");
+        }
+        let item = actor.getOwnedItem(id);
         const itemData = item.data;
-        const key = itemData.data.skill.replace("@", "data.").replace(".mod", ".superior");
+        const key = itemData.data.skill.replace("@", "actor.data.data.").replace(".mod", ".superior");
         const superior = eval(key);
 
         const action = {
@@ -106,30 +110,35 @@ export class CofRoll {
      * @param key the key of the attribute to roll
      * @private
      */
-    static rollEncounterWeapon(data, actor, event) {
-        const item = $(event.currentTarget).parents(".weapon");
-        let label = item.find(".weapon-name").val();
-        let mod = parseInt(item.find(".weapon-mod").val(), 10);
+    static rollEncounterWeapon(data, actor, event) { 
+        let obj = data;
+        if (event) {
+            const item = $(event.currentTarget).parents(".weapon");
+            obj = {
+                name: item.find(".weapon-name").val(),
+                mod: parseInt(item.find(".weapon-mod").val(), 10),
+                critrange: item.find(".weapon-critrange").val(),
+                dmg: item.find(".weapon-dmg").val()
+            }
+        }
         let attackBuff = actor.data.data.attacks.melee.buff;
-        let critrange = item.find(".weapon-critrange").val();
-        let dmg = item.find(".weapon-dmg").val();
 
         const action = {
             hideFate: true,
             skillRoll: {
-                mod: mod + attackBuff,
+                mod: obj.mod + attackBuff,
                 dice: "1d20",
-                critRange: critrange,
+                critRange: obj.critrange,
                 target: "selected"
             },
 
             damageRoll: {
-                formula: dmg,
+                formula: obj.dmg,
                 type: "damage",
                 target: "selected"
             }
         };
-        return CofRoll.rollDialog(actor, actor.token, label, "systems/cof/ui/icons/red_31.jpg", action);
+        return CofRoll.rollDialog(actor, actor.token, obj.name, "systems/cof/ui/icons/red_31.jpg", action);
     }
 
     /**
@@ -324,7 +333,8 @@ export class CofRoll {
                 break;
             case "selected":
                 if (game.user.targets.size) {
-                    return [[...game.user.targets][0]];
+                    const array = [...game.user.targets];
+                    return [array[array.length - 1]];
                 }
                 break;
             case "self":

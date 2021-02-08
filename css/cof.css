@@ -868,6 +868,53 @@ strong {
   background-color: #12d6f8;
 }
 
+#hotbar #macro-list2 {
+  -webkit-box-flex: 0;
+  -ms-flex: 0 0 504px;
+  flex: 0 0 504px;
+  height: 100%;
+  list-style: none;
+  margin: 0 2px;
+  padding: 0;
+  border: 1px solid #000;
+  border-radius: 3px;
+}
+
+#hotbar #action-bar2 {
+  -webkit-box-flex: 1;
+  -ms-flex: 1;
+  flex: 1;
+  height: 52px;
+  pointer-events: all;
+}
+
+#hotbar.GM {
+  width: 1120px;
+}
+
+#hotbar #macro-list2 .macro-key {
+  position: absolute;
+  top: 2px;
+  right: 2px;
+  padding: 1px 3px;
+  background: #111;
+  color: #f0f0e0;
+  font-weight: bold;
+  pointer-events: all;
+}
+
+.macro .big-tooltip {
+  position: absolute;
+  max-height: 200px;
+  top: -210px;
+  max-width: 400px;
+  min-height: 200px;
+  overflow: hidden;
+  min-width: 400px;
+  z-index: 1000;
+  left: -175px;
+}
+
 /* Styles limited to cof sheets */
 .cof {
   /*

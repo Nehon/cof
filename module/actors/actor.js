@@ -215,6 +215,14 @@ export class CofActor extends Actor {
         return items.filter(i => i.type === "capacity")
     }
 
+    getWeapons(items) {
+        return items.filter(i => i.type === "item" && i.data.properties && i.data.properties.weapon)
+    }
+
+    getTrappingItems(items) {
+        return items.filter(i => i.type === "item" && i.data.subtype === "trapping")
+    }
+
     getCapacity(items, id){
         return items.find(i => i.type === "capacity" && i._id === id)
     }

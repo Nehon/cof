@@ -121,6 +121,14 @@ export class Capacity {
         return effectData;
     }
 
-
+    static isActivable(capacity){
+        for (const key in capacity.data.effects) {
+            const effect = capacity.data.effects[key];
+            if(effect.activable){
+                return true;
+            }            
+        }
+        return false;        
+    }
 
 }
