@@ -89,10 +89,10 @@ const initStatusEffects = function () {
 
     // replace "deaf" with "disarmed"
     CONFIG.statusEffects[9] = { id: "disarmed", label: "EFFECT.StatusDisarmed", icon: "systems/cof/ui/icons/status/drop-weapon.svg" };
-    
+
     // Silence
     CONFIG.statusEffects[10].changes = [{ key: "data.attacks.magic.buff", mode: 2, value: -2 }];
-    
+
     // move "bleeding" in "frozen"'s place
     CONFIG.statusEffects[13] = duplicate(CONFIG.statusEffects[16]);
 
@@ -103,7 +103,7 @@ const initStatusEffects = function () {
     CONFIG.statusEffects[16] = duplicate(CONFIG.statusEffects[23]);
 
     // add "surpise"
-    CONFIG.statusEffects[17] = { 
+    CONFIG.statusEffects[17] = {
         id: "surprise", label: "EFFECT.StatusSurprise", icon: "systems/cof/ui/icons/status/surprised.svg",
         changes: [{ key: "data.attributes.def.buff", mode: 2, value: -5 }]
     };
@@ -142,7 +142,7 @@ Hooks.once("init", async function () {
     CONFIG.Item.entityClass = CofItem;
     CONFIG.ActiveEffect.entityClass = CofEffect;
     //CONFIG.time.turnTime = 1;
-    
+
     // Create a namespace within the game global
     game.cof = {
         skin: "base",

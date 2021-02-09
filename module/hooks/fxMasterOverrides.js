@@ -1,5 +1,53 @@
+
+
+const preloadFile = function(url){
+    var req = new XMLHttpRequest();
+    req.open('GET', url, true);
+    req.responseType = 'blob';
+
+    req.onload = function () {
+        // Onload is triggered even on 404
+        // so we need to check the status code
+        if (this.status === 200) {
+            var videoBlob = this.response;
+            var vid = URL.createObjectURL(videoBlob); // IE10+
+            canvas.fxmaster.resourceMap.set(url, vid);
+        }
+    }
+    req.onerror = function () {
+        // Error
+    }
+
+    req.send();
+}
+
+const preloadResources = async function(){
+  // preload resources
+  canvas.fxmaster.resourceMap = new Map();
+
+  //\s*file\s*:\s*"([^"]*)"
+  const macroCompendiums = game.packs.filter(c => c.metadata.entity === "Macro");
+  const reg = new RegExp(/\s*file\s*:\s*"([^"]*)"/g);
+  for (const compendium of macroCompendiums) {
+      const content = await compendium.getContent();
+      for (const macro of content) {
+        if(!macro.name.endsWith("onVisualEffect")){
+          continue;
+        }
+        let m;
+        while(m = reg.exec(macro.data.command)){
+            preloadFile(m[1]);
+        }
+        
+      }
+  }
+}
+
 export const FXMasterOverride = function () {
   if (!canvas.fxmaster) { return; }
+  
+  preloadResources();
+
   canvas.fxmaster.playVideo = function (data) {
 
     // Set default values
@@ -16,10 +64,18 @@ export const FXMasterOverride = function () {
     var video = document.createElement("video");
     video.preload = "auto";
     video.crossOrigin = "anonymous";
-    video.src = data.file;
+
+    const blob = canvas.fxmaster.resourceMap.get(data.file);
+    if(blob){
+      console.log("found video file in the cache", data.file);
+      video.src = blob;  
+    } else {
+      console.log("downloading file", data.file);
+      video.src = data.file;
+    }
+    
     video.playbackRate = data.playbackRate;
- //   video.loop = data.loop> 0;
- 
+    video.volume = 0.2;
 
     // Create PIXI sprite
     var container;
@@ -38,7 +94,7 @@ export const FXMasterOverride = function () {
     //   }      
     // },3000);
 
-    video.oncanplay = () => {  
+    video.oncanplaythrough = () => {  
       const texture = PIXI.Texture.from(video);
       vidSprite = new PIXI.Sprite(texture);
       this.addChild(vidSprite);
