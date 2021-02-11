@@ -229,7 +229,7 @@
   "COF.attributes.val.abbrev" : "Val",
   "COF.attributes.tmpval.abbrev" : "Temp",
 
-  "COF.attributes.rp.label" : "Points de récupération",
+  "COF.attributes.rp.label" : "Points de récup.",
   "COF.attributes.rp.abbrev" : "PR",
   "COF.attributes.fp.label" : "Points de chance",
   "COF.attributes.fp.abbrev" : "PC",

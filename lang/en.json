@@ -179,7 +179,7 @@
   "COF.attributes.buff.abbrev" : "Buff",
   "COF.attributes.max.abbrev" : "Max",
 
-  "COF.attributes.defence.label": "DEFENCE",
+  "COF.attributes.defence.label": "DEFENSE",
   "COF.attributes.initiative.label": "INITIATIVE",
   "COF.attributes.vitality.label": "VITALITY",
 
@@ -189,7 +189,7 @@
   "COF.attributes.xp.abbrev": "XP",
   "COF.attributes.init.label": "Initiative",
   "COF.attributes.init.abbrev": "INIT",
-  "COF.attributes.def.label": "Defence",
+  "COF.attributes.def.label": "Defense",
   "COF.attributes.def.abbrev": "DEF",
   "COF.attributes.level.label": "Level",
   "COF.attributes.level.abbrev": "LVL",

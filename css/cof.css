@@ -147,6 +147,20 @@
 }
 
 @font-face {
+  font-family: "Folkard";
+  font-style: normal;
+  font-weight: 400;
+  src: url("../fonts/FOLKARD.woff");
+}
+
+@font-face {
+  font-family: "LoversQuarel";
+  font-style: normal;
+  font-weight: 400;
+  src: url("../fonts/script/LoversQuarrel-Regular.ttf");
+}
+
+@font-face {
   font-family: 'Modesto Condensed';
   font-style: normal;
   font-weight: 400;
@@ -212,7 +226,7 @@ strong {
   visibility: hidden;
   position: absolute;
   width: 140px;
-  background-color: #555;
+  background-color: rgba(0, 0, 0, 0.8);
   color: #fff;
   text-align: center;
   padding: 5px 0;
@@ -222,9 +236,10 @@ strong {
   -webkit-transition: opacity 0.3s;
   -o-transition: opacity 0.3s;
   transition: opacity 0.3s;
-  font-size: 14px;
+  font-size: 15px;
   font-weight: normal;
   margin: 0;
+  font-family: "Modesto Condensed", "Palatino Linotype", serif;
 }
 
 .big-tooltip {
@@ -928,7 +943,12 @@ Copied from dnd5e
 
 .cof.actor {
   /* ----------------------------------------- */
-  /*  Layout                                   */
+  /*  Layout     
+
+-webkit-box-shadow: inset 0px 0px 25px 5px rgba(0,0,0,0.59);
+    box-shadow: inset 0px 0px 25px 5px rgba(0, 0, 0, 0.3);
+    coloe: #000;
+    border: #000 1px solid;*/
   /* ----------------------------------------- */
   /* ----------------------------------------- */
   /*  Layout                                   */
@@ -954,6 +974,10 @@ Copied from dnd5e
   height: 100%;
   max-height: 100%;
   overflow: hidden;
+  background: url(/systems/cof/ui/bg-2.png), -webkit-gradient(linear, left top, right top, from(#dfe2ce), to(#dfe2ce));
+  background: url(/systems/cof/ui/bg-2.png), -o-linear-gradient(left, #dfe2ce, #dfe2ce);
+  background: url(/systems/cof/ui/bg-2.png), linear-gradient(to right, #dfe2ce, #dfe2ce);
+  background-blend-mode: multiply;
 }
 
 .cof.actor .window-content > form {
@@ -972,6 +996,209 @@ Copied from dnd5e
   height: 100%;
   max-height: 100%;
   overflow: hidden;
+}
+
+.cof.actor .window-content > form .wrap #leftPane {
+  min-width: 285px;
+  padding-top: 20px;
+}
+
+.cof.actor .window-content > form .wrap #rightPane {
+  min-width: 285px;
+  padding-top: 20px;
+}
+
+.cof.actor .window-content > form .wrap .drop-field {
+  position: relative;
+  margin-right: 5px;
+}
+
+.cof.actor .window-content > form .wrap .dice-list {
+  font-size: 20px;
+  width: 100%;
+  font-family: "Modesto Condensed", "Palatino Linotype", serif;
+}
+
+.cof.actor .window-content > form .wrap #descriptionContent {
+  padding: 2px;
+  font-family: "LoversQuarel", cursive;
+  font-size: 32px;
+  text-shadow: 0 0 1px #777;
+  line-height: 0.7;
+  height: 105px;
+  overflow: hidden;
+  text-align: justify;
+  overflow-x: visible;
+}
+
+.cof.actor .window-content > form .wrap .expandDescription {
+  border-bottom: 1px solid #b4b39e;
+  position: absolute;
+  width: 100%;
+  text-align: center;
+  font-size: 1.2em;
+  bottom: 0;
+  background: -o-radial-gradient(bottom, ellipse, #dfe2ce 0%, rgba(223, 226, 206, 0) 80%), -o-radial-gradient(bottom, ellipse, #dfe2ce 0%, rgba(223, 226, 206, 0) 80%);
+  background: radial-gradient(ellipse at bottom, #dfe2ce 0%, rgba(223, 226, 206, 0) 80%), radial-gradient(ellipse at bottom, #dfe2ce 0%, rgba(223, 226, 206, 0) 80%);
+  background-blend-mode: overlay;
+  cursor: pointer;
+}
+
+.cof.actor .window-content > form .wrap #editDescription {
+  height: 545px;
+  -webkit-transform: translate(-50%);
+  -ms-transform: translate(-50%);
+  transform: translate(-50%);
+  left: 50%;
+  position: absolute;
+  background: url(/systems/cof/ui/bg-2.png), -webkit-gradient(linear, left top, right top, from(#dfe2ce), to(#dfe2ce));
+  background: url(/systems/cof/ui/bg-2.png), -o-linear-gradient(left, #dfe2ce, #dfe2ce);
+  background: url(/systems/cof/ui/bg-2.png), linear-gradient(to right, #dfe2ce, #dfe2ce);
+  background-blend-mode: multiply;
+  z-index: 5;
+  font-family: "LoversQuarel", cursive;
+  border: 1px solid #b4b39e;
+  font-size: 30px;
+  line-height: 0.8;
+  text-shadow: 0 0 1px #777;
+  -webkit-box-shadow: 0 0 20px #000;
+  box-shadow: 0 0 20px #000;
+  margin-top: 5px;
+  width: 50%;
+}
+
+.cof.actor .window-content > form .wrap .cell {
+  border: 1px solid #736953a6;
+  margin-left: 1px;
+  font-family: "LoversQuarel", cursive;
+  font-size: 30px;
+  margin-bottom: 1px;
+  line-height: 0.8;
+}
+
+.cof.actor .window-content > form .wrap .cell .text-field {
+  font-family: Folkard;
+  font-size: 18px;
+  padding-top: 11px;
+}
+
+.cof.actor .window-content > form .wrap .cell .profile-controls, .cof.actor .window-content > form .wrap .cell .species-controls {
+  font-family: Folkard;
+  font-size: 13px;
+  padding-top: 0px;
+  position: absolute;
+  right: -8px;
+  background-color: #971010;
+  width: 15px;
+  height: 15px;
+  padding: 0;
+  text-align: center;
+  color: white;
+  padding-left: 1px;
+  -webkit-box-shadow: 0px 2px 5px 1px rgba(0, 0, 0, 0.5);
+  box-shadow: 0px 2px 5px 1px rgba(0, 0, 0, 0.5);
+}
+
+.cof.actor .window-content > form .wrap .roll-stat {
+  text-shadow: 0px 3px 10px black;
+  color: white;
+}
+
+.cof.actor .window-content > form .wrap .mod {
+  color: #fff;
+  background-color: rgba(24, 26, 74, 0.4);
+  border-width: 0 5px 0 5px;
+  border-style: solid;
+  border-color: rgba(0, 0, 0, 0);
+  margin-left: 4px;
+  -webkit-box-flex: 0;
+  -ms-flex: 0 0 60px;
+  flex: 0 0 60px;
+}
+
+.cof.actor .window-content > form .wrap .mod.header {
+  border-radius: 2px 2px 0 0;
+}
+
+.cof.actor .window-content > form .wrap .mod.footer {
+  border-radius: 0 0 2px 2px;
+  height: 5px;
+  margin-left: 11px;
+}
+
+.cof.actor .window-content > form .wrap .cell.focus {
+  border-style: solid;
+  border-width: 1px 5px 1px 5px;
+  margin: 0 0 0 2px;
+  border-color: rgba(24, 26, 74, 0.4);
+  -webkit-box-flex: 0;
+  -ms-flex: 0 0 60px;
+  flex: 0 0 60px;
+}
+
+.cof.actor .window-content > form .wrap .label {
+  background: -webkit-gradient(linear, left top, right top, from(rgba(0, 0, 0, 0.6)), to(rgba(0, 0, 0, 0.75)));
+  background: -o-linear-gradient(left, rgba(0, 0, 0, 0.6), rgba(0, 0, 0, 0.75));
+  background: linear-gradient(to right, rgba(0, 0, 0, 0.6), rgba(0, 0, 0, 0.75));
+  color: #fff;
+  margin-bottom: 1px;
+}
+
+.cof.actor .window-content > form .wrap .label input[type="checkbox"] {
+  width: 16px;
+  height: 16px;
+  margin-left: -7px;
+}
+
+.cof.actor .window-content > form .wrap .small-header {
+  font-size: 11px;
+  margin-bottom: -11px;
+  font-weight: bold;
+  margin-left: -4px;
+  margin-top: 2px;
+}
+
+.cof.actor .window-content > form .wrap .hp-field {
+  background: none;
+  text-shadow: 0 0 1px #000;
+  font-family: "LoversQuarel", cursive;
+  font-size: 45px;
+  vertical-align: middle;
+  height: 40px;
+}
+
+.cof.actor .window-content > form .wrap .hp-bar {
+  margin-top: -4px;
+  height: 10px;
+  position: relative;
+  border-radius: 3px;
+  border: 1px solid #747474;
+  -webkit-box-shadow: 0px 4px 8px 3px rgba(0, 0, 0, 0.5);
+  box-shadow: 0px 4px 8px 3px rgba(0, 0, 0, 0.5);
+  background: -webkit-gradient(linear, left top, left bottom, from(rgba(255, 255, 255, 0.3)), color-stop(50%, rgba(255, 255, 255, 0.3)), color-stop(51%, rgba(164, 179, 189, 0.3)), to(rgba(214, 228, 238, 0.3)));
+  background: -o-linear-gradient(top, rgba(255, 255, 255, 0.3) 0%, rgba(255, 255, 255, 0.3) 50%, rgba(164, 179, 189, 0.3) 51%, rgba(214, 228, 238, 0.3) 100%);
+  background: linear-gradient(to bottom, rgba(255, 255, 255, 0.3) 0%, rgba(255, 255, 255, 0.3) 50%, rgba(164, 179, 189, 0.3) 51%, rgba(214, 228, 238, 0.3) 100%);
+}
+
+.cof.actor .window-content > form .wrap .hp-bar .inner {
+  height: 100%;
+  background: -webkit-gradient(linear, left top, left bottom, from(#cccec2), color-stop(50%, #a9b58b), color-stop(51%, #72aa00), to(#9ecb2d));
+  background: -o-linear-gradient(top, #cccec2 0%, #a9b58b 50%, #72aa00 51%, #9ecb2d 100%);
+  background: linear-gradient(to bottom, #cccec2 0%, #a9b58b 50%, #72aa00 51%, #9ecb2d 100%);
+}
+
+.cof.actor .window-content > form .wrap .hp-bar .deco-right {
+  position: absolute;
+  right: -1px;
+  width: 89px;
+  top: -7px;
+}
+
+.cof.actor .window-content > form .wrap .hp-bar .deco-left {
+  position: absolute;
+  left: -1px;
+  width: 89px;
+  top: -7px;
 }
 
 .cof.actor .window-content > form .wrap .header .header-background {
@@ -1019,33 +1246,128 @@ Copied from dnd5e
   min-height: 100px;
   height: 100px;
   max-height: 100px;
+  z-index: 10;
 }
 
 .cof.actor .window-content > form .wrap .main {
   -ms-flex-wrap: nowrap;
   flex-wrap: nowrap;
   padding: 0;
-  overflow: hidden;
   margin: -10px 0 0 0;
   height: calc(100% - 95px);
   min-height: calc(100% - 95px);
   max-height: calc(100% - 95px);
 }
 
+.cof.actor .window-content > form .wrap .main .topArea {
+  -ms-flex-wrap: nowrap;
+  flex-wrap: nowrap;
+  overflow: visible;
+  height: 355px;
+}
+
+.cof.actor .window-content > form .wrap .main #centerPane {
+  -webkit-box-flex: 0;
+  -ms-flex: 0 0 230px;
+  flex: 0 0 230px;
+  border: 1px solid #000;
+  max-height: 305px;
+  overflow: visible;
+  position: relative;
+}
+
+.cof.actor .window-content > form .wrap .main #centerPane .profile-img {
+  cursor: pointer;
+  border: none;
+  margin-top: 15px;
+  margin-left: 0;
+  width: 100%;
+  overflow: hidden;
+  max-height: 290px;
+  position: absolute;
+}
+
+.cof.actor .window-content > form .wrap .main #centerPane .zone {
+  -webkit-box-shadow: 0px 4px 10px 2px rgba(0, 0, 0, 0.7);
+  box-shadow: 0px 4px 10px 2px rgba(0, 0, 0, 0.7);
+  background: white;
+  overflow: hidden;
+  border-radius: 3px;
+}
+
+.cof.actor .window-content > form .wrap .main #centerPane .level-zone {
+  position: absolute;
+  top: 240px;
+  width: 40px;
+  height: 40px;
+  right: -10px;
+}
+
+.cof.actor .window-content > form .wrap .main #centerPane .level-zone .field-label {
+  color: #646464;
+  position: absolute;
+  margin-left: -6px;
+  font-size: 12px;
+  margin-top: -10px;
+  font-weight: bold;
+  pointer-events: none;
+}
+
+.cof.actor .window-content > form .wrap .main #centerPane .level-zone .field-value {
+  background: none;
+  color: #000;
+  font-size: 38px;
+  margin-top: 0px;
+  font-family: "LoversQuarel", cursive;
+  max-height: 30px;
+  height: 30px;
+  min-height: 30px;
+  padding: 16px 0 0 0;
+}
+
+.cof.actor .window-content > form .wrap .main #centerPane .name-zone {
+  margin: 0px -15px 0px -15px;
+  position: relative;
+  top: 300px;
+}
+
+.cof.actor .window-content > form .wrap .main #centerPane .name-zone .deco-right {
+  position: absolute;
+  right: -7px;
+  top: 20px;
+  width: 33%;
+  border-radius: 15px;
+}
+
+.cof.actor .window-content > form .wrap .main #centerPane .name-zone .deco-left {
+  position: absolute;
+  left: -7px;
+  top: 20px;
+  width: 33%;
+  border-radius: 15px;
+}
+
+.cof.actor .window-content > form .wrap .main #centerPane .name-zone .name-field {
+  height: 35px;
+  border-bottom: 1px solid #747474;
+}
+
+.cof.actor .window-content > form .wrap .main #centerPane .name-zone .name-field .field-value {
+  font-family: Folkard;
+  -webkit-font-smoothing: antialiased;
+  background: none;
+  color: #000;
+  max-height: 35px;
+  font-size: 22px;
+  padding-top: 17px;
+  height: 35px;
+  min-height: 35px;
+}
+
 .cof.actor .window-content > form .wrap .main .sidebar {
   max-width: 250px;
   padding: 0 5px 0 5px;
   height: 100%;
-}
-
-.cof.actor .window-content > form .wrap .main .sidebar .profile-img {
-  cursor: pointer;
-  border: none;
-  margin-top: 5px;
-  margin-left: 0;
-  -webkit-box-flex: 0;
-  -ms-flex: 0 0 240px;
-  flex: 0 0 240px;
 }
 
 .cof.actor .window-content > form .wrap .main .separator {
@@ -1202,13 +1524,19 @@ Copied from dnd5e
 }
 
 .cof.actor .spacer {
-  min-height: 28px;
-  height: 28px;
-  max-height: 28px;
+  min-height: 20px;
+  height: 20px;
+  max-height: 20px;
+}
+
+.cof.actor .spacer-double {
+  min-height: 42px;
+  height: 42px;
+  max-height: 42px;
 }
 
 .cof.actor .layout {
-  padding: 5px;
+  padding: 20px;
 }
 
 .cof.actor .weapon-image {
@@ -1242,6 +1570,8 @@ Copied from dnd5e
   -ms-flex-positive: 2;
   flex-grow: 2;
   vertical-align: middle;
+  font-family: "Modesto Condensed", "Palatino Linotype", serif;
+  font-size: 1.2em;
 }
 
 .cof.actor .window-content > form .wrap .field-value {
@@ -1250,7 +1580,7 @@ Copied from dnd5e
   height: 26px;
   max-height: 26px;
   vertical-align: middle;
-  padding: 5px;
+  text-shadow: 0 0 1px #000;
 }
 
 .cof.actor .window-content > form .wrap .header .header-background {
@@ -1265,10 +1595,6 @@ Copied from dnd5e
   background: url("../ui/deco-right.png") no-repeat;
 }
 
-.cof.actor .window-content > form .wrap .main {
-  background: white;
-}
-
 .cof.actor .window-content > form .wrap .main .sidebar {
   background: url("../ui/parchemin1.png") no-repeat white;
 }
@@ -1278,7 +1604,7 @@ Copied from dnd5e
 }
 
 .cof.actor .window-content > form .wrap .main .content .drop-field {
-  background-color: rgba(255, 255, 255, 0.4);
+  background-color: rgba(255, 255, 255, 0.5);
 }
 
 .cof.actor .window-content > form .wrap .main .content .drop-field .field-value {
@@ -1300,7 +1626,7 @@ Copied from dnd5e
 
 .cof.actor .field-value {
   border: none;
-  background: rgba(255, 255, 255, 0.4);
+  background: rgba(255, 255, 255, 0.5);
   border-radius: 0;
   color: #3c3c3c;
 }
@@ -1311,7 +1637,7 @@ Copied from dnd5e
 }
 
 .cof.actor .stats .field-value {
-  font-family: "ChN1Regular", cursive;
+  font-family: "LoversQuarel", cursive;
   font-size: 1.2em;
   color: #3c3c3c;
 }
@@ -1336,11 +1662,6 @@ Copied from dnd5e
 .cof.actor .row {
   margin-top: 1px;
   background: transparent;
-}
-
-.cof.actor .cell {
-  border: 1px solid #736953a6;
-  margin-left: 1px;
 }
 
 .cof.actor .btn {
@@ -1423,7 +1744,6 @@ Copied from dnd5e
 .cof.actor .path-controls,
 .cof.actor .profile-controls {
   color: #464331c4;
-  visibility: hidden;
   -webkit-box-flex: 0;
   -ms-flex: 0 0 18px;
   flex: 0 0 18px;

@@ -29,6 +29,16 @@ export const registerHandlebarsHelpers = function () {
         return new Handlebars.SafeString(string);
     });
 
+    Handlebars.registerHelper('stripStyle', function (string) {
+        let s = string.replace(/style="[^"]*"/g,"");
+        return new Handlebars.SafeString(s);
+    });
+
+    Handlebars.registerHelper('percent', function (value, max) {
+        return Math.max(0,Math.min(100, Math.floor(value / max * 100.0)));
+    });
+
+
     Handlebars.registerHelper('info', function (align, label1, value1, label2, value2, label3, value3) {
         const v2Sign = value2 < 0 ? '' : '+';
         const v3Sign = value3 < 0 ? '' : '+';

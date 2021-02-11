@@ -159,6 +159,9 @@ export class CofActorSheet extends ActorSheet {
             game.cof.macros.rollCapacityMacro(item.data.data.key, item.data.name);
         });
 
+        html.find('.expandDescription').click(ev =>{
+            html.find('#editDescription').toggle();
+        });
 
         html.find('.capacity').hover(ev =>{
             ev.preventDefault();

@@ -1,29 +1,101 @@
-<div class="flexrow no-wrap">
-    <div class="flex1 layout">
-        <!-- STATS -->
-        {{> "systems/cof/templates/actors/character/parts/stats/character-attributes.hbs"}}
+<div class="flexrow topArea">
+    <div id="editDescription" style="display:none">
+        <div style="padding:20px">
+            {{editor content=data.description target="data.description" button=true owner=owner editable=editable}}
+        </div>
+        <div class="expandDescription">x</div>
     </div>
-    <div class="flex1 layout">
-        <!-- ATTAQUES -->
-        {{> "systems/cof/templates/actors/character/parts/stats/character-attacks.hbs"}}
-        <div class="flexrow"><div class="flex1 spacer"></div></div>
-        <!-- INIT -->
-        {{> "systems/cof/templates/actors/character/parts/stats/character-init.hbs"}}
+    <div id="leftPane" style="padding-top:20px">
+        <div class="layout">
+            <!-- STATS -->
+            {{> "systems/cof/templates/actors/character/parts/stats/character-attributes.hbs"}}
+            <div class="flexrow"><div class="flex1 spacer-double"></div></div>
+            
+            <!-- SPECIES -->
+            <div class="flexrow" style="margin-right:15px">
+                <div class="flex2 center label">
+                    <span class="field-label">{{ localize 'COF.details.species' }}</span>
+                </div>
+                <div class="flex4 center cell drop-field compendium-pack" data-pack="cof.species" data-open="0">
+                    {{#with (getSpecies actor.items)}}
+                        <div class="flex5 field-value text-field" style="background-image: url('{{img}}'); background-size: 26px 26px; background-repeat: no-repeat">{{name}}</div>
+                        <div class="species-controls item" data-item-id="{{_id}}">
+                            <a class="item-control item-delete" title="Delete Item"><i class="fas fa-times"></i></a>
+                        </div>
+                    {{/with}}
+                </div>
+            </div>
+            <!-- /SPECIES -->
+            <!-- PROFILE -->
+            <div class="flexrow"  style="margin-right:15px">
+                <div class="flex2 center label">
+                    <span class="field-label">{{ localize 'COF.details.profile' }}</span>
+                </div>
+                <div class="flex4 center cell drop-field compendium-pack" data-pack="cof.profiles" data-open="0">
+                    {{#with (getProfile actor.items)}}
+                        <div class="flex5 field-value text-field" style="background-image: url('{{img}}'); background-size: 26px 26px; background-repeat: no-repeat">{{name}}</div>
+                        <div class="profile-controls item" data-item-id="{{_id}}" >
+                            <a class="item-control item-delete" title="Delete Item"><i class="fas fa-times"></i></a>
+                        </div>
+                    {{/with}}
+                </div>
+            </div>
+            <!-- /PROFILE --> 
+        </div>
+    </div>
+    <div id="centerPane">
+        <div class="profile-img">
+            <img src="{{actor.img}}" data-edit="img" title="{{actor.name}}" style="border:none;width:100%"/> 
+        </div>
+        <div class="level-zone zone center">
+            <div class="field-label">{{ localize 'COF.attributes.level.label' }}</div>
+            <input class="field-value" name="data.level.value" type="text" value="{{actor.data.level.value}}" data-dtype="Number"/>                    
+        </div>
+        <div class="name-zone zone">
+            <div class="deco-left">
+                <img src="/systems/cof/ui/deco-left.png" style="border:none">
+            </div>                    
+            <div class="center name-field">
+                <input class="field-value sans" name="name" type="text" value="{{actor.name}}" placeholder="{{ localize 'COF.details.name' }}" data-dtype="String"/>
+            </div>
+            <div class="deco-right">
+                <img src="/systems/cof/ui/deco-right.png" style="border:none">
+            </div>
+        </div>
+    </div>
+    <div id="rightPane">
+        <div class="layout">
+            <!-- ATTAQUES -->
+            {{> "systems/cof/templates/actors/character/parts/stats/character-attacks.hbs"}}
+            <div class="flexrow"><div class="flex1 spacer"></div></div>
+            <!-- INIT -->
+            {{> "systems/cof/templates/actors/character/parts/stats/character-init.hbs"}}
+            <div class="flexrow"><div class="flex1 spacer"></div></div>
+            {{> "systems/cof/templates/actors/character/parts/stats/character-defence.hbs"}}
+        </div>
     </div>
 </div>
-<div class="flexrow"><div class="flex1 half-spacer"></div></div>
-<div class="flexrow no-wrap">
-    <div class="flex1 layout">
-        <!-- VITALITE -->
-        {{> "systems/cof/templates/actors/character/parts/stats/character-vitality.hbs"}}
-        <div class="flexrow"><div class="flex1 half-spacer"></div></div>
-        <!-- DEFENSE -->
-        {{> "systems/cof/templates/actors/character/parts/stats/character-defence.hbs"}}
-    </div>
-    <div class="flex1 layout">
-        <!-- RECOVERY -->
-        {{> "systems/cof/templates/actors/character/parts/stats/character-recovery.hbs"}}
-        <!-- RESOURCES -->
-        {{> "systems/cof/templates/actors/character/parts/stats/character-resources.hbs"}}
+<div>
+    <div class="flexrow">
+        <div class="flex2 layout">                       
+            {{> "systems/cof/templates/actors/character/parts/character-description.hbs"}}   
+        </div>
+        <div class="flex3">
+            {{> "systems/cof/templates/actors/character/parts/stats/character-vitality.hbs"}}
+                <div id="descriptionContainer" style="height: 110px;margin-top: -5px;position:relative"> 
+                <div class="flex small-header" style="border-bottom: 1px solid #b4b39e;">
+                    <span class="field-label">{{ localize "COF.details.description" }}</span>
+                </div>
+                <div id="descriptionContent">
+                    {{stripStyle data.description}}
+                </div> 
+                <div class="expandDescription">...</div>
+                
+            </div>
+        </div>
+        <div class="flex2 layout">                        
+            <!-- RESOURCES -->
+            {{> "systems/cof/templates/actors/character/parts/stats/character-resources.hbs"}}
+        </div>
     </div>
 </div>

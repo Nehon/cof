@@ -1,24 +1,27 @@
-<div class="flexrow table-header red no-wrap">
+<div class="flexrow table-header no-wrap">
     <div class="flex2 center">
         <div class="field-label ellipsis">{{ localize 'COF.attributes.initiative.label' }}</div>
     </div>
     <div class="flex1 center">
         <div class="field-label">{{ localize 'COF.attributes.bonus.abbrev' }}</div>
     </div>
-    <div class="flex1 center">
+    <div class="flex1 center mod header">
         <div class="field-label">{{ localize 'COF.attributes.value.abbrev' }}</div>
     </div>
 </div>
 <div class="flexrow no-wrap">
-    <div class="flex2 center bg-red">
+    <div class="flex2 center label">
         <span class="field-label ellipsis"><i class="fas fa-bolt"></i>&nbsp;{{ localize 'COF.attributes.init.abbrev' }}</span>
     </div>
     <div class="flex1 center cell">
         <input class="field-value" name="data.attributes.init.bonus" type="text" value="{{actor.data.attributes.init.bonus}}" placeholder="{{ localize 'COF.attributes.bonus.abbrev' }}" data-dtype="Number"/>
     </div>
-    <div class="flex1 center cell readonly tooltip">
+    <div class="flex1 center cell readonly tooltip focus">
         <input class="field-value" name="data.attributes.init.value" readonly="true" type="text" value="{{actor.data.attributes.init.value}}" placeholder="{{ localize 'COF.attributes.value.abbrev' }}" data-dtype="Number"/>
         {{info 'left' (localize 'COF.stats.dex.abbrev') data.stats.dex.value (localize 'COF.attributes.bonus.abbrev') data.attributes.init.bonus  (localize 'COF.ui.buff') data.attributes.init.buff}}
-        
     </div>
+</div>
+<div class="flexrow no-wrap">
+    <div class="flex3"></div>
+    <div class="flex1 mod footer"></div>
 </div>

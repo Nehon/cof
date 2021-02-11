@@ -17,6 +17,8 @@
         padding: 5px;
         flex-grow: 2;
         vertical-align: middle;
+        font-family:"Modesto Condensed", "Palatino Linotype", serif;
+        font-size:1.2em
       }
 
       .field-value {
@@ -25,7 +27,7 @@
         height: 26px;
         max-height: 26px;
         vertical-align: middle;
-        padding: 5px;
+        text-shadow: 0 0 1px #000;
       }
 
       .header {
@@ -40,8 +42,7 @@
           }
         }
       }
-      .main {
-        background: white;
+      .main {        
         .sidebar {
           background: url("../ui/parchemin1.png") no-repeat white;
         }
@@ -50,7 +51,7 @@
         }
         .content{
           .drop-field {
-            background-color: rgba(255, 255, 255, 0.4);
+            background-color: rgba(255, 255, 255, 0.5);
             .field-value {
               background: transparent;
             }
@@ -73,7 +74,7 @@
 
 .field-value {
   border: none;
-  background: rgba(255, 255, 255, 0.4);
+  background: rgba(255, 255, 255, 0.5);
   border-radius: 0;
   color: $c-dark;
 }
@@ -110,10 +111,7 @@
   background: transparent;
 }
 
-.cell {
-  border: 1px solid $c-border;
-  margin-left: 1px;
-}
+
 
 .btn {
   cursor: pointer;
@@ -248,8 +246,7 @@
 .species-controls,
 .path-controls,
 .profile-controls {
-  color: $c-darkbrown;
-  visibility: hidden;
+  color: $c-darkbrown;  
   flex: 0 0 18px;
   border:1px solid transparent;
 }

@@ -52,6 +52,21 @@
   src: url('../fonts/PermanentMarker-Regular.ttf');
 }
 
+@font-face {
+  font-family: "Folkard";
+  font-style: normal;
+  font-weight: 400;
+  src: url('../fonts/FOLKARD.woff');
+}
+
+
+@font-face {
+  font-family: "LoversQuarel";
+  font-style: normal;
+  font-weight: 400;
+  src: url('../fonts/script/LoversQuarrel-Regular.ttf');
+}
+
 //@font-face {
 //  font-family: "UnifrakturCook";
 //  src: url('../fonts/UnifrakturCook-Bold.ttf');
@@ -85,7 +100,7 @@ $font-primary: 'Signika', sans-serif;
 $font-secondary: 'MyriadPro', sans-serif;
 $font-tertiary: "Modesto Condensed", "Palatino Linotype", serif;
 $font-charname: "PermanentMarker", cursive;
-$font-handwrite: "ChN1Regular", cursive;
+$font-handwrite: "LoversQuarel", cursive;
 
 .empty {
   //font: 14px $font-secondary;

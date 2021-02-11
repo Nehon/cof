@@ -1,22 +1,24 @@
-<div class="flexrow table-header red no-wrap">
+<div class="flexrow table-header no-wrap">
     <div class="flex2 center">
         <div class="field-label ellipsis">{{ localize 'COF.attacks.label' }}</div>
     </div>
     <div class="flex1 center">
         <div class="field-label">{{ localize 'COF.ui.bonus' }}</div>
     </div>
-    <div class="flex1 center">
+    <div class="flex1 center mod header">
         <div class="field-label">{{ localize 'COF.ui.mod' }}</div>
     </div>
 </div>
 {{#each actor.data.attacks as |attack id|}}
     {{!#if attack.enabled}}
         <div class="flexrow no-wrap">
-            <div class="flex2 center bg-red rollable" data-rolling="data.attacks.{{id}}" data-roll-type="skillcheck">
-                <span class="field-label ellipsis"><i class="fas fa-dice-d20"></i>&nbsp;{{ localize attack.abbrev }}</span>
-                <input name="data.attacks.{{id}}.abbrev" type="hidden" value="{{attack.abbrev}}" data-dtype="String"/>
-                <input name="data.attacks.{{id}}.label" type="hidden" value="{{attack.label}}" data-dtype="String"/>
-                <input name="data.attacks.{{id}}.key" type="hidden" value="{{attack.key}}" data-dtype="String"/>
+            <div class="flex2 label">
+                <div class="flex2 center rollable field-label" data-rolling="data.attacks.{{id}}" data-roll-type="skillcheck">                
+                    <span style="margin-left:-9px;">{{ localize attack.abbrev }}</span>&nbsp;&nbsp;<i class="fas fa-dice-d20 roll-stat"></i>
+                    <input name="data.attacks.{{id}}.abbrev" type="hidden" value="{{attack.abbrev}}" data-dtype="String"/>
+                    <input name="data.attacks.{{id}}.label" type="hidden" value="{{attack.label}}" data-dtype="String"/>
+                    <input name="data.attacks.{{id}}.key" type="hidden" value="{{attack.key}}" data-dtype="String"/>
+                </div>
             </div>
             <div class="flex1 center cell">
                 {{#if (isNull attack.bonus)}}
@@ -25,9 +27,15 @@
                     <input class="field-value" name="data.attacks.{{id}}.bonus" type="text" value="{{numberFormat attack.bonus decimals=0 sign=true}}" placeholder="Bonus" data-dtype="Number"/>
                 {{/if}}
             </div>
-            <div class="flex1 center cell readonly tooltip">
+            <div class="flex1 center cell readonly tooltip focus">
                 <input class="field-value" name="data.attacks.{{id}}.mod" readonly="true" type="text" value="{{numberFormat attack.mod decimals=0 sign=true}}" placeholder="Mod" data-dtype="Number"/>
                 {{info 'left' (localize 'COF.stats.base.abbrev') attack.base (localize 'COF.attributes.bonus.abbrev') attack.bonus  (localize 'COF.ui.buff') attack.buff}}
             </div>
         </div>
 {{/each}}
+ <div class="flexrow no-wrap">
+    <div class="flex3">
+    </div>
+    <div class="flex1 mod footer">            
+    </div>
+</div>

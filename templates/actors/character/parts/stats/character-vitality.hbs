@@ -1,4 +1,4 @@
-<div class="flexrow table-header green no-wrap">
+{{!-- <div class="flexrow table-header green no-wrap">
     <div class="flex2 center rollable" data-rolling="data.attributes.hp" data-roll-type="hp">
         <div class="field-label"><i class="fas fa-dice-d6"></i>&nbsp;{{ localize 'COF.attributes.vitality.label' }}</div>
     </div>
@@ -17,35 +17,75 @@
     <div class="flex1 center">
         <div class="field-label">{{ localize 'COF.ui.max' }}</div>
     </div>
+     style="flex:0 0 230px"
+</div> --}}
+<div class="flexrow no-wrap" style="margin-top:-10px">
+    <div class="flex4 small-header" >
+        <div class="field-label" style="margin-top: 21px;margin-left: 60px;">{{ localize "COF.attributes.hp.abbrev" }}</div>
+    </div>
+    <div class="flex2 center" >
+        <input class="hp-field" style="margin-top: -10px;margin-right: -20px;" name="data.attributes.hp.value" type="text" value="{{actor.data.attributes.hp.value}}" placeholder="Value" data-dtype="Number"/>
+    </div>    
+    <div class="hp-field flex1 center">/</div>
+    <div class="flex2 center tooltip">
+        <input class="hp-field" style="margin-left: -20px;margin-top: 4px;" name="data.attributes.hp.max" type="text" readonly="true" value="{{actor.data.attributes.hp.max}}" placeholder="Max" data-dtype="Number"/>
+        {{info4 'right' (localize 'COF.stats.base.abbrev') data.attributes.hp.base 'CON * Lvl' (mult data.stats.con.mod data.level.value) (localize 'COF.attributes.bonus.abbrev') data.attributes.hp.bonus  (localize 'COF.ui.buff') data.attributes.hp.buff}}
+    </div>
+    <div class="flex4" >
+       
+    </div>
 </div>
-<div class="flexrow no-wrap">
-    <div class="flex2 center bg-green">
-        <span class="field-label"><i class="fas fa-heart"></i>&nbsp;{{ localize 'COF.attributes.hp.abbrev' }}</span>
+<div class="hp-bar">
+    
+    <div class="deco-left">
+        <img src="/systems/cof/ui/deco-left.png" style="border:none;border-radius: 7px;">
+    </div>                    
+    <div class="inner" style="width:{{percent data.attributes.hp.value data.attributes.hp.max}}%"></div>
+    <div class="deco-right">
+        <img src="/systems/cof/ui/deco-right.png" style="border:none;border-radius: 7px;">
     </div>
-    <div class="center cell readonly" style="flex:0 1 60px">
-        <select name="data.attributes.hd.value" data-type="String" style="font-size:12px; width:100%">
-        {{#select actor.data.attributes.hd.value}}
-            <option value="">{{localize "COF.None"}}</option>
-            <option value="1d4">1d4</option>
-            <option value="1d6">1d6</option>
-            <option value="1d8">1d8</option>
-            <option value="1d10">1d10</option>
-            <option value="1d12">1d12</option>
-            <option value="1d20">1d20</option>
-        {{/select}}
-        </select>
+    
+</div>
+<div class="flexrow">
+    <div class="flex1"></div>
+    <div class="flexrow no-wrap small-header"   style="flex:0 0 230px">
+        <div class="flex1">
+            <div class="field-label">{{ localize 'COF.ui.hd' }}</div>
+        </div>
+        <div class="flex1">
+            <div class="field-label">{{ localize 'COF.ui.base' }}</div>
+        </div>
+        <div class="flex1">
+            <div class="field-label">{{ localize 'COF.ui.bonus' }}</div>
+        </div>    
     </div>
-    <div class="flex1 center cell">
-        <input class="field-value" name="data.attributes.hp.value" type="text" value="{{actor.data.attributes.hp.value}}" placeholder="Value" data-dtype="Number"/>
+    <div class="flex1"></div>
+</div>
+<div class="flexrow">
+    <div class="flex1"></div>
+    <div class="flexrow no-wrap" style="flex:0 0 230px" >
+        {{!-- <div class="flex2 center bg-green">
+            <span class="field-label"><i class="fas fa-heart"></i>&nbsp;{{ localize 'COF.attributes.hp.abbrev' }}</span>
+        </div> --}}
+        <div class="center cell readonly flex1" >
+            <select name="data.attributes.hd.value" data-type="String" class="dice-list">
+            {{#select actor.data.attributes.hd.value}}
+                <option value="">{{localize "COF.None"}}</option>
+                <option value="1d4">1d4</option>
+                <option value="1d6">1d6</option>
+                <option value="1d8">1d8</option>
+                <option value="1d10">1d10</option>
+                <option value="1d12">1d12</option>
+                <option value="1d20">1d20</option>
+            {{/select}}
+            </select>
+        </div>
+        <div class="flex1 center cell">
+            <input class="field-value" name="data.attributes.hp.base" type="text" value="{{actor.data.attributes.hp.base}}" placeholder="Base" data-dtype="Number"/>
+        </div>
+        <div class="flex1 center cell">
+            <input class="field-value" name="data.attributes.hp.bonus" type="text" value="{{actor.data.attributes.hp.bonus}}" placeholder="Bonus" data-dtype="Number"/>
+        </div>    
     </div>
-    <div class="flex1 center cell">
-        <input class="field-value" name="data.attributes.hp.base" type="text" value="{{actor.data.attributes.hp.base}}" placeholder="Base" data-dtype="Number"/>
-    </div>
-    <div class="flex1 center cell">
-        <input class="field-value" name="data.attributes.hp.bonus" type="text" value="{{actor.data.attributes.hp.bonus}}" placeholder="Bonus" data-dtype="Number"/>
-    </div>
-    <div class="flex1 center cell readonly tooltip">
-        <input class="field-value" name="data.attributes.hp.max" type="text" readonly="true" value="{{actor.data.attributes.hp.max}}" placeholder="Max" data-dtype="Number"/>
-        {{info4 'left' (localize 'COF.stats.base.abbrev') data.attributes.hp.base 'CON * Lvl' (mult data.stats.con.mod data.level.value) (localize 'COF.attributes.bonus.abbrev') data.attributes.hp.bonus  (localize 'COF.ui.buff') data.attributes.hp.buff}}
-    </div>
+    <div class="flex1"></div>
 </div>

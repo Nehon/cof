@@ -1,4 +1,8 @@
-<div class="flexrow table-header darkslate no-wrap">
+{{#if (not (isEnabled "useMana"))}}
+<div class="flexrow"><div class="flex1 spacer-double"></div></div>
+{{/if}}
+
+<div class="flexrow table-header no-wrap">
     <div class="flex8 center">
         <div class="field-label ellipsis">{{ localize 'COF.attributes.resources.label' }}</div>
     </div>
@@ -12,10 +16,28 @@
         <div class="field-label">{{ localize 'COF.ui.max' }}</div>
     </div>
 </div>
+{{#if (isEnabled "useRecovery")}}
+ <div class="flexrow no-wrap">
+        <div class="flex8 center label">
+            <span class="field-label ellipsis"><i class="fas fa-heartbeat"></i>&nbsp;{{ localize 'COF.attributes.rp.label' }}</span>
+        </div>
+        <div class="flex3 center cell">
+            <input class="field-value" name="data.attributes.rp.value" type="text" value="{{actor.data.attributes.rp.value}}" placeholder="Value" data-dtype="Number"/>
+        </div>
+        <div class="flex3 center cell">
+            <input class="field-value" name="data.attributes.rp.bonus" type="text" value="{{actor.data.attributes.rp.bonus}}" placeholder="Bonus" data-dtype="Number"/>
+        </div>
+        <div class="flex3 center cell readonly tooltip">
+            <input class="field-value" name="data.attributes.rp.max" readonly="true" type="text" value="{{actor.data.attributes.rp.max}}" placeholder="Max" data-dtype="Number"/>
+            {{info 'left' (localize 'COF.stats.base.abbrev') data.attributes.rp.base (localize 'COF.attributes.bonus.abbrev') data.attributes.rp.bonus  (localize 'COF.ui.buff') data.attributes.rp.buff}}
+        </div>
+    </div>
+{{/if}}      
 {{#if (isEnabled "useFortune")}}
+<div class="flexrow"><div class="flex1 half-spacer"></div></div>
 <div class="flexrow no-wrap">
-    <div class="flex8 center bg-darkslate">
-        <span class="field-label ellipsis"><i class="fas fa-star"></i>&nbsp;{{ localize 'COF.attributes.fp.abbrev' }}</span>
+    <div class="flex8 center label">
+        <span class="field-label ellipsis"><i class="fas fa-star"></i>&nbsp;{{ localize 'COF.attributes.fp.label' }}</span>
     </div>
     <div class="flex3 center cell">
         <input class="field-value" name="data.attributes.fp.value" type="text" value="{{actor.data.attributes.fp.value}}" placeholder="Value" data-dtype="Number"/>
@@ -30,8 +52,9 @@
 </div>
 {{/if}}
 {{#if (isEnabled "useMana")}}
+<div class="flexrow"><div class="flex1 half-spacer"></div></div>
 <div class="flexrow no-wrap">
-    <div class="flex8 center bg-darkslate">
+    <div class="flex8 center label">
         <span class="field-label ellipsis"><i class="fas fa-hand-sparkles"></i>&nbsp;{{ localize 'COF.attributes.mp.abbrev' }}</span>
     </div>
     <div class="flex3 center cell">
