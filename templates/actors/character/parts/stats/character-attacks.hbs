@@ -12,7 +12,7 @@
 {{#each actor.data.attacks as |attack id|}}
     {{!#if attack.enabled}}
         <div class="flexrow no-wrap">
-            <div class="flex2 label">
+            <div class="flex2 dark-red">
                 <div class="flex2 center rollable field-label" data-rolling="data.attacks.{{id}}" data-roll-type="skillcheck">                
                     <span style="margin-left:-9px;">{{ localize attack.abbrev }}</span>&nbsp;&nbsp;<i class="fas fa-dice-d20 roll-stat"></i>
                     <input name="data.attacks.{{id}}.abbrev" type="hidden" value="{{attack.abbrev}}" data-dtype="String"/>

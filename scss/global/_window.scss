@@ -57,7 +57,7 @@
     border: 1px solid #b4b39e;
     border-radius: 3px;
     z-index: 5;
-    font-family: Folkard;
+    font-family: $font-secondary;
     line-height: 1.2;
     font-size: 1.2em;
     background: url(../ui/bg-2.png);
@@ -186,6 +186,16 @@
 }
 .disabled{
     color: #aaaaaa
+}
+
+.dialog-content{
+   hr{
+    margin-right: auto;
+    margin-left: auto;    
+    width: 50%;
+    border-bottom: 1px solid #b4b39e;
+    border-top: none;
+  }
 }
 /* ----------------------------------------- */
 /* Scrollbar

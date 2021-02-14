@@ -44,6 +44,8 @@ textarea:disabled:focus {
 button {
   background: rgba(0, 0, 0, 0.1);
   border: $borderGroove;
+  font-family: $font-primary;
+  font-size: 1.1em;
 }
 
 select {

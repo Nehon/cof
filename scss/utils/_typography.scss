@@ -53,12 +53,11 @@
 }
 
 @font-face {
-  font-family: "Folkard";
+  font-family: "Immortal";
   font-style: normal;
   font-weight: 400;
-  src: url('../fonts/FOLKARD.woff');
+  src: url('../fonts/IMMORTAL.ttf');
 }
-
 
 @font-face {
   font-family: "LoversQuarel";
@@ -96,9 +95,9 @@
 /*  TEXT STYLES                             */
 /* ----------------------------------------- */
 
-$font-primary: 'Signika', sans-serif;
-$font-secondary: 'MyriadPro', sans-serif;
-$font-tertiary: "Modesto Condensed", "Palatino Linotype", serif;
+$font-primary: "Modesto Condensed", "Palatino Linotype", serif;
+$font-secondary: "Immortal", sans-serif;
+$font-tertiary: 'Signika', sans-serif;
 $font-charname: "PermanentMarker", cursive;
 $font-handwrite: "LoversQuarel", cursive;
 

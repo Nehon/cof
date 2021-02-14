@@ -73,8 +73,9 @@ $colorRoll : darkslategrey;
   color: $c-darkslate;
 }
 .bg-darkslate {
-  background: $c-darkslate;
-  color: $c-white;
+  background: linear-gradient(to right, rgba(47, 79, 79, 0.6), rgba(47, 79, 79, 0.75));
+  color:#fff;
+  margin-bottom: 1px;
 }
 .darkgreen {
   color: $c-darkgreen;
@@ -133,4 +134,44 @@ $colorRoll : darkslategrey;
 .bg-purple {
   background: $c-purple;
   color: $c-white;
+}
+.dark{
+  background: linear-gradient(to right, rgba(0, 0, 0, 0.6), rgba(0, 0, 0, 0.75));
+  color:#fff;
+  margin-bottom: 1px;
+}
+
+.dark-red{
+  background: linear-gradient(to right, rgba(200, 0, 0, 0.6), rgba(100, 0, 0, 0.75));
+  color:#fff;
+  margin-bottom: 1px;
+}
+.dark-green{
+  background: linear-gradient(to right, rgba(0, 100, 0, 0.6), rgba(0, 50, 0, 0.75));
+  color:#fff;
+  margin-bottom: 1px;
+}
+
+.dark-blue{
+  background: linear-gradient(to right, rgba(0, 0, 150, 0.6), rgba(0, 0, 50, 0.75));
+  color:#fff;
+  margin-bottom: 1px;
+}
+
+.dark-silver{
+  background: linear-gradient(to right, rgba(100, 100, 100, 0.6), rgba(0, 0, 0, 0.75));
+  color:#fff;
+  margin-bottom: 1px;
+}
+
+.dark-yellow{
+  background: linear-gradient(to right, rgba(100, 100, 0, 0.6), rgba(30, 30, 0, 0.75));
+  color:#fff;
+  margin-bottom: 1px;
+}
+
+.dark-teal{
+  background: linear-gradient(to right, rgba(0, 100, 100, 0.6), rgba(0, 0, 0, 0.75));
+  color:#fff;
+  margin-bottom: 1px;
 }

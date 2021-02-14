@@ -28,8 +28,11 @@
 }
 
 .bg-darkslate {
-  background: darkslategray;
+  background: -webkit-gradient(linear, left top, right top, from(rgba(47, 79, 79, 0.6)), to(rgba(47, 79, 79, 0.75)));
+  background: -o-linear-gradient(left, rgba(47, 79, 79, 0.6), rgba(47, 79, 79, 0.75));
+  background: linear-gradient(to right, rgba(47, 79, 79, 0.6), rgba(47, 79, 79, 0.75));
   color: #fff;
+  margin-bottom: 1px;
 }
 
 .darkgreen {
@@ -95,6 +98,62 @@
   color: #fff;
 }
 
+.dark {
+  background: -webkit-gradient(linear, left top, right top, from(rgba(0, 0, 0, 0.6)), to(rgba(0, 0, 0, 0.75)));
+  background: -o-linear-gradient(left, rgba(0, 0, 0, 0.6), rgba(0, 0, 0, 0.75));
+  background: linear-gradient(to right, rgba(0, 0, 0, 0.6), rgba(0, 0, 0, 0.75));
+  color: #fff;
+  margin-bottom: 1px;
+}
+
+.dark-red {
+  background: -webkit-gradient(linear, left top, right top, from(rgba(200, 0, 0, 0.6)), to(rgba(100, 0, 0, 0.75)));
+  background: -o-linear-gradient(left, rgba(200, 0, 0, 0.6), rgba(100, 0, 0, 0.75));
+  background: linear-gradient(to right, rgba(200, 0, 0, 0.6), rgba(100, 0, 0, 0.75));
+  color: #fff;
+  margin-bottom: 1px;
+}
+
+.dark-green {
+  background: -webkit-gradient(linear, left top, right top, from(rgba(0, 100, 0, 0.6)), to(rgba(0, 50, 0, 0.75)));
+  background: -o-linear-gradient(left, rgba(0, 100, 0, 0.6), rgba(0, 50, 0, 0.75));
+  background: linear-gradient(to right, rgba(0, 100, 0, 0.6), rgba(0, 50, 0, 0.75));
+  color: #fff;
+  margin-bottom: 1px;
+}
+
+.dark-blue {
+  background: -webkit-gradient(linear, left top, right top, from(rgba(0, 0, 150, 0.6)), to(rgba(0, 0, 50, 0.75)));
+  background: -o-linear-gradient(left, rgba(0, 0, 150, 0.6), rgba(0, 0, 50, 0.75));
+  background: linear-gradient(to right, rgba(0, 0, 150, 0.6), rgba(0, 0, 50, 0.75));
+  color: #fff;
+  margin-bottom: 1px;
+}
+
+.dark-silver {
+  background: -webkit-gradient(linear, left top, right top, from(rgba(100, 100, 100, 0.6)), to(rgba(0, 0, 0, 0.75)));
+  background: -o-linear-gradient(left, rgba(100, 100, 100, 0.6), rgba(0, 0, 0, 0.75));
+  background: linear-gradient(to right, rgba(100, 100, 100, 0.6), rgba(0, 0, 0, 0.75));
+  color: #fff;
+  margin-bottom: 1px;
+}
+
+.dark-yellow {
+  background: -webkit-gradient(linear, left top, right top, from(rgba(100, 100, 0, 0.6)), to(rgba(30, 30, 0, 0.75)));
+  background: -o-linear-gradient(left, rgba(100, 100, 0, 0.6), rgba(30, 30, 0, 0.75));
+  background: linear-gradient(to right, rgba(100, 100, 0, 0.6), rgba(30, 30, 0, 0.75));
+  color: #fff;
+  margin-bottom: 1px;
+}
+
+.dark-teal {
+  background: -webkit-gradient(linear, left top, right top, from(rgba(0, 100, 100, 0.6)), to(rgba(0, 0, 0, 0.75)));
+  background: -o-linear-gradient(left, rgba(0, 100, 100, 0.6), rgba(0, 0, 0, 0.75));
+  background: linear-gradient(to right, rgba(0, 100, 100, 0.6), rgba(0, 0, 0, 0.75));
+  color: #fff;
+  margin-bottom: 1px;
+}
+
 /* ----------------------------------------- */
 /*  LOCAL FONTS                             */
 /* ----------------------------------------- */
@@ -147,10 +206,10 @@
 }
 
 @font-face {
-  font-family: "Folkard";
+  font-family: "Immortal";
   font-style: normal;
   font-weight: 400;
-  src: url("../fonts/FOLKARD.woff");
+  src: url("../fonts/IMMORTAL.ttf");
 }
 
 @font-face {
@@ -193,7 +252,7 @@ strong {
 
 /* Global styles */
 .window-app {
-  font-family: "Signika", sans-serif;
+  font-family: "Modesto Condensed", "Palatino Linotype", serif;
 }
 
 .window-app a:hover {
@@ -250,7 +309,7 @@ strong {
   border: 1px solid #b4b39e;
   border-radius: 3px;
   z-index: 5;
-  font-family: Folkard;
+  font-family: "Immortal", sans-serif;
   line-height: 1.2;
   font-size: 1.2em;
   background: url(../ui/bg-2.png);
@@ -383,6 +442,14 @@ strong {
 
 .disabled {
   color: #aaaaaa;
+}
+
+.dialog-content hr {
+  margin-right: auto;
+  margin-left: auto;
+  width: 50%;
+  border-bottom: 1px solid #b4b39e;
+  border-top: none;
 }
 
 /* ----------------------------------------- */
@@ -729,6 +796,16 @@ strong {
   font-weight: bold;
 }
 
+#chat-log .message {
+  font-family: "Modesto Condensed", "Palatino Linotype", serif;
+  font-size: 0.9em;
+}
+
+.chat-message-apply-button {
+  font-family: "Modesto Condensed", "Palatino Linotype", serif;
+  font-size: 1.1em;
+}
+
 .message-skill-roll h1 {
   border: none;
   font-size: 2.8em;
@@ -757,17 +834,16 @@ strong {
 
 .target .overlay {
   color: darkslategrey;
-  font-size: 0.4em;
+  font-size: 0.5em;
   opacity: 0.9;
-  font-weight: bolder;
   margin-left: -5px;
 }
 
 .target .overlay.name {
   color: #fff;
   margin-left: -10px;
-  font-size: 0.9em;
-  text-shadow: 0px 0px 3px black;
+  font-size: 1.1em;
+  text-shadow: 0px 0px 5px black;
   max-width: 62px;
   opacity: 1;
   display: -webkit-inline-box;
@@ -866,8 +942,8 @@ strong {
 
 .overlay {
   font-size: 0.5em;
-  margin-left: -16px;
-  text-shadow: 0px 0px 2px black;
+  margin-left: -10px;
+  text-shadow: 0px 0px 1px black;
 }
 
 #hotbar .macro .macro-use {
@@ -1120,13 +1196,13 @@ Copied from dnd5e
 }
 
 .cof.actor .window-content > form .wrap .cell .text-field {
-  font-family: Folkard;
+  font-family: "Immortal", sans-serif;
   font-size: 18px;
-  padding-top: 11px;
+  padding-top: 7px;
 }
 
 .cof.actor .window-content > form .wrap .cell .profile-controls, .cof.actor .window-content > form .wrap .cell .species-controls {
-  font-family: Folkard;
+  font-family: "Immortal", sans-serif;
   font-size: 13px;
   padding-top: 0px;
   position: absolute;
@@ -1400,13 +1476,12 @@ Copied from dnd5e
 }
 
 .cof.actor .window-content > form .wrap .main #centerPane .name-zone .name-field .field-value {
-  font-family: Folkard;
+  font-family: "Immortal", sans-serif;
   -webkit-font-smoothing: antialiased;
   background: none;
   color: #000;
   max-height: 35px;
   font-size: 22px;
-  padding-top: 17px;
   height: 35px;
   min-height: 35px;
 }
@@ -1690,7 +1765,7 @@ Copied from dnd5e
 }
 
 .cof.actor .field-value.sans {
-  font: 14px "Signika", sans-serif;
+  font: 14px "Modesto Condensed", "Palatino Linotype", serif;
 }
 
 .cof.actor .field-area {
@@ -1698,7 +1773,7 @@ Copied from dnd5e
   width: 100%;
   vertical-align: middle;
   background: transparent;
-  font-family: "Signika", sans-serif;
+  font-family: "Modesto Condensed", "Palatino Linotype", serif;
   font-size: 13px;
 }
 
@@ -1713,7 +1788,7 @@ Copied from dnd5e
 
 .cof.actor .btn {
   cursor: pointer;
-  font-family: "Signika", sans-serif;
+  font-family: "Modesto Condensed", "Palatino Linotype", serif;
   color: #464331c4;
   border: 1px solid #736953a6;
   -webkit-box-shadow: 0 0 10px #00000052 inset;
@@ -1736,7 +1811,7 @@ Copied from dnd5e
 }
 
 .cof.actor .tabs {
-  font: 14px "Signika", sans-serif;
+  font: 14px "Modesto Condensed", "Palatino Linotype", serif;
   color: #464331c4;
   text-align: center;
 }
@@ -1835,7 +1910,7 @@ Copied from dnd5e
 }
 
 .cof.actor .label-text {
-  font-family: "Signika", sans-serif;
+  font-family: "Modesto Condensed", "Palatino Linotype", serif;
   font-size: 14px;
   color: #464331c4;
   text-align: center;
@@ -1924,7 +1999,7 @@ Copied from dnd5e
 }
 
 .cof.item .window-content .sheet-header .header-details {
-  font-family: "Modesto Condensed", "Palatino Linotype", serif;
+  font-family: "Signika", sans-serif;
   font-size: 20px;
   font-weight: 700;
 }
@@ -2008,7 +2083,7 @@ Copied from dnd5e
   -webkit-box-flex: 0;
   -ms-flex: 0 0 20px;
   flex: 0 0 20px;
-  font-family: "Modesto Condensed", "Palatino Linotype", serif;
+  font-family: "Signika", sans-serif;
   font-size: 20px;
   font-weight: 700;
 }
@@ -2303,11 +2378,13 @@ Copied from dnd5e
 .cof button {
   background: rgba(0, 0, 0, 0.1);
   border: 2px groove #eeede0;
+  font-family: "Modesto Condensed", "Palatino Linotype", serif;
+  font-size: 1.1em;
 }
 
 .cof select {
   color: #191813;
-  font-family: "Signika", sans-serif;
+  font-family: "Modesto Condensed", "Palatino Linotype", serif;
   font-size: 14px;
   text-align: center;
   text-align-last: center;
@@ -2432,7 +2509,7 @@ Copied from dnd5e
   padding: 2px 0;
   border-top: 2px groove #eeede0;
   border-bottom: 2px groove #eeede0;
-  font-family: "Modesto Condensed", "Palatino Linotype", serif;
+  font-family: "Signika", sans-serif;
   font-size: 20px;
   font-weight: 700;
 }
@@ -2518,7 +2595,7 @@ Copied from dnd5e
 }
 
 .cof nav.sheet-tabs.tabs {
-  font: 14px "Signika", sans-serif;
+  font: 14px "Modesto Condensed", "Palatino Linotype", serif;
   color: #464331c4;
   text-align: center;
   border: none;
@@ -2777,7 +2854,7 @@ Copied from dnd5e
 .cof .inventory-list .inventory-header h3 {
   margin: 0 -5px 0 0;
   padding-left: 5px;
-  font-family: "Modesto Condensed", "Palatino Linotype", serif;
+  font-family: "Signika", sans-serif;
   font-size: 20px;
   font-weight: 700;
   font-size: 18px;

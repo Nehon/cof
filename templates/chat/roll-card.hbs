@@ -8,7 +8,7 @@
 </h1>
 <div class="flex1">
     {{#if (not hideFate)}}
-     <button class="chat-message-fate-button tooltip" >
+     <button class="chat-message-fate-button tooltip dark-yellow" >
                 <i class="fas fa-star" style="vertical-align:top;"> {{localize "COF.message.fate"}}</i>
                 <span class="tooltiptext tooltip-left" style="top:-18px;">{{localize "COF.message.fateText"}} <br> <span style="font-size:larger">{{fateValue}} / {{fateMax}}</span></span>
     </button>
@@ -35,11 +35,11 @@
             {{#if target.uncheckedEffects}}
                 <div class="flex3 tooltip center"><img style="border:none;vertical-align: bottom;border-radius: 12px;" src="{{target.uncheckedEffects.icon}}" width="24" height="24" />
                     <span class="tooltiptext tooltip-left">{{safeString target.uncheckedEffects.tooltip}}</span>
-                    <i class="overlay" style="font-size:0.8em;margin-top: 10px;">EFF</i>
+                    <i class="overlay" style="font-size:0.9em;margin-top: 10px;">EFF</i>
                     {{#if target.uncheckedEffects.resisted}}
-                        <i class="overlay name" style="font-size:0.8em;margin-top: -16px; margin-left:-38px; color:yellow;">RESIST</i> 
+                        <i class="overlay name" style="font-size:0.9em;margin-top: -13px; margin-left:-23px; color:yellow;">RESIST</i> 
                     {{else}}
-                        <i class="overlay name" style="font-size:1.0em;margin-top: -16px;margin-left: -18px;">
+                        <i class="overlay name" style="font-size:1.0em;margin-top: -19px;margin-left: -12px;">
                             {{#if (equals target.uncheckedEffects.duration.rounds 128)}}
                                 <span style="font-size:1.3em;"">&infin;</span>
                             {{else}}
@@ -55,9 +55,9 @@
                         <span class="tooltiptext tooltip-left">{{safeString target.effects.tooltip}}</span>                                        
                         <i class="overlay" style="font-size:0.8em;margin-top: 10px;">EFF</i>                        
                         {{#if target.effects.resisted}}
-                            <i class="overlay name" style="font-size:0.8em;margin-top: -16px; margin-left:-38px; color:yellow;">RESIST</i> 
+                            <i class="overlay name" style="font-size:0.8em;margin-top: -13px; margin-left:-23px; color:yellow;">RESIST</i> 
                         {{else}}
-                            <i class="overlay  name" style="font-size:1.0em;margin-top: -16px;margin-left: -18px;">
+                            <i class="overlay  name" style="font-size:1.0em;margin-top: -19px;margin-left: -12px;">
                                 {{#if (equals target.effects.duration.rounds 128)}}
                                     <span style="font-size:1.3em;"">&infin;</span>
                                 {{else}}
@@ -90,7 +90,7 @@
     {{/forin}}
 {{/if}}
 {{#if displayApply}}
-    <button class="chat-message-apply-button" style="line-height: 20px;margin-top:3px" >
-        <i class="fas fa-check-circle" style="vertical-align:middle;"> {{localize "COF.message.apply"}}</i>
+    <button class="chat-message-apply-button dark-silver" style="line-height: 20px;margin-top:3px" >
+        <i class="fas fa-check-circle" style="vertical-align:middle;"> </i>{{localize "COF.message.apply"}}
     </button
 {{/if}}

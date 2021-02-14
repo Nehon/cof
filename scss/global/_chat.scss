@@ -25,6 +25,15 @@
   }
 }
 
+#chat-log .message {
+    font-family: $font-primary;
+    font-size: 0.9em;
+}
+.chat-message-apply-button{
+    font-family: $font-primary;
+    font-size: 1.1em;
+}
+
 .message-skill-roll {
   h1{
     border: none;
@@ -49,18 +58,17 @@
     text-shadow: 0px 0px 1px rgba(0,0,0,1);
   }  
   .overlay {  
-     color: $colorRoll;
-     font-size: 0.4em;
-     opacity: 0.9;
-     //text-shadow: none;
-     font-weight: bolder;
+    color: $colorRoll;
+    font-size: 0.5em;
+    opacity: 0.9;     
+    //text-shadow: none;     
     margin-left: -5px;
   }
   .overlay.name{
     color: #fff;
     margin-left: -10px;
-    font-size: 0.9em;
-    text-shadow: 0px 0px 3px black;
+    font-size: 1.1em;
+    text-shadow: 0px 0px 5px black;
     max-width: 62px;
     opacity: 1;
     display: inline-flex;
@@ -141,9 +149,9 @@
 
 .overlay{
   font-size: 0.5em;
-  margin-left: -16px;
+  margin-left: -10px;
   //-webkit-text-stroke: 1px #000;
-  text-shadow: 0px 0px 2px rgba(0,0,0,1);
+  text-shadow: 0px 0px 1px rgba(0,0,0,1);
 } 
 
 // .fa-certificate:before {

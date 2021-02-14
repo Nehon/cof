@@ -9,14 +9,14 @@
             dice: dice,
             dmgRoll: dmgRoll --}}
 {{#if useSkillRoll}}
-    <div class="row flexrow table-header red">
+    <div class="row flexrow table-header field-dark">
         <div class="flex1 center">
             <h3>{{localize 'COF.ui.skillcheck'}}</h3>
         </div>
     </div>
     <div class="flexrow" style="margin-bottom: 1px;">
-        <div class="flex1 center bg-red">
-            <label for="dice">{{localize 'COF.ui.dice.type'}}</label>
+        <div class="flex1 center dark">
+            <dark for="dice">{{localize 'COF.ui.dice.type'}}</dark>
         </div>
         <div class="flex1 center cell">
             <select class="flex1" name="dice" id="dice" data-type="String">
@@ -32,24 +32,24 @@
         </div>
     </div>
     <div class="row flexrow" style="margin-bottom: 1px;">
-        <div class="flex1 center bg-red">
-            <span class="field-label">{{localize 'COF.ui.modifier'}}</span>
+        <div class="flex1 center dark">
+            <span class="field-dark">{{localize 'COF.ui.modifier'}}</span>
         </div>
         <div class="flex1 center cell">
             <input class="field-value readonly" id="mod" name="mod" type="text" readonly="true" value="{{numberFormat mod decimals=0 sign=true}}" data-dtype="Number"/>     
         </div>
     </div>
     <div class="row flexrow" style="margin-bottom: 1px;">
-        <div class="flex1 center bg-red">
-            <span class="field-label">{{localize 'COF.ui.critrange'}}</span>
+        <div class="flex1 center dark">
+            <span class="field-dark">{{localize 'COF.ui.critrange'}}</span>
         </div>
         <div class="flex1 center cell">
             <input class="field-value" id="critrange" name="critrange" type="text" value="{{critrange}}" data-dtype="String"/>
         </div>
     </div>
     <div class="row flexrow" style="margin-bottom: 1px;">
-        <div class="flex1 center bg-red">
-            <span class="field-label">{{localize 'COF.ui.bonus'}}/{{localize 'COF.ui.malus'}}</span>
+        <div class="flex1 center dark">
+            <span class="field-dark">{{localize 'COF.ui.bonus'}}/{{localize 'COF.ui.malus'}}</span>
         </div>
         <div class="flex1 center cell">
             <input class="field-value" id="bonus" name="bonus" type="text" value="{{numberFormat bonus decimals=0 sign=true}}" data-dtype="Number"/>
@@ -60,7 +60,7 @@
     {{#if displayTarget}}
         <div class="row flexrow" style="margin-bottom: 1px; line-height: 1.8;">
             <div class="flex1 center bg-darkslate">
-                <span class="field-label">{{localize 'COF.ui.target'}}</span>
+                <span class="field-dark">{{localize 'COF.ui.target'}}</span>
             </div>
             <div class="flex1 center cell">
                 {{#if targetName}}
@@ -75,25 +75,29 @@
         <!-- DIFFICULTY -->
         <div class="row flexrow" style="margin-bottom: 5px;">
             <div class="flex1 center bg-darkslate">
-                <span class="field-label">{{localize 'COF.ui.difficulty'}}</span>
+                <span class="field-dark">{{localize 'COF.ui.difficulty'}}</span>
             </div>
             <div class="flex1 center cell">
                 <input class="field-value" id="difficulty" name="difficulty" type="text" value="{{difficulty}}" data-dtype="Number"/>
             </div>
         </div>
+       
+    {{/if}}
+    {{#if displayTarget}}
         <hr/>
     {{/if}}
+
 {{/if}}    
 
-{{#if useDmgRoll}}
+{{#if useDmgRoll}}    
     {{#if (equals type 'damage')}}
-        <div class="row flexrow table-header red">
+        <div class="row flexrow table-header field-label">
             <div class="flex1 center">
                 <h3>{{ localize "COF.message.damage"}}</h3>
             </div>
         </div>
     {{else}}
-        <div class="row flexrow table-header green">
+        <div class="row flexrow table-header field-label">
             <div class="flex1 center">
                 <h3>{{ localize "COF.message.heal"}}</h3>
             </div>
@@ -107,7 +111,7 @@
     {{#if displayTarget}}
         <div class="row flexrow" style="margin-bottom: 10px; line-height: 1.8;">
             <div class="flex1 center bg-darkslate">
-                <span class="field-label">{{localize 'COF.ui.target'}}</span>
+                <span class="field-dark">{{localize 'COF.ui.target'}}</span>
             </div>
             <div class="flex1 center cell">
                 {{#if targetName}}

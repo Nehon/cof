@@ -414,7 +414,11 @@ export class CofActorSheet extends ActorSheet {
 
     equipItem(event, item) {
         const elt = $(event.srcElement);
-        const slotId = elt.data("slot");
+        let slotId = elt.data("slot");
+        if(!slotId){
+            slotId = elt.closest(".item-slot").data("slot");
+        }
+
         const id = elt.attr("id");
         let itemData = item.data;
         if (item.itemId) {

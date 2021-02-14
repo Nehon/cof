@@ -122,12 +122,12 @@
         margin-bottom: 1px;
         line-height: 0.8;
         .text-field {
-          font-family: Folkard;
+          font-family: $font-secondary;
           font-size: 18px; 
-          padding-top: 11px;
+          padding-top: 7px;
         }
         .profile-controls, .species-controls{
-          font-family: Folkard;
+          font-family: $font-secondary;
           font-size: 13px;
           padding-top: 0px;
           position: absolute;
@@ -365,13 +365,12 @@
               height: 35px;
               border-bottom: 1px solid #747474;
               .field-value{
-                font-family: Folkard;
+                font-family: $font-secondary;
                 -webkit-font-smoothing: antialiased;
                 background: none;
                 color: #000;
                 max-height: 35px;
                 font-size: 22px;
-                padding-top: 17px;
                 height: 35px;
                 min-height: 35px;
               }
