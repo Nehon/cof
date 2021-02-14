@@ -122,14 +122,81 @@ export const registerHandlebarsHelpers = function () {
         return items.find(item => item.type === "species");
     });
 
-    Handlebars.registerHelper('getInventory', function (items) {
+    Handlebars.registerHelper('hint', function (item) {
+        let content;
+        if(item.data.worn){
+            content = "E"
+        } else if(item.data.properties && item.data.properties.consumable){
+            content = item.data.qty;
+        }
+        if (content) {
+            return new Handlebars.SafeString(`<span class="hint">${content}</span>`)
+        }       
+        return "";
+    });
+
+
+    const equippedFromRange= (items, start, end) =>{
         let inventory = items.filter(item => item.type === "item");
-        inventory.sort(function (a, b) {
-            const aKey = a.data.subtype + "-" + a.name.slugify({ strict: true });
-            const bKey = b.data.subtype + "-" + b.name.slugify({ strict: true });
-            return (aKey > bKey) ? 1 : -1
-        });
-        return inventory;
+        let array = new Array(end - start + 1);
+        for (let i = 0; i < array.length; i++) {
+            array[i] = undefined;            
+        }
+        let unslotted = [];
+        for (const item of inventory) {
+            if(!item.data.worn){
+                continue;
+            }
+            if(item.flags.equipSlot === undefined || item.flags.equipSlot === null){
+                unslotted.push(item);
+            }
+            if(start > item.flags.equipSlot || item.flags.equipSlot > end){
+                continue;
+            }
+            array[item.flags.equipSlot - start] = item;
+        }
+
+        if( unslotted.length ){
+            console.warn("Equipment with no slot", unslotted);
+        }        
+        
+        return array;
+    }
+
+
+    Handlebars.registerHelper('getEquippedAccessories', function (items) {
+        return equippedFromRange(items, 0, 7);       
+    });
+
+    Handlebars.registerHelper('getEquipped', function (items) {
+        let array = equippedFromRange(items, 8, 13);
+        for (let i = 0; i < array.length; i++) {
+            if(!array[i]){
+                array[i]={empty:true};
+            }            
+        }
+        array[0].htmlId = "rightHand"
+        array[1].htmlId = "leftHand"
+        array[2].htmlId = "head"
+        array[3].htmlId = "chest"
+        array[4].htmlId = "legs"
+        array[5].htmlId = "feet"
+        return array;
+    });
+
+    Handlebars.registerHelper('getInventory', function (items) {        
+        let inventory = items.filter(item => item.type === "item");
+        let array = new Array(49);
+        for (let i = 0; i < array.length; i++) {
+            if(inventory.length <= i){
+                array[i] = undefined;
+                continue;
+            }
+            array[i] = inventory[i];            
+        }
+        
+        //console.log(array);
+        return array;
     });
 
     Handlebars.registerHelper('getWorn', function (items) {

@@ -117,6 +117,9 @@
   "COF.ui.aoe":"Aire d'effet",
   "COF.ui.orientation": "Orientation",
   "COF.ui.position": "Position (Vous pouvez utilisez les flèches du clavier)",
+  "COF.ui.wealth": "Richesses",  
+  "COF.ui.inventory" : "Inventaire",
+  "COF.ui.accessories" : "Accessoires",
 
   "COF.roll.success" : "Succès",
   "COF.roll.critical" : "Critique",
@@ -229,9 +232,9 @@
   "COF.attributes.val.abbrev" : "Val",
   "COF.attributes.tmpval.abbrev" : "Temp",
 
-  "COF.attributes.rp.label" : "Points de récup.",
+  "COF.attributes.rp.label" : "Récupération",
   "COF.attributes.rp.abbrev" : "PR",
-  "COF.attributes.fp.label" : "Points de chance",
+  "COF.attributes.fp.label" : "Chance",
   "COF.attributes.fp.abbrev" : "PC",
   "COF.attributes.mp.label" : "Points de magie",
   "COF.attributes.mp.abbrev" : "PM",
@@ -342,7 +345,13 @@
   "COF.notification.NoCapacity": "Le personnage ne connait pas la capacité",
   "COF.notification.noWeaponEquiped": "Le personage n'a pas d'arme équipée",
   "COF.notification.capacityDepleted": "Vous ne pouvez plus utiliser cette capacité pour le moment",
-  "COF.notification.itemDepleted": "Il ne vous reste plus de",  
+  "COF.notification.itemDepleted": "Il ne vous reste plus de",
+  "COF.notification.notEquipable":"Cet objet ne peut pas être équipé",
+  "COF.notification.invalidSlot":"Cet objet ne peut pas être équipé sur cet emplacement",
+  "COF.notification.unequip":"Déséquiper",
+  "COF.notification.unequipConfirm":"Êtes vous sûr de vouloir déséquiper",
+  "COF.notification.deleteItem":"Supprimer un objet",
+  "COF.notification.deleteItemConfirm":"Êtes vous sûr de vouloir supprimer",
   
   "COF.message.damageRoll": "Jet de dommages",
   "COF.message.healRoll": "Jet de soin",
@@ -421,6 +430,15 @@
   "EFFECT.StatusDowngrade": "Affaibli",
 
   "EFFECT.StatusSurprise": "Surpris",
-  "EFFECT.StatusDisarmed": "Désarmé"
+  "EFFECT.StatusDisarmed": "Désarmé",
+
+  "ITEM.Edit":"Éditer",
+  "ITEM.Delete":"Supprimer",
+  "ITEM.EditRef":"Éditer la réfrence",
+  "ITEM.Equip":"Équipper",
+  "ITEM.Unequip":"Déséquipper",
+  "ITEM.Quantity":"Quantité",
+  "ITEM.Link":"Méssage",
+  "ITEM.Roll":"Roll"
   
 }

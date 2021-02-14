@@ -437,9 +437,12 @@ export class CofActor extends Actor {
         if(!this.pathRanksUpdated){
             return;
         }
-        const caps = this.getCapacities(actorData.items);
+        const caps = actorData.items;
         for(let cap of caps){
             if(!cap.data.effects){
+                continue;
+            }
+            if(cap.data.hasOwnProperty("worn") && !cap.data.worn){
                 continue;
             }
             for (const key in cap.data.effects) {

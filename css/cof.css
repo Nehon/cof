@@ -245,10 +245,17 @@ strong {
 .big-tooltip {
   position: fixed;
   max-width: 320px;
-  background: #eeeeee;
+  width: 320px;
   padding: 10px;
-  border: 1px solid #999999;
-  border-radius: 4px;
+  border: 1px solid #b4b39e;
+  border-radius: 3px;
+  z-index: 5;
+  font-family: Folkard;
+  line-height: 1.2;
+  font-size: 1.2em;
+  background: url(../ui/bg-2.png);
+  -webkit-box-shadow: 0 5px 10px;
+  box-shadow: 0 5px 10px;
 }
 
 .big-tooltip #desc-content {
@@ -257,6 +264,7 @@ strong {
 
 .big-tooltip h2 {
   padding-bottom: 2px;
+  font-family: "Modesto Condensed", "Palatino Linotype", serif;
 }
 
 .big-tooltip #desc-img {
@@ -1067,11 +1075,46 @@ Copied from dnd5e
   width: 50%;
 }
 
+.cof.actor .window-content > form .wrap .tab-button {
+  font-family: "Modesto Condensed", "Palatino Linotype", serif;
+  font-size: 20px;
+  width: 70%;
+  background: -webkit-gradient(linear, left top, right top, from(rgba(0, 0, 0, 0.6)), to(rgba(0, 0, 0, 0.75)));
+  background: -o-linear-gradient(left, rgba(0, 0, 0, 0.6), rgba(0, 0, 0, 0.75));
+  background: linear-gradient(to right, rgba(0, 0, 0, 0.6), rgba(0, 0, 0, 0.75));
+  height: 25px;
+  margin-top: -2px;
+  color: white;
+  border-radius: 5px 5px 0 0;
+  -webkit-box-shadow: 0 3px 15px #000;
+  box-shadow: 0 3px 15px #000;
+  border: 2px outset #aaa;
+  padding-top: 2px;
+}
+
+.cof.actor .window-content > form .wrap .tab-button img {
+  width: 20px;
+  border: none;
+  margin-right: 4px;
+  vertical-align: middle;
+  margin-top: -3px;
+}
+
+.cof.actor .window-content > form .wrap .active .tab-button {
+  -webkit-box-shadow: 0 3px 15px #111 inset;
+  box-shadow: 0 3px 15px #111 inset;
+  background: -webkit-gradient(linear, left top, right top, from(rgba(62, 102, 121, 0.6)), to(rgba(62, 102, 121, 0.75)));
+  background: -o-linear-gradient(left, rgba(62, 102, 121, 0.6), rgba(62, 102, 121, 0.75));
+  background: linear-gradient(to right, rgba(62, 102, 121, 0.6), rgba(62, 102, 121, 0.75));
+  width: 67%;
+  margin-top: 0px;
+}
+
 .cof.actor .window-content > form .wrap .cell {
   border: 1px solid #736953a6;
   margin-left: 1px;
   font-family: "LoversQuarel", cursive;
-  font-size: 30px;
+  font-size: 25px;
   margin-bottom: 1px;
   line-height: 0.8;
 }
@@ -1148,6 +1191,10 @@ Copied from dnd5e
   width: 16px;
   height: 16px;
   margin-left: -7px;
+}
+
+.cof.actor .window-content > form .wrap .label img {
+  vertical-align: middle;
 }
 
 .cof.actor .window-content > form .wrap .small-header {
@@ -1771,14 +1818,6 @@ Copied from dnd5e
   min-height: 80px;
   /*color: $c-darkgreen;*/
   background-color: transparent;
-}
-
-.cof.actor .inventory h2 {
-  font-family: "Signika", sans-serif;
-  font-size: 16px;
-  text-transform: uppercase;
-  color: #464331c4;
-  border-bottom: 1px solid lightgray;
 }
 
 .cof.actor label.input-label {
@@ -2516,6 +2555,134 @@ Copied from dnd5e
 .cof .currencies {
   margin: 0 0 5px 0;
   padding: 5px;
+}
+
+.cof .silhouette {
+  position: relative;
+  height: 520px;
+}
+
+.cof .silhouette .item-slot {
+  position: absolute;
+  width: 50px;
+}
+
+.cof .silhouette #rightHand {
+  top: 235px;
+  left: 0px;
+}
+
+.cof .silhouette #leftHand {
+  top: 235px;
+  left: 176px;
+}
+
+.cof .silhouette #head {
+  top: 15px;
+  left: 92px;
+}
+
+.cof .silhouette #chest {
+  top: 120px;
+  left: 92px;
+}
+
+.cof .silhouette #legs {
+  top: 315px;
+  left: 92px;
+}
+
+.cof .silhouette #feet {
+  top: 430px;
+  left: 92px;
+}
+
+.cof .silhouette::before {
+  content: "";
+  width: 100%;
+  height: 100%;
+  position: absolute;
+  left: 0;
+  top: 0;
+  opacity: 0.6;
+  background: url(../ui/Silhouette.png) no-repeat;
+  mix-blend-mode: multiply;
+  background-size: contain;
+  background-position: 20px -10px;
+}
+
+.cof #accessories {
+  margin-top: 40px;
+  padding: 10px;
+  width: 70px;
+  background: rgba(24, 26, 74, 0.3);
+  margin-right: auto;
+  margin-left: auto;
+  border-radius: 4px;
+}
+
+.cof .inventory-slots {
+  width: 357px;
+  max-width: 357px;
+  margin: auto;
+  padding-top: 10px;
+}
+
+.cof .item-slot {
+  position: relative;
+  -webkit-box-flex: 0;
+  -ms-flex: 0 0 50px;
+  flex: 0 0 50px;
+  height: 50px;
+  border: 1px solid #000;
+  border-radius: 2px;
+  margin: 1px 1px 0px 0px;
+  cursor: pointer;
+}
+
+.cof .item-slot img {
+  width: 48px;
+  height: 48px;
+  -o-object-fit: cover;
+  object-fit: cover;
+  -o-object-position: 50% 50%;
+  object-position: 50% 50%;
+  border: none;
+}
+
+.cof .item-slot .hint {
+  position: absolute;
+  top: -4px;
+  left: 2px;
+  padding: 1px 3px;
+  background: #111;
+  color: #f0f0e0;
+  font-weight: bold;
+  pointer-events: none;
+}
+
+.cof .item-slot.empty {
+  -webkit-box-shadow: 0 0 5px #444 inset;
+  box-shadow: 0 0 5px #444 inset;
+  background: rgba(0, 0, 0, 0.1);
+}
+
+.cof .inventory hr {
+  padding: 0;
+  margin: 0;
+  margin-top: -5px;
+  margin-right: auto;
+  margin-bottom: 0;
+  margin-left: auto;
+  width: 50%;
+  border-bottom: 1px solid #b4b39e;
+  border-top: none;
+}
+
+.cof .inventory .action-menu {
+  max-height: 50px;
+  font-family: "Modesto Condensed", "Palatino Linotype", serif;
+  font-size: 1.25em;
 }
 
 .cof .inventory-list {

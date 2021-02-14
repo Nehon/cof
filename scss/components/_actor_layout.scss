@@ -88,11 +88,37 @@
         margin-top: 5px;
         width: 50%;
       }
+      .tab-button{
+       font-family: "Modesto Condensed", "Palatino Linotype", serif;
+        font-size: 20px;
+        width: 70%;
+        background: linear-gradient(to right, rgba(0, 0, 0, 0.6), rgba(0, 0, 0, 0.75));
+        height: 25px;
+        margin-top: -2px;
+        color: white;
+        border-radius: 5px 5px 0 0;
+        box-shadow: 0 3px 15px #000;
+        border: 2px outset #aaa;
+        padding-top: 2px;
+        img{
+          width: 20px;
+          border: none;
+          margin-right: 4px;
+          vertical-align: middle;
+          margin-top: -3px;
+        }
+      }
+      .active .tab-button{
+        box-shadow: 0 3px 15px #111 inset;
+        background: linear-gradient(to right, rgba(62, 102, 121, 0.6), rgba(62, 102, 121, 0.75));
+        width: 67%;
+        margin-top: 0px;
+      }
       .cell {
         border: 1px solid $c-border;
         margin-left: 1px;
         font-family: $font-handwrite;
-        font-size:30px;
+        font-size: 25px;
         margin-bottom: 1px;
         line-height: 0.8;
         .text-field {
@@ -153,6 +179,9 @@
           width:16px;
           height:16px;
           margin-left:-7px;
+        }
+        img{
+          vertical-align:middle;
         }
       }
       .small-header{

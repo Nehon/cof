@@ -171,4 +171,16 @@ export class Traversal {
         return diceResult;
     }
 
+    static async confirm(title, content){        
+        return new Promise((resolve => {
+            Dialog.confirm({
+                title: title,
+                content: content,
+                yes: () => resolve(true),
+                no: () => resolve(false),
+                defaultYes: false
+            });
+        }));        
+    }
+
 }

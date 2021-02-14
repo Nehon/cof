@@ -1,12 +1,13 @@
 {{!-- <a class="header-field-add add-effect" data-transfer="true">
 <i class="fa fa-plus">effect</i>
 </a><br> --}}
+<div style='padding:20px;font-family:"Modesto Condensed", "Palatino Linotype", serif;font-size:1.2em'>
     <div class="flexrow center" style="margin-bottom:3px;">
-        <div class="flex4 center bg-darkgreen" style="margin:1px;">Effect</div>        
-        <div class="flex1 center bg-darkgreen" style="margin:1px;">Start</div>
-        <div class="flex2 center bg-darkgreen" style="margin:1px;">Duration</div>
-        <div class="flex5 center bg-darkgreen" style="margin:1px;">Changes</div>
-        <div class="flex1 center bg-darkgreen" style="margin:1px;"> edit</div>        
+        <div class="flex4 center label" style="margin:1px;"><span class="field-label">Effect</span></div>        
+        <div class="flex1 center label" style="margin:1px;"><span class="field-label">Start</span></div>
+        <div class="flex2 center label" style="margin:1px;"><span class="field-label">Duration</span></div>
+        <div class="flex5 center label" style="margin:1px;"><span class="field-label">Changes</span></div>
+        <div class="flex1 center label" style="margin:1px;"><span class="field-label">Edit</span></div>        
     </div>
 {{#each actor.effects as |effect id|}}
     <div class="flexrow" style="margin-bottom:3px;text-align:right;{{#if effect.disabled}}background-color:#999999;{{/if}}">
@@ -41,3 +42,4 @@
         </div>
     </div>
 {{/each}}
+</div>

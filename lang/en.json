@@ -117,6 +117,9 @@
   "COF.ui.aoe":"Area of Effect",
   "COF.ui.orientation": "Orientation",
   "COF.ui.position": "Position (you can use arrow keys)",
+  "COF.ui.wealth": "Wealth",
+  "COF.ui.inventory" : "Inventory",
+  "COF.ui.accessories" : "Accessories",
 
   "COF.roll.success" : "Success",
   "COF.roll.critical" : "Critical",
@@ -229,9 +232,9 @@
   "COF.attributes.val.abbrev" : "Val",
   "COF.attributes.tmpval.abbrev" : "Temp",
 
-  "COF.attributes.rp.label" : "Recovery Points",
+  "COF.attributes.rp.label" : "Recovery",
   "COF.attributes.rp.abbrev" : "RP",
-  "COF.attributes.fp.label" : "Fortune Points",
+  "COF.attributes.fp.label" : "Fortune",
   "COF.attributes.fp.abbrev" : "FP",
   "COF.attributes.mp.label" : "Magic Points",
   "COF.attributes.mp.abbrev" : "MP",
@@ -343,6 +346,12 @@
   "COF.notification.noWeaponEquiped": "The character has no weapon equiped",
   "COF.notification.capacityDepleted": "You can't use this capacity for the moment",
   "COF.notification.itemDepleted": "You don't have any more",
+  "COF.notification.notEquipable":"This item cannot be equipped",
+  "COF.notification.invalidSlot":"This cannot be equipped in this slot",
+  "COF.notification.unequip":"Unequip",
+  "COF.notification.unequipConfirm":"Are you sure you want to unequip",
+  "COF.notification.deleteItem":"Delete Item",
+  "COF.notification.deleteItemConfirm":"Are you sure you want to delete",
 
   "COF.message.damageRoll": "Damage roll",
   "COF.message.healRoll": "Heal roll",  
@@ -404,6 +413,14 @@
   "data.dmg":"WPN_DMG",
   
   "EFFECT.StatusSurprise": "Surprise",
-  "EFFECT.StatusDisarmed": "Disarmed"
+  "EFFECT.StatusDisarmed": "Disarmed",
+
+  "ITEM.Edit":"Edit",
+  "ITEM.EditRef":"Edit reference",
+  "ITEM.Equip":"Equip",
+  "ITEM.Unequip":"Unequip",
+  "ITEM.Quantity":"Quantity",
+  "ITEM.Link":"Link",
+  "ITEM.Roll":"Roll"
   
 }

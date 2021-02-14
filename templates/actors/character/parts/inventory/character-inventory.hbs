@@ -1,4 +1,93 @@
-<div class="flexrow no-wrap currencies" style="max-height:20px">
+<div id="item-description" class="big-tooltip" style="display:none"><h2><img id="desc-img" width="32" height="32"/><span id="desc-title"></span></h2><span id="desc-content"></span></div>
+<div class="flexrow" style="padding: 0 20px;">
+    <div class="flex1">
+        <div class="center field-label">{{localize "COF.ui.equipment"}}</div>
+        <hr>
+        <div class="flexrow">
+            <div class="flex1">
+                <div id="accessories" class="flexrow">
+                    <div class="center field-label" style="margin-left: -8px;">{{localize "COF.ui.accessories"}}</div>
+                    {{#each (getEquippedAccessories actor.items) as |item id|}}
+                        {{#if item}}
+                            <div class="item-slot " data-slot="{{id}}">
+                                <div class="action-menu equipment-slot">
+                                    <img  src="{{item.img}}" class="item moreDetails" data-item-id="{{item._id}}" draggable="true" data-desc-target="item-description">
+                                </div>
+                                {{hint item}}
+                            </div>
+                        {{else}}
+                            <div class="item-slot empty equipment-slot" data-slot="{{id}}"></div>
+                        {{/if}}
+                    {{/each}}
+                </div>
+            </div>
+            <div class="flex2 silhouette"> 
+                {{#each (getEquipped actor.items) as |item id|}}
+                    {{#if item.empty}}
+                        <div id="{{item.htmlId}}" class="item-slot empty equipment-slot" data-slot="{{add id 8}}"></div>
+                    {{else}}                        
+                        <div id="{{item.htmlId}}" class="item-slot" data-slot="{{add id 8}}">
+                            <div class="action-menu equipment-slot">
+                                <img  src="{{item.img}}" class="item moreDetails" data-item-id="{{item._id}}" draggable="true" data-desc-target="item-description">
+                            </div>
+                            {{hint item}}
+                        </div>
+                    {{/if}}
+                {{/each}}                
+            </div>
+        </div>
+    </div>
+    <div class="flex1 inventory-panel">    
+        <div class="center field-label">{{localize "COF.ui.wealth"}}</div>
+        <hr>
+        <div class="flexrow center" style="padding-top:10px">
+            <div class="flex1 left" style="margin-left:1px;flex:0 0 77px">
+                <div class="label" title="Pièces de platine (10 po)">
+                    <img width="26" src="icons/commodities/currency/coins-engraved-face-silver.webp">
+                </div>
+                <input class="field-value cell" style="width:50px;text-align: center;" name="data.currency.pp.qty" type="number" value="{{actor.data.currency.pp.qty}}" data-dtype="Number"/>
+            </div>
+            <div class="flex1 left" style="margin-left:1px;flex:0 0 77px">
+                <div class="label" title="Pièces d'or (10 pa)">
+                    <img width="26" src="icons/commodities/currency/coins-engraved-hole-gold.webp">
+                </div>                
+                <input class="field-value cell" style="width:50px;text-align: center;" name="data.currency.gp.qty" type="number" value="{{actor.data.currency.gp.qty}}" data-dtype="Number"/>
+            </div>
+            <div class="flex1 left" style="margin-left:1px;flex:0 0 77px">
+                <div class="label" title="Pièces d'argent (10 pc)">
+                    <img width="26" src="icons/commodities/currency/coins-plain-stack-silver.webp">
+                </div>                
+                <input class="field-value cell" style="width:50px;text-align: center;" name="data.currency.sp.qty" type="number" value="{{actor.data.currency.sp.qty}}" data-dtype="Number"/>
+            </div>
+            <div class="flex1 left" style="margin-left:1px;flex:0 0 77px">
+                <div class="label" title="Pièces de cuivre">
+                    <img width="26" src="icons/commodities/currency/coins-engraved-copper.webp">
+                </div>                 
+                <input class="field-value cell" style="width:50px;text-align: center;" name="data.currency.cp.qty" type="number" value="{{actor.data.currency.cp.qty}}" data-dtype="Number"/>
+            </div>
+        </div>
+        <div style="padding-top:30px">
+            <div class="center field-label">{{localize "COF.ui.inventory"}}</div>
+             <hr>
+            <div class="inventory-slots flexrow item-list">
+                {{#each (getInventory actor.items) as |item id|}}  
+                    {{#if item}}
+                        <div class="item-slot" data-slot="{{id}}" >
+                            <div class="action-menu">
+                                <img  src="{{item.img}}" class="item moreDetails" data-item-id="{{item._id}}" draggable="true" data-desc-target="item-description">
+                            </div>
+                            {{hint item}}
+                        </div>
+                    {{else}}
+                        <div class="item-slot empty" data-slot="{{id}}"></div>
+                    {{/if}}       
+                    
+                {{/each}}             
+            </div>
+        </div>
+    </div>
+</div>
+ {{!-- <div class="flexrow no-wrap currencies" style="max-height:20px">
     <div class="flex7"></div>
     <div class="flex1 left">Bourse</div>
     <div class="flex1 left">
@@ -34,4 +123,4 @@
     </ol>
 {{else}}
     <p class="empty">Votre inventaire est vide.</p>
-{{/if}}
+{{/if}}  --}}

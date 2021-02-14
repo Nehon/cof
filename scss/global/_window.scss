@@ -49,20 +49,27 @@
   margin:0;
   font-family: "Modesto Condensed", "Palatino Linotype", serif;
 }
-
-.big-tooltip{
-  position: fixed;
-  max-width: 320px;    
-  background: #eeeeee;
-  padding: 10px;
-  border: 1px solid #999999;
-  border-radius: 4px;
+.big-tooltip{  
+    position: fixed;
+    max-width: 320px;
+    width: 320px;    
+    padding: 10px;
+    border: 1px solid #b4b39e;
+    border-radius: 3px;
+    z-index: 5;
+    font-family: Folkard;
+    line-height: 1.2;
+    font-size: 1.2em;
+    background: url(../ui/bg-2.png);
+    box-shadow: 0 5px 10px;    
 }
+
 .big-tooltip #desc-content{
     text-align: justify;
 }
 .big-tooltip h2{
     padding-bottom:2px;
+    font-family: "Modesto Condensed", "Palatino Linotype", serif;
 }
 
 .big-tooltip #desc-img{

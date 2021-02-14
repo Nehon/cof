@@ -24,11 +24,11 @@
         <div class="field-label" style="margin-top: 21px;margin-left: 60px;">{{ localize "COF.attributes.hp.abbrev" }}</div>
     </div>
     <div class="flex2 center" >
-        <input class="hp-field" style="margin-top: -10px;margin-right: -20px;" name="data.attributes.hp.value" type="text" value="{{actor.data.attributes.hp.value}}" placeholder="Value" data-dtype="Number"/>
+        <input class="hp-field" style="margin-top: -15px;margin-right: -40px;" name="data.attributes.hp.value" type="text" value="{{actor.data.attributes.hp.value}}" placeholder="Value" data-dtype="Number"/>
     </div>    
     <div class="hp-field flex1 center">/</div>
     <div class="flex2 center tooltip">
-        <input class="hp-field" style="margin-left: -20px;margin-top: 4px;" name="data.attributes.hp.max" type="text" readonly="true" value="{{actor.data.attributes.hp.max}}" placeholder="Max" data-dtype="Number"/>
+        <input class="hp-field" style="margin-left: -30px;margin-top: 4px;" name="data.attributes.hp.max" type="text" readonly="true" value="{{actor.data.attributes.hp.max}}" placeholder="Max" data-dtype="Number"/>
         {{info4 'right' (localize 'COF.stats.base.abbrev') data.attributes.hp.base 'CON * Lvl' (mult data.stats.con.mod data.level.value) (localize 'COF.attributes.bonus.abbrev') data.attributes.hp.bonus  (localize 'COF.ui.buff') data.attributes.hp.buff}}
     </div>
     <div class="flex4" >

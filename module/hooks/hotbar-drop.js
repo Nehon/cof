@@ -255,7 +255,7 @@ Hooks.on("updateOwnedItem", async (actor, item, change) => {
     if (!change) {
         return;
     }
-    if (change.data.hasOwnProperty("nbUse") || change.data.hasOwnProperty("maxUse") || change.data.hasOwnProperty("qty")) {
+    if (change.data && (change.data.hasOwnProperty("nbUse") || change.data.hasOwnProperty("maxUse") || change.data.hasOwnProperty("qty"))) {
         ui.hotbar.render();
     }
 

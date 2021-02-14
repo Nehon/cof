@@ -3,6 +3,119 @@
   margin: 0 0 5px 0;
   padding: 5px;
 }
+.silhouette{
+  position: relative;  
+  height: 520px;  
+ 
+  .item-slot{
+    position: absolute;
+    width: 50px;
+  }
+  #rightHand{    
+    top: 235px;
+    left: 0px;    
+  }
+  #leftHand{    
+    top: 235px;
+    left: 176px;    
+  }
+  #head{    
+    top: 15px;
+    left: 92px;    
+  }
+  #chest{
+    top: 120px;
+    left: 92px;    
+  }
+  #legs{    
+    top: 315px;
+    left: 92px;    
+  }
+  #feet{    
+    top: 430px;
+    left: 92px;    
+  }
+}
+.silhouette::before{
+  content:"";
+  width:100%;
+  height:100%;
+  position: absolute;
+  left:0;
+  top:0;
+  opacity: 0.6;
+  background: url(../ui/Silhouette.png) no-repeat;
+  mix-blend-mode: multiply;  
+  background-size: contain;
+  background-position: 20px -10px;
+}
+
+#accessories{
+  margin-top: 40px;
+  padding:10px;
+  width:70px;
+  background: rgba(24, 26, 74, 0.3);
+  margin-right: auto;
+  margin-left: auto ;  
+  border-radius: 4px;
+}
+
+.inventory-slots {
+  width: 357px;
+  max-width: 357px;  
+  margin:auto;
+  padding-top: 10px
+  
+}
+.item-slot{    
+    position: relative;
+    flex: 0 0 50px;
+    height: 50px;
+    border: 1px solid #000;
+    border-radius: 2px;    
+    margin: 1px 1px 0px 0px;    
+    cursor: pointer;
+    img{
+      width: 48px;
+      height: 48px;
+      object-fit: cover;
+      object-position: 50% 50%;
+      border: none;
+    }
+    .hint{
+      position: absolute;
+      top: -4px;
+      left: 2px;
+      padding: 1px 3px;
+      background: #111;
+      color: #f0f0e0;
+      font-weight: bold;
+      pointer-events: none;
+    }
+}
+.item-slot.empty{
+  box-shadow: 0 0 5px #444 inset;
+  background: rgba(0, 0, 0, 0.1);
+}
+.inventory{
+  hr{
+    padding: 0;
+    margin: 0;
+    margin-top: -5px;
+    margin-right: auto;
+    margin-bottom:0;
+    margin-left: auto;    
+    width: 50%;
+    border-bottom: 1px solid #b4b39e;
+    border-top: none;
+  }
+  .action-menu{
+    max-height:50px;
+    font-family: "Modesto Condensed", "Palatino Linotype", serif;
+    font-size: 1.25em;
+  }
+}
+
 .inventory-list {
   list-style: none;
   margin: 0;
