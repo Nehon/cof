@@ -285,8 +285,7 @@ export class CofRoll {
         let difficulty = arr.length > 1 ? arr[1].trim() : undefined;
        
         if (result.indexOf("@rank") >= 0) {
-            const rank = actor.data.data.paths[capacity.data.pathIndex].rank;
-            result = result.replace(/@rank/g, rank);
+            result = result.replace(/@rank/g, capacity.data.pathRank);
         }
         if (result.indexOf("@shield.def") >= 0) {
             const shield = actor.items.find(i => i.data.data.subtype === "shield" && i.data.data.worn);

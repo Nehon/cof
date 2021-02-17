@@ -26,6 +26,14 @@
       flex: 1;
     }
 
+    .reference{
+      color:#fff;
+      text-shadow: 0 0 2px #000;
+      position: absolute;
+      top: 110px;
+      font-size: 20px;
+    }
+
     img {
       //flex: 0 0 64px;
       //height: 64px;
@@ -43,7 +51,7 @@
     }
 
     .header-details {
-      font-family: $font-tertiary;
+      font-family: $font-primary;
       font-size: 20px;
       font-weight: 700;
 
@@ -122,7 +130,7 @@
     margin-top: -2px;
     margin-bottom: 5px;
     flex: 0 0 20px;
-    font-family: $font-tertiary;
+    font-family: $font-primary;
     font-size: 20px;
     font-weight: 700;
 
@@ -141,7 +149,14 @@
 
   .sheet-body {
     overflow: hidden;
-
+    font-family: $font-secondary;
+    font-size:1.1em;
+    line-height: 1.1;
+    
+    .form-fields{
+      font-family: $font-primary;
+      font-size:1em;    
+    }
     .tab {
       height: 100%;
       align-content: flex-start;
@@ -215,6 +230,7 @@
           height: 24px;
           //border: 1px solid $colorTan;
           background: rgba(0, 0, 0, 0.05);
+          font-family: $font-tertiary;
         }
 
         .form-group {

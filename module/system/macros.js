@@ -306,8 +306,8 @@ export class Macros {
                 continue;
             }
             let rank = 0;
-            if (cap.data.pathIndex != undefined) {
-                rank = actor.data.data.paths[cap.data.pathIndex].rank;
+            if (cap.data.pathRank != undefined) {
+                rank = cap.data.pathRank;
                 if (effect.rank > rank || rank > effect.maxRank) {
                     continue;
                 }

@@ -43,22 +43,61 @@
   position: absolute;
   left:0;
   top:0;
-  opacity: 0.6;
+  opacity: 1;
   background: url(../ui/Silhouette.png) no-repeat;
-  mix-blend-mode: multiply;  
+  mix-blend-mode: overlay;  
   background-size: contain;
-  background-position: 20px -10px;
+  background-position: 17px -10px;
 }
 
 #accessories{
   margin-top: 40px;
   padding:10px;
-  width:70px;
-  background: rgba(24, 26, 74, 0.3);
+  width:70px;  
   margin-right: auto;
-  margin-left: auto ;  
-  border-radius: 4px;
+  margin-left: auto ;    
 }
+
+.accParent{
+  position:relative;
+}
+.accParent::before{
+  content: "";
+  width: 100%;
+  height: 105%;
+  position: absolute;
+  left: 0;
+  top: 0;
+  background: url(../ui/bgAcc.png) no-repeat;
+  mix-blend-mode: overlay;
+  background-position: center;
+  background-size: 145px 525px;
+}
+
+#addSkill{
+  margin-top: 10px;
+  padding:10px;
+  width:70px;  
+  margin-right: auto;
+  margin-left: auto ;    
+}
+
+.skillParent{
+  position:relative;
+}
+.skillParent::before{
+  content: "";
+  width: 100%;
+  height: 103%;
+  position: absolute;
+  left: 0;
+  top: 0;
+  background: url(../ui/bgAcc.png) no-repeat;
+  mix-blend-mode: overlay;
+  background-position: center;
+  background-size: 145px 560px;
+}
+
 
 .inventory-slots {
   width: 357px;
@@ -97,7 +136,7 @@
   box-shadow: 0 0 5px #444 inset;
   background: rgba(0, 0, 0, 0.1);
 }
-.inventory{
+.inventory, .capacities{
   hr{
     padding: 0;
     margin: 0;
@@ -113,6 +152,125 @@
     max-height:50px;
     font-family: "Modesto Condensed", "Palatino Linotype", serif;
     font-size: 1.25em;
+  }
+}
+
+.skilltree{
+  padding:20px;
+  position:relative;
+  min-width:760px;
+  max-width:1000px;
+  .path-number{
+    height: 50px;
+    font-size: 3em;
+    text-align: center;
+    padding-top: 3px;
+    color: rgba(255, 255, 255, 0.8);
+    text-shadow: 0 0 4px #000;
+    mix-blend-mode: overlay;
+  }
+  .path-number-link{
+    height:35px;
+  }
+  .path-number-link.first{
+    height:45px;
+  }
+  .capacity{
+    width:50px;
+    margin:auto;
+    position:relative;
+    a {
+      position: absolute;      
+      top: 39px;
+      left: 39px;
+      background: #414141bb;
+      overflow: visible;
+      width: 16px;
+      height: 16px;
+      border: 2px solid #000;
+      border-radius: 2px;
+      img{
+        width: 20px;
+        height: 20px;
+        min-width: 20px;
+        min-height: 20px;        
+        position: absolute;
+        top: -9px;
+        left: 1px;
+        filter: invert(0.7) sepia(1) hue-rotate(175deg) drop-shadow(0px 0px 1px black);
+      }
+    }
+  }
+  .profile-zone{
+    position:absolute;
+    max-width:50px;
+    min-width:50px;
+    white-space: nowrap;
+    overflow:visible;
+    left: 4%;
+    font-size:1.5em;
+    color: #fff;
+    text-shadow: 0 0 2px #000;    
+  }
+
+ .profile-zone.red{
+    color: rgb(255, 0, 0);
+    text-shadow: 0 0 2px #000;   
+    img {
+      outline: 25px solid rgba(255, 0, 0, 0.5);
+      outline-offset: -25px;
+    } 
+  }
+ 
+  .path-slot, .capacity-slot{
+    width:50px;
+    margin:auto;   
+   
+  }
+  .capacity-slot, .path-slot{    
+    img {
+      filter:sepia(1);      
+      opacity:0.5;
+    }    
+  }
+  .capacity-slot.active, .path-slot.active{
+    img {
+      filter:none;
+      opacity:1;
+      box-shadow: 0 0 11px 3px #0009;
+    }    
+  }
+  .path-link{
+    height:35px;
+    background: #0002;
+    width: 6px;
+    margin: auto;
+    border: 1px solid #000;
+    border-top: none;
+    border-bottom: none;    
+  }
+  .path-link.first{
+    height:45px;
+  }
+  .path-link.active{
+    background: rgb(186, 229, 249);
+    box-shadow: 0 0 9px 1px rgba(88, 101, 252, 0.8);
+  }
+  .backdrop{
+    position:absolute;
+    width:100%;
+    height:calc(100% - 116px);
+    top:110px;
+    left:0;
+ 
+    .lane{
+      background: url(../ui/bgSkill.png);
+      mix-blend-mode: overlay;
+      height: 110px;
+      background-position: center;
+      background-size: cover;
+      margin-top: -25px;
+    } 
   }
 }
 

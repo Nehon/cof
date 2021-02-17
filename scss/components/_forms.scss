@@ -79,7 +79,7 @@ label.checkbox {
   margin: 0;
   height: 22px;
   line-height: 22px;
-  font-size: 11px;
+  font-size: 1em;
   font-weight: bold;
 
   > input[type="checkbox"] {
@@ -148,9 +148,9 @@ label.checkbox {
   padding: 2px 0;
   border-top: $borderGroove;
   border-bottom: $borderGroove;
-  font-family: $font-tertiary;
+  font-family: $font-primary;
   font-size: 20px;
-  font-weight: 700;
+  font-weight: 700;  
 }
 
 .tag {

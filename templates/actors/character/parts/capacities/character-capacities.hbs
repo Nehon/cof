@@ -23,7 +23,7 @@
                     <div class="item-detail flex3"  style="flex:3">{{#if capacity.data.maxUse}}
                         <input class="field-value capacity-nb-use" data-item-id="{{capacity._id}}" style="width:30px;" type="text" value="{{capacity.data.nbUse}}" placeholder="?" data-dtype="Number"/>
                          / {{#if (equals capacity.data.maxUse "@rank")}}
-                            {{getPathRank ../actor capacity.data.pathIndex}}
+                            {{capacity.data.pathRank}}
                          {{else}}
                             {{capacity.data.maxUse}}
                         {{/if}}&nbsp;per {{capacity.data.frequency}}

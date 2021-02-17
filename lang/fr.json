@@ -107,6 +107,7 @@
   "COF.ui.alliesSelf": "Alliés et lui même",
   "COF.ui.eanemies": "Ennemis",
   "COF.ui.all": "Tous",
+  "COF.ui.nbUse": "Nb utilisation",
   "COF.ui.maxUse": "Max nb utilisation",
   "COF.ui.resistanceRoll":"Test de résistance",
   "COF.ui.resistanceEffect":"Effet de résistance",

@@ -411,6 +411,7 @@
       "summary" : "",
       "rank": null,
       "pathIndex": null,
+      "pathRank": 0,
       "limited": false,
       "spell": false     
     },
@@ -467,6 +468,7 @@
       ],
       "key": "",
       "capacities": [],
+      "rank":0,
       "properties": {
         "profile": false,
         "prestige": false,

@@ -22,6 +22,7 @@ export const preloadHandlebarsTemplates = async function () {
 
         "systems/cof/templates/actors/character/parts/capacities/character-capacities.hbs",
         "systems/cof/templates/actors/character/parts/capacities/character-paths.hbs",
+        "systems/cof/templates/actors/character/parts/capacities/character-skill-tree.hbs",
 
         "systems/cof/templates/actors/character/parts/combat/character-combat.hbs",
         "systems/cof/templates/actors/character/parts/combat/character-combat-item.hbs",

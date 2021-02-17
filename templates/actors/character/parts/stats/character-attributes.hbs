@@ -19,8 +19,13 @@
 <div class="flexrow no-wrap">
     <div class="flex2 label">
         <div class="flexrow no-wrap">
-            <div class="flex1 center no-wrap" title="Supérieur (2d20)">
-                <input type="checkbox" name="data.stats.{{id}}.superior" {{checked stat.superior}}>
+            <div class="flex1" title="Supérieur (2d20)" style="position:relative">
+                <a class="nice-checkbox" onclick="this.children[0].click()">
+                    <input type="checkbox" name="data.stats.{{id}}.superior" {{checked stat.superior}} style="display:none">
+                    {{#if stat.superior}}
+                        <img src="systems/cof/ui/check.svg" width="16" height="16">
+                    {{/if}}                    
+                </a>
             </div>
             <div class="flex8 center rollable no-wrap" data-rolling="data.stats.{{id}}" data-roll-type="skillcheck">
                 <div class="field-label no-wrap" title="{{ localize stat.label }}">

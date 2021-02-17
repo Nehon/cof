@@ -1,0 +1,96 @@
+<div id="cap-description" class="big-tooltip" style="display:none"><h2><img id="desc-img" width="32" height="32"/><span id="desc-title"></span></h2><span id="desc-content"></span></div>
+<div class="flexrow">
+    <div class="flex5 skilltree">
+        <div class="backdrop">
+            <div class="lane"></div>            
+            <div class="lane"></div>            
+            <div class="lane"></div>            
+            <div class="lane"></div>            
+            <div class="lane"></div>            
+        </div>
+        <div class="center field-label" style="margin-top:-18px">{{localize "COF.ui.profile"}}</div>
+        <hr style="margin-bottom:6px">
+        
+        {{#with (getProfile actor.items)}}
+            <div class="profile-zone {{#if (isNegative ../actor.data.xp.value)}}red{{/if}}">      
+                <div class="path-slot active">
+                    <img src="{{img}}" class="item ">
+                </div>
+                <div class="center" style="margin-top: -64px;">{{name}}</div>                    
+                <div class="right {{#if (isPositive ../actor.data.xp.value)}}blue{{/if}}" style="margin-top: 20px;font-size:0.8em">{{sub ../actor.data.xp.max ../actor.data.xp.value}}/{{../actor.data.xp.max}}</div>                                  
+            </div>
+        {{/with}}
+        
+        <div class="flexrow">
+            <div class="flex1">
+                    <div class="path-number"></div>
+                    <div class="path-number-link"></div>
+                    <div class="path-number">1</div>
+                    <div class="path-number-link"></div>
+                    <div class="path-number">2</div>
+                    <div class="path-number-link"></div>
+                    <div class="path-number">3</div>
+                    <div class="path-number-link"></div>
+                    <div class="path-number">4</div>
+                    <div class="path-number-link"></div>
+                    <div class="path-number">5</div> 
+            </div>
+            <div class="flex8 flexrow  item-list">
+                {{#each (getPaths actor.items) as |path id|}}
+                    <div class="flex2">
+                        <div class="item-slot path-slot" data-slot="{{id}}" data-ref-id="{{path._id}}" data-item-type="path" data-pack="path">
+                            <div class="action-menu path-slot {{#if path.data.rank}}active{{/if}}">
+                                <img  src="{{path.img}}" class="interractable" data-item-id="{{path._id}}" data-desc-target="cap-description">
+                            </div>
+                            {{hint path}}
+                        </div>                                                              
+                        {{#each (getCapacitiesByIds path.data.capacities) as |capacity id|}}                                                     
+                                    {{#if (includesKey ../../actor.items "capacity" capacity.data.key)}}
+                                        <div class="path-link active"></div>
+                                        <div class="item-slot capacity ref" data-slot="{{id}}" data-item-id="{{idFromKey ../../actor.items capacity.data.key}}" data-path-id="{{path._id}}" data-ref-id="{{capacity._id}}" data-item-type="capacity" data-pack="capacity">
+                                            <div class="action-menu capacity-slot active">
+                                                <img  src="{{capacity.img}}" class="item interractable" data-item-id="{{idFromKey ../../actor.items capacity.data.key}}" draggable="true" data-desc-target="cap-description">
+                                            </div>
+                                            <a class="capacity-control capacity-checked" title="{{capacity.name}}">
+                                                <img src="systems/cof/ui/check.svg" width="16" height="16">
+                                            </a>
+                                        </div>                               
+                                    {{else}}
+                                        <div class="path-link"></div>                                        
+                                        <div class="item-slot capacity ref" data-slot="{{id}}"  data-item-id="{{capacity._id}}" data-path-id="{{path._id}}" data-ref-id="{{capacity._id}}" data-item-type="capacity" data-pack="capacity">
+                                            <div class="action-menu capacity-slot">
+                                                <img src="{{capacity.img}}" class="interractable" data-item-id="{{capacity._id}}" data-desc-target="cap-description">
+                                            </div>
+                                            <a class="capacity-control capacity-unchecked" title="{{capacity.name}}"></a>                               
+                                        </div>
+                                    {{/if}}
+                                    {{hint path}}
+                        {{/each}}
+                    </div>
+                {{/each}}
+            </div>
+            
+        </div>
+    </div>
+    <div>
+        <div class="center field-label">additional skills</div>
+        <hr/>    
+        <div class="skillParent">
+            <div id="addSkill" class="flexrow item-list">                            
+                 {{#each (getExtraCapacities actor.items 0 8) as |item id|}}
+                    {{#if item}}
+                        {{log item}}
+                        <div class="item-slot" data-slot="{{id}}" data-ref-id="{{item._id}}" data-item-type="capacity" data-pack="capacity">
+                            <div class="action-menu extra-capacity-slot">                                
+                                <img  src="{{item.img}}" class="item interractable" data-item-id="{{item._id}}" draggable="true" data-desc-target="cap-description">
+                            </div>
+                            {{hint item}}
+                        </div>
+                    {{else}}
+                        <div class="item-slot empty capacity-slot" data-slot="{{id}}"></div>
+                    {{/if}}
+                {{/each}} 
+            </div>
+        </div>
+    </div>
+</div>

@@ -15,7 +15,7 @@ export class Capacity {
         const elt = $(event.currentTarget).parents(".capacity");
         const data = duplicate(actor.data);
         // get id of clicked capacity
-        const capId = elt.data("itemId");
+        const capId = elt.data("refId");
         // get id of parent path
         const pathId = elt.data("pathId");
         // get path from owned items
@@ -35,6 +35,7 @@ export class Capacity {
         // retrieve path's capacities already present in owned items
         const items = data.items.filter(i => i.type === "capacity" && capacitiesKeys.includes(i.data.key));
         const itemKeys = items.map(i => i.data.key);
+        let pathRank = items.length;
 
         if(isUncheck){
             const caps = capacities.filter(c => path.data.capacities.indexOf(c._id) >= path.data.capacities.indexOf(capId));
@@ -42,13 +43,26 @@ export class Capacity {
             // const caps = capacities.filter(c => c.data.rank >= capacity.data.rank);
             // REMOVE SELECTED CAPS
             const toRemove = items.filter(i => capsKeys.includes(i.data.key)).map(i => i._id);
-            return actor.deleteOwnedItem(toRemove);
+            pathRank -= toRemove.length;
+            actor.deleteOwnedItem(toRemove);
         }else {
             const caps = capacities.filter(c => path.data.capacities.indexOf(c._id) <= path.data.capacities.indexOf(capId));
             // const caps = capacities.filter(c => c.data.rank <= capacity.data.rank);
             const toAdd = caps.filter(c => !itemKeys.includes(c.data.key));
-            return actor.createOwnedItem(toAdd);
+            pathRank += toAdd.length;
+            for (const item of toAdd) {
+               item.data.pathRank = pathRank;               
+            }
+            actor.createOwnedItem(toAdd);
         }
+
+        let updates = [];
+        updates.push({_id:path._id, data:{rank:pathRank}});
+        for (const item of items) {
+            updates.push({_id:item._id, data:{pathRank: pathRank}});
+        }
+        actor.updateEmbeddedEntity('OwnedItem', updates);
+        
     }
 
     static makeActiveEffect(capacity, effect, changes, duration) {

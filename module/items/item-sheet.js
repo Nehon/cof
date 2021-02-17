@@ -389,6 +389,7 @@ export class CofItemSheet extends ItemSheet {
         data.itemType = data.item.type.titleCase();
         // data.itemStatus = this._getItemStatus(data.item);
         data.itemProperties = this._getItemProperties(data.item);
+        data.isFromCompendium = !!this.item.compendium;
         // data.isPhysical = data.item.data.hasOwnProperty("quantity");
 
         // Potential consumption targets

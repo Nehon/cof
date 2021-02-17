@@ -47,17 +47,12 @@ export class UpdateUtils {
         }
     }
 
-    static updateActorsPathRank() {
+    static createEffects() {
         for(let actor of game.actors.entries){
-            actor.prepareData();            
             UpdateUtils.updateNonCoreEffects(actor);
         }        
         // update tokens actor in case of unlinked tokens
         for(let token of canvas.tokens.objects.children){            
-            if(token.actor.pathRanksUpdated){
-                continue;
-            }
-            token.actor.prepareData();            
             UpdateUtils.updateNonCoreEffects(token.actor);
         }
     }

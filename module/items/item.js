@@ -105,8 +105,8 @@ export class CofItem extends Item {
     static logItem(item, actor){
         const description = item.data.description?item.data.description:"<p></p>";
         ChatMessage.create({
-            flavor: `<h2 class="roll" style="padding-bottom: 2px;"><img src="${item.img}" width="24" height="24" style="background:#aaaaaa;vertical-align: sub;margin-right: 4px;"/>${item.name}</h2>`,
-            content: description.replace("<p>","<p style='text-align: justify;padding: 0 5px;'>"),
+            flavor: `<h2 class="log" style="padding-bottom: 2px;"><img src="${item.img}" width="24" height="24" style="background:#aaaaaa;vertical-align: sub;margin-right: 4px;"/>${item.name}</h2>`,
+            content: description.replace("<p>","<p class='message-description'>"),
             speaker: ChatMessage.getSpeaker({actor: actor})
         });       
     }

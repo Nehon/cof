@@ -282,11 +282,7 @@ export class CofActor extends Actor {
     getMaxUse(item){
         let maxUse = item.data.maxUse;
         if (maxUse === "@rank") {
-            if (this.data.data.paths) {
-                maxUse = this.data.data.paths[item.data.pathIndex].rank;
-            } else {
-                maxUse = 0;
-            }
+            maxUse = item.data.pathRank;            
         }
         if(maxUse === "" || maxUse === undefined){
             return null;
@@ -434,9 +430,6 @@ export class CofActor extends Actor {
     }
 
     applyCapacities(actorData, statPass = false) {
-        if(!this.pathRanksUpdated){
-            return;
-        }
         const caps = actorData.items;
         for(let cap of caps){
             if(!cap.data.effects){
@@ -484,40 +477,6 @@ export class CofActor extends Actor {
 
     /* -------------------------------------------- */
 
-    computePathRank(path, pathIndex, capacites) {       
-        let rank = 0;
-        for (const capacity of path.data.capacities) {
-            let cap = game.cof.config.capacities.find(c => c._id == capacity);
-            if(!cap){
-                const gameCaps = game.items.filter(i => i.type === "capacity");
-                cap = gameCaps.find(c => c._id == capacity);
-                cap = cap ? cap.data : cap;
-            }
-            const activeCapacity = capacites.find(i => i.data.key === cap.data.key);
-            if (!activeCapacity) {
-                continue;
-            }
-            activeCapacity.data.pathIndex = pathIndex;
-            if (activeCapacity.data.rank > rank) {
-                rank = activeCapacity.data.rank;
-            }
-        }
-        return rank;
-    }
-
-    updatePathRanks(capacities){        
-        const paths = this.getPaths(this.data.items);
-        this.data.data.paths = {};  // important, paths needs to be an object in order to be able to call @paths.0.rank in chat macros.
-        for (let index = 0; index < paths.length; index++) {
-            const path = paths[index];
-            const rank = this.computePathRank(path, index, capacities);
-            this.data.data.paths[index] = {_id: path._id, rank: rank};       
-        }
-        this.pathRanksUpdated = true;
-    }
-
-    /* -------------------------------------------- */
-
     computeXP(actorData) {
         let items = actorData.items;
         let lvl = actorData.data.level.value;
@@ -529,10 +488,6 @@ export class CofActor extends Actor {
         actorData.data.xp.max = maxxp;
         actorData.data.xp.value = maxxp - currxp;
 
-        if (game.cof.config.capacities.length) {
-            this.updatePathRanks(capacities);            
-        }
-       
         if (maxxp - currxp < 0) {
             const diff = currxp - maxxp;
             alert.msg =  `${actorData.name} a dépensé ${diff} point${(diff == 1) ?'':'s'} de capacité en trop !`;

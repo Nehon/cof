@@ -221,13 +221,6 @@ export const registerHandlebarsHelpers = function () {
         return items.filter(item => item.type === "path").length;
     });
 
-    Handlebars.registerHelper('getPathRank', function (actor, pathIndex) {  
-        if(!actor.data.paths){
-            return 0;
-        }
-        return actor.data.paths[pathIndex].rank;
-    });
-
     Handlebars.registerHelper('state', function () {        
         console.log(arguments);
     });
@@ -246,6 +239,20 @@ export const registerHandlebarsHelpers = function () {
         });
         return caps;
     });
+    Handlebars.registerHelper('getExtraCapacities', function (items, start, end) {
+        let result = []
+        let caps = items.filter(item => item.type === "capacity" && (item.data.rank === undefined || item.data.rank === null));
+        for (let i = start; i <= end ; i++) {
+            result[i - start] = caps[i];
+        }
+        return result;
+    });
+
+    Handlebars.registerHelper('idFromKey', function (items, key) {        
+        let item = items.find(item => item.data.key === key);        
+        return item._id;
+    });
+
 
     Handlebars.registerHelper('getCapacitiesByIds', function (ids) {
         if (ids) {

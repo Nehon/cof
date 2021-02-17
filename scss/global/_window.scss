@@ -49,6 +49,14 @@
   margin:0;
   font-family: "Modesto Condensed", "Palatino Linotype", serif;
 }
+
+.message-description{
+  text-align: justify;
+  padding: 0 5px;
+  font-family: $font-secondary;
+  line-height: 1.1;
+  font-size: 1.1em;
+}
 .big-tooltip{  
     position: fixed;
     max-width: 320px;

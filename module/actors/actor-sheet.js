@@ -156,14 +156,14 @@ export class CofActorSheet extends ActorSheet {
             html.find('#editDescription').toggle();
         });
 
-        const moreDetails = html.find('.moreDetails');
+        const interractable = html.find('.interractable');
         const hideDescription = ev => {
             let li = $(ev.currentTarget);
             const descriptionName = li.data("desc-target");
             html.find(`#${descriptionName}`).hide();
         };
 
-        moreDetails.hover(ev => {
+        interractable.hover(ev => {
             ev.preventDefault();
             let li = $(ev.currentTarget);
             const id = li.data("item-id");
@@ -189,8 +189,8 @@ export class CofActorSheet extends ActorSheet {
         },
             hideDescription
         );
-        moreDetails.on("mousedown", hideDescription);
-        moreDetails.on("dragstart", ev => {
+        interractable.on("mousedown", hideDescription);
+        interractable.on("dragstart", ev => {
             let li = $(ev.currentTarget);
             const itemId = li.data("itemId");
             const parent = li.parent()[0];
@@ -206,7 +206,7 @@ export class CofActorSheet extends ActorSheet {
             ev.originalEvent.dataTransfer.setData("text/plain", JSON.stringify(dragData));
         });
         
-        moreDetails.click(ev => {
+        interractable.click(ev => {
             ev.preventDefault();
             let li = $(ev.currentTarget);
             const id = li.data("item-id");
@@ -214,7 +214,14 @@ export class CofActorSheet extends ActorSheet {
             if(!item){
                 return;
             }
-            game.cof.macros.rollItemMacro(item._id, item.name, "item");            
+            switch(item.data.type){                
+                case "capacity":
+                    game.cof.macros.rollCapacityMacro(item.data.data.key, item.name);
+                    break       
+                default:
+                    game.cof.macros.rollItemMacro(item._id, item.name, item.data.type);
+            }
+            
         })
 
         const inventory = html.find('.inventory');
@@ -226,7 +233,7 @@ export class CofActorSheet extends ActorSheet {
                     return this.actor.owner;
                 },
                 callback: li => {
-                    const item = this.actor.getOwnedItem(li.find(".item").data("item-id"));
+                    const item = this.actor.getOwnedItem(li.find(".interractable").data("item-id"));
                     game.cof.macros.rollItemMacro(item._id, item.name, "item");
                 }
             },
@@ -237,19 +244,19 @@ export class CofActorSheet extends ActorSheet {
                     return this.actor.owner;
                 },
                 callback: li => {
-                    this.editItem(li.find(".item"));
+                    this.editItem(li.find(".interractable"));
                 }
             },
             {
                 name: "ITEM.Equip",
                 icon: '<i class="fas fa-link"></i>',
                 condition: li => {
-                    const item = this.actor.getOwnedItem(li.find(".item").data("item-id"));
+                    const item = this.actor.getOwnedItem(li.find(".interractable").data("item-id"));
                     const equippable = item.data.data.properties && item.data.data.properties.equipable && !item.data.data.worn;
                     return this.actor.owner && equippable;
                 },
                 callback: li => {
-                    const id = li.find(".item").data("item-id");
+                    const id = li.find(".interractable").data("item-id");
                     this.equipItemInSlot(id, this.findEmptySlot(id));                    
                 }
             },
@@ -257,19 +264,19 @@ export class CofActorSheet extends ActorSheet {
                 name: "ITEM.Unequip",
                 icon: '<i class="fas fa-unlink"></i>',
                 condition: li => {
-                    const item = this.actor.getOwnedItem(li.find(".item").data("item-id"));
+                    const item = this.actor.getOwnedItem(li.find(".interractable").data("item-id"));
                     const equipped = item.data.data.worn;
                     return this.actor.owner && equipped;
                 },
                 callback: li => {
-                     this.unEquipItem(undefined, {itemId:li.find(".item").data("item-id")});
+                     this.unEquipItem(undefined, {itemId:li.find(".interractable").data("item-id")});
                 }
             },
             {
                 name: "ITEM.Link",
                 icon: '<i class="fas fa-comment"></i>',                
                 callback: li => {
-                    const id = li.find(".item").data("item-id");
+                    const id = li.find(".interractable").data("item-id");
                     const item = this.actor.getItemById(id);
                     CofItem.logItem(item, this.actor);                    
                 }
@@ -282,7 +289,7 @@ export class CofActorSheet extends ActorSheet {
                     return this.actor.owner && !equipped;
                 },
                 callback: async li => {
-                    const id = li.find(".item").data("item-id");
+                    const id = li.find(".interractable").data("item-id");
                     const item = this.actor.getOwnedItem(id);
                     if (!(await Traversal.confirm(
                         game.i18n.localize("COF.notification.deleteItem"),
@@ -294,6 +301,69 @@ export class CofActorSheet extends ActorSheet {
             },
         ]);
 
+        const capacities = html.find('.capacities');
+        new ContextMenu(capacities, ".action-menu", [
+            {
+                name: "ITEM.Roll",
+                icon: '<i class="fas fa-dice-d20"></i>',
+                condition: li => {
+                    const item = this.actor.getOwnedItem(li.find(".interractable").data("item-id"));
+                    return this.actor.owner && item;
+                },
+                callback: li => {
+                    const item = this.actor.getOwnedItem(li.find(".interractable").data("item-id"));
+                    game.cof.macros.rollCapacityMacro(item.data.data.key, item.name);
+                }
+            },
+            {
+                name: "ITEM.Edit",
+                icon: '<i class="fas fa-edit"></i>',
+                condition: li => {
+                    const id = li.find(".interractable").data("itemId");
+                    const item = this.actor.getOwnedItem(id);
+                    return this.actor.owner && item;
+                },
+                callback: li => {
+                    this.editItem(li.find(".interractable"));
+                }
+            },  
+             {
+                name: "ITEM.EditRef",
+                icon: '<i class="fas fa-pen-square"></i>',
+                condition: li => {
+                    return game.user.isGM && li.parents(".ref").length;
+                },
+                callback: li => {
+                    this.editReference(li.parents(".ref"));
+                }
+            },  
+            {
+                name: "ITEM.Link",
+                icon: '<i class="fas fa-comment"></i>',                
+                callback: li => {
+                    this.linkItem(li.find(".interractable"));
+                }
+            },
+            {
+                name: "ITEM.Delete",
+                icon: '<i class="fas fa-trash"></i>',
+                condition: li => {
+                    const isPathCapacity = li.hasClass("capacity-slot");
+                    return this.actor.owner && !isPathCapacity;
+                },
+                callback: async li => {
+                    const id = li.find(".interractable").data("item-id");
+                    const item = this.actor.getOwnedItem(id);
+                    if (!(await Traversal.confirm(
+                        game.i18n.localize("COF.notification.deleteItem"),
+                        `${game.i18n.localize("COF.notification.deleteItemConfirm")} <strong>${item.name}</strong>`))) {
+                        return;
+                    }
+                    this.actor.deleteEmbeddedEntity("OwnedItem", id);
+                }
+            },
+        ]);
+     
     }
 
     async _onEditItem(event) {
@@ -302,8 +372,17 @@ export class CofActorSheet extends ActorSheet {
         this.editItem(li);
     }
 
-    async editItem(li) {
-        const id = li.data("itemId");
+    async findItem(li){
+        const id = li.data("itemId");        
+        let item = this.actor.getOwnedItem(id);
+        if(item){
+            return item;            
+        }
+        return this.findItemRef(li.parents(".ref"));
+    }
+
+    async findItemRef(li){
+        const id = li.data("refId");
         const type = (li.data("itemType")) ? li.data("itemType") : "item";
         const pack = (li.data("pack")) ? li.data("pack") : null;
 
@@ -314,7 +393,22 @@ export class CofActorSheet extends ActorSheet {
             // look into world/compendiums items
             entity = await Traversal.getEntity(id, type, pack);
         }
-        if (entity) return entity.sheet.render(true);
+        return entity;
+    }
+
+    async editItem(li) {        
+        const id = li.data("itemId");        
+        const item = this.actor.getOwnedItem(id);
+        if (item) return item.sheet.render(true);
+    }
+    async editReference(li) {
+        const item = await this.findItemRef(li);        
+        if (item) return item.sheet.render(true);
+    }
+
+    async linkItem(li) {
+        const item = await this.findItem(li);        
+        if (item) return CofItem.logItem(item.data, this.actor);
     }
 
     /* -------------------------------------------- */

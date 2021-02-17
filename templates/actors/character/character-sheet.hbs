@@ -22,8 +22,11 @@
                 {{!-- <div class="tab combat" data-group="primary" data-tab="combat" style="margin-top:20px">
                     {{> "systems/cof/templates/actors/character/parts/combat/character-combat.hbs"}}
                 </div> --}}
-                <div class="tab capacities" data-group="primary" data-tab="capacities" style="margin-top:20px">
+                {{!-- <div class="tab capacities" data-group="primary" data-tab="capacities" style="margin-top:20px">
                     {{> "systems/cof/templates/actors/character/parts/capacities/character-paths.hbs"}}
+                </div> --}}
+                <div class="tab capacities" data-group="primary" data-tab="skill-tree" style="margin-top:20px">
+                    {{> "systems/cof/templates/actors/character/parts/capacities/character-skill-tree.hbs"}}
                 </div>
                 <div class="tab inventory" data-group="primary" data-tab="inventory" style="margin-top:20px">
                     {{> "systems/cof/templates/actors/character/parts/inventory/character-inventory.hbs"}}
@@ -40,13 +43,16 @@
                 <a class="center" data-tab="stats">                    
                     <span class="tab-button"><img src="systems/cof/ui/icons/status/id-card.svg">{{ localize "COF.tabs.stats" }}</span>                     
                 </a>
-                 {{!-- <a class="center" data-tab="combat">                    
+                 {{!-- <a class="item center" data-tab="combat">                    
                     <span class="tab-button"><img src="systems/cof/ui/icons/status/swords-emblem.svg">{{ localize "COF.tabs.combat" }}</span>
                 </a>  --}}
                 <a class="center compendium-pack" data-pack="item" data-open="0" data-tab="inventory">                    
                     <span class="tab-button"><img src="systems/cof/ui/icons/status/battle-gear.svg">{{ localize "COF.tabs.inventory" }}</span>
                 </a>
-                <a class="center compendium-pack" data-pack="path" data-open="0" data-tab="capacities">                    
+                {{!-- <a class="center compendium-pack" data-pack="path" data-open="0" data-tab="capacities">                    
+                    <span class="tab-button"><img src="systems/cof/ui/icons/status/secret-book.svg">{{ localize "COF.tabs.paths" }} & {{ localize "COF.tabs.capacities" }}</span>
+                </a>                --}}
+                <a class="center compendium-pack" data-pack="path" data-open="0" data-tab="skill-tree">                    
                     <span class="tab-button"><img src="systems/cof/ui/icons/status/secret-book.svg">{{ localize "COF.tabs.paths" }} & {{ localize "COF.tabs.capacities" }}</span>
                 </a>               
                 {{#if options.isGM}}    

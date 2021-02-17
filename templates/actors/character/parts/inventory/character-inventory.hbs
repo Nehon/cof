@@ -4,14 +4,14 @@
         <div class="center field-label">{{localize "COF.ui.equipment"}}</div>
         <hr>
         <div class="flexrow">
-            <div class="flex1">
+            <div class="flex1 accParent">
                 <div id="accessories" class="flexrow">
                     <div class="center field-label" style="margin-left: -8px;">{{localize "COF.ui.accessories"}}</div>
                     {{#each (getEquippedAccessories actor.items) as |item id|}}
                         {{#if item}}
-                            <div class="item-slot " data-slot="{{id}}">
+                            <div class="item-slot" data-slot="{{id}}">
                                 <div class="action-menu equipment-slot">
-                                    <img  src="{{item.img}}" class="item moreDetails" data-item-id="{{item._id}}" draggable="true" data-desc-target="item-description">
+                                    <img  src="{{item.img}}" class="item interractable" data-item-id="{{item._id}}" draggable="true" data-desc-target="item-description">
                                 </div>
                                 {{hint item}}
                             </div>
@@ -28,7 +28,7 @@
                     {{else}}                        
                         <div id="{{item.htmlId}}" class="item-slot" data-slot="{{add id 8}}">
                             <div class="action-menu equipment-slot">
-                                <img  src="{{item.img}}" class="item moreDetails" data-item-id="{{item._id}}" draggable="true" data-desc-target="item-description">
+                                <img  src="{{item.img}}" class="item interractable" data-item-id="{{item._id}}" draggable="true" data-desc-target="item-description">
                             </div>
                             {{hint item}}
                         </div>
@@ -74,7 +74,7 @@
                     {{#if item}}
                         <div class="item-slot" data-slot="{{id}}" >
                             <div class="action-menu">
-                                <img  src="{{item.img}}" class="item moreDetails" data-item-id="{{item._id}}" draggable="true" data-desc-target="item-description">
+                                <img  src="{{item.img}}" class="item interractable" data-item-id="{{item._id}}" draggable="true" data-desc-target="item-description">
                             </div>
                             {{hint item}}
                         </div>

@@ -11,6 +11,12 @@
             <label class="checkbox flex1">
                 <input type="checkbox" name="data.isAoe" {{checked data.isAoe}}> {{localize "COF.ui.aoe"}}
             </label>            
+             <div class='flex2 cellEffect'>
+                <label class="checkbox">
+                    {{localize "COF.ui.nbUse"}}
+                </label>
+                <input type="text" value="{{data.nbUse}}" name="data.nbUse" data-dtype="Number" >
+            </div>  
             <div class='flex2 cellEffect'>
                 <label class="checkbox">
                     {{localize "COF.ui.maxUse"}}
