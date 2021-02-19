@@ -1,5 +1,6 @@
 .window-app {
-  font-family: $font-primary;
+  font-family: $font-primary; 
+  font-size:17px; 
 
   a:hover {
     text-shadow: 0 0 8px $c-linkshadow;
@@ -165,7 +166,7 @@
   background-color: #305371;
   padding: 2px 5px;
   border-radius: 4px;
-  font-size: 0.9em;
+  font-size: 1em;
   margin-right: 1px;
   .remove-buff{
     margin-left:5px; 

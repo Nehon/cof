@@ -1,0 +1,23 @@
+<div class="flexrow no-wrap" style="margin-top:-10px">
+    <div class="flex4 small-header" >
+        <div class="field-label" style="margin-top: 21px;margin-left: 60px;">{{ localize "COF.attributes.hp.abbrev" }}</div>
+    </div>
+    <div class="flex2 center" >
+        <input class="hp-field" style="margin-top: -15px;margin-right: -40px;" name="data.attributes.hp.value" type="text" value="{{actor.data.attributes.hp.value}}" placeholder="Value" data-dtype="Number"/>
+    </div>    
+    <div class="hp-field flex1 center">/</div>
+    <div class="flex2 center">
+        <input class="hp-field" style="margin-left: -30px;margin-top: 4px;" name="data.attributes.hp.max" type="text" value="{{actor.data.attributes.hp.max}}" placeholder="Max" data-dtype="Number"/>        
+    </div>
+    <div class="flex4" >
+    </div>
+</div>
+<div class="hp-bar">
+    <div class="deco-left">
+        <img src="/systems/cof/ui/deco-left.png" style="border:none;border-radius: 7px;">
+    </div>                    
+    <div class="inner" style="width:{{percent data.attributes.hp.value data.attributes.hp.max}}%"></div>
+    <div class="deco-right">
+        <img src="/systems/cof/ui/deco-right.png" style="border:none;border-radius: 7px;">
+    </div>    
+</div>

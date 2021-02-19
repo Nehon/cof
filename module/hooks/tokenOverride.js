@@ -34,7 +34,6 @@ export const overrideTokenRender = function () {
         this.effects.addChild(icon);
     }
 
-
     const backupFuncDown = MouseInteractionManager.prototype._handleMouseDown;
     MouseInteractionManager.prototype._handleMouseDown = function (event) {
         return backupFuncDown.call(this, mouseWheelEvent(event));

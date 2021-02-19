@@ -136,12 +136,15 @@ Hooks.on("renderHotbar", async (bar, html, info) => {
 
     let buttons = []
     if (actor.data.data.weapons) {
-        for (const key in actor.data.data.weapons) {
-            const weapon = actor.data.data.weapons[key];
+        let array = actor.data.data.weapons;
+        if(typeof array === "object"){
+            array = Object.values(array);
+        }
+        for (const weapon of array) {
             buttons.push({
                 name: weapon.name,
-                description: weapon.name,
-                img: "systems/cof/ui/icons/red_31.jpg",
+                description:  `<strong>mod:</strong> ${weapon.mod}, <strong>dmg:</strong> ${weapon.dmg} (<strong>crit</strong> ${weapon.critrange})`,
+                img: weapon.img? weapon.img: "systems/cof/ui/icons/red_31.jpg",
                 onClick: () => {
                     CofRoll.rollEncounterWeapon(weapon, actor);
                 }

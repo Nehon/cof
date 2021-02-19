@@ -1,0 +1,37 @@
+<div style="padding:10px">
+    <div class="flexrow">
+        <div class="flex1">
+            <img src="{{weapon.img}}" class="flex1" id="edit-img" width="64px">
+            <input type="hidden" value="{{weapon.img}}"" id="img">
+        </div>                
+        <div class="flex4">
+            <div class="field-label">Name</div>
+            <input type="text" value="{{weapon.name}}"" id="name">
+        </div>     
+    </div>
+    <div class="flexrow">
+        <div class="flex1 label">
+            <div class="field-label">Mod</div>
+            
+        </div>
+        <div class="flex1 cell">
+            <input type="text" value="{{weapon.mod}}"" id="mod" data-dtype="Number">
+        </div> 
+    </div>
+    <div class="flexrow">
+        <div class="flex1 label">
+            <div class="field-label">Damage</div>
+        </div>
+        <div class="flex1 cell">
+            <input type="text" value="{{weapon.dmg}}"" id="dmg" data-dtype="String">
+        </div> 
+    </div>
+    <div class="flexrow">
+        <div class="flex1 label">
+            <div class="field-label">Crit range</div>
+        </div>
+        <div class="flex1 cell">
+            <input type="text" value="{{weapon.critrange}}" id="critrange" data-dtype="Number">
+        </div> 
+    </div>
+</div>

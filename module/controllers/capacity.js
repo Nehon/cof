@@ -51,7 +51,8 @@ export class Capacity {
             const toAdd = caps.filter(c => !itemKeys.includes(c.data.key));
             pathRank += toAdd.length;
             for (const item of toAdd) {
-               item.data.pathRank = pathRank;               
+               item.data.pathRank = pathRank;   
+               item.data.pathIndex = pathId;            
             }
             actor.createOwnedItem(toAdd);
         }
@@ -59,7 +60,7 @@ export class Capacity {
         let updates = [];
         updates.push({_id:path._id, data:{rank:pathRank}});
         for (const item of items) {
-            updates.push({_id:item._id, data:{pathRank: pathRank}});
+            updates.push({_id:item._id, data:{pathRank: pathRank, pathIndex: pathId}});
         }
         actor.updateEmbeddedEntity('OwnedItem', updates);
         

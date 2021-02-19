@@ -1,0 +1,50 @@
+<div class="flexrow table-header no-wrap" style="margin-left:15px">
+    <div class="flex2 center">
+        <div class="field-label">{{ localize 'COF.attributes.defence.label' }}</div>
+    </div>
+    <div class="flex1 center">
+        <div class="field-label">{{ localize 'COF.ui.base' }}</div>
+    </div>
+    <div class="flex1 center">
+        <div class="field-label">{{ localize 'COF.ui.bonus' }}</div>
+    </div>
+    <div class="flex1 center mod header">
+        <div class="field-label">{{ localize 'COF.ui.value' }}</div>
+    </div>
+</div>
+<div class="flexrow no-wrap" style="margin-left:15px">
+    <div class="flex2 center dark-silver">
+        <span class="field-label"><i class="fas fa-shield-alt"></i>&nbsp;{{ localize 'COF.attributes.def.abbrev' }}</span>
+    </div>
+    <div class="flex1 center cell">
+        <input class="field-value" name="data.attributes.def.base" type="text" value="{{actor.data.attributes.def.base}}" placeholder="Base" data-dtype="Number"/>        
+    </div>
+    <div class="flex1 center cell">
+        <input class="field-value" name="data.attributes.def.bonus" type="text" value="{{actor.data.attributes.def.bonus}}" placeholder="Bonus" data-dtype="Number"/>
+    </div>
+    <div class="flex1 center cell readonly tooltip focus">
+        <input class="field-value" name="data.attributes.def.value" readonly="true" type="text" value="{{actor.data.attributes.def.value}}" placeholder="Value" data-dtype="Number"/>
+        {{info 'left' (localize 'COF.stats.base.abbrev') actor.data.attributes.def.base (localize 'COF.attributes.bonus.abbrev') actor.data.attributes.def.bonus  (localize 'COF.ui.buff') actor.data.attributes.def.buff}}
+    </div>
+</div>
+{{#if (isEnabled "useDamageResistance")}}
+<div class="flexrow no-wrap"  style="margin-left:15px">
+    <div class="flex2 center dark-silver">
+        <span class="field-label"><i class="fas fa-user-shield"></i>&nbsp;{{ localize 'COF.attributes.dr.abbrev' }}</span>
+    </div>
+    <div class="flex1 center cell">
+        <input class="field-value" name="data.attributes.dr.base.value" type="text" value="{{actor.data.attributes.dr.base.value}}" placeholder="Base" data-dtype="Number"/>
+    </div>
+    <div class="flex1 center cell">
+        <input class="field-value" name="data.attributes.dr.bonus.value" type="text" value="{{actor.data.attributes.dr.bonus.value}}" placeholder="Bonus" data-dtype="Number"/>
+    </div>
+    <div class="flex1 center cell readonly tooltip focus">
+        <input class="field-value" name="data.attributes.dr.value" readonly="true" type="text" value="{{actor.data.attributes.dr.value}}" placeholder="Value" data-dtype="Number"/>
+        {{info 'left' (localize 'COF.stats.base.abbrev') actor.data.attributes.dr.base.value (localize 'COF.attributes.bonus.abbrev') actor.data.attributes.dr.bonus.value  (localize 'COF.ui.buff') actor.data.attributes.dr.buff}}
+    </div>
+</div>
+{{/if}}
+<div class="flexrow no-wrap">
+    <div class="flex4"></div>    
+    <div class="flex1 mod footer"></div>
+</div>

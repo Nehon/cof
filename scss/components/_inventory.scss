@@ -151,7 +151,7 @@
   .action-menu{
     max-height:50px;
     font-family: "Modesto Condensed", "Palatino Linotype", serif;
-    font-size: 1.25em;
+    font-size: 1.1em;
   }
 }
 
@@ -162,7 +162,7 @@
   max-width:1000px;
   .path-number{
     height: 50px;
-    font-size: 3em;
+    font-size: 2.4em;
     text-align: center;
     padding-top: 3px;
     color: rgba(255, 255, 255, 0.8);
@@ -208,7 +208,7 @@
     white-space: nowrap;
     overflow:visible;
     left: 4%;
-    font-size:1.5em;
+    font-size:1.2em;
     color: #fff;
     text-shadow: 0 0 2px #000;    
   }
@@ -271,6 +271,10 @@
       background-size: cover;
       margin-top: -25px;
     } 
+    .lane.small{
+      background: url(../ui/bgSkillSmall.png);
+      background-size: 105% 106%;     
+    }
   }
 }
 

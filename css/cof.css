@@ -253,6 +253,7 @@ strong {
 /* Global styles */
 .window-app {
   font-family: "Modesto Condensed", "Palatino Linotype", serif;
+  font-size: 17px;
 }
 
 .window-app a:hover {
@@ -418,7 +419,7 @@ strong {
   background-color: #305371;
   padding: 2px 5px;
   border-radius: 4px;
-  font-size: 0.9em;
+  font-size: 1em;
   margin-right: 1px;
 }
 
@@ -1750,7 +1751,6 @@ Copied from dnd5e
   flex-grow: 2;
   vertical-align: middle;
   font-family: "Modesto Condensed", "Palatino Linotype", serif;
-  font-size: 1.2em;
 }
 
 .cof.actor .window-content > form .wrap .field-value {
@@ -2168,8 +2168,8 @@ Copied from dnd5e
 .cof.item .window-content .sheet-body {
   overflow: hidden;
   font-family: "Immortal", sans-serif;
-  font-size: 1.1em;
-  line-height: 1.1;
+  font-size: 1.2em;
+  line-height: 1.3;
 }
 
 .cof.item .window-content .sheet-body .form-fields {
@@ -2253,6 +2253,7 @@ Copied from dnd5e
   height: 24px;
   background: rgba(0, 0, 0, 0.05);
   font-family: "Signika", sans-serif;
+  font-size: 0.9em;
 }
 
 .cof.item .window-content .sheet-body .tab.details .form-group span {
@@ -2873,7 +2874,7 @@ Copied from dnd5e
 .cof .inventory .action-menu, .cof .capacities .action-menu {
   max-height: 50px;
   font-family: "Modesto Condensed", "Palatino Linotype", serif;
-  font-size: 1.25em;
+  font-size: 1.1em;
 }
 
 .cof .skilltree {
@@ -2885,7 +2886,7 @@ Copied from dnd5e
 
 .cof .skilltree .path-number {
   height: 50px;
-  font-size: 3em;
+  font-size: 2.4em;
   text-align: center;
   padding-top: 3px;
   color: rgba(255, 255, 255, 0.8);
@@ -2938,7 +2939,7 @@ Copied from dnd5e
   white-space: nowrap;
   overflow: visible;
   left: 4%;
-  font-size: 1.5em;
+  font-size: 1.2em;
   color: #fff;
   text-shadow: 0 0 2px #000;
 }
@@ -3007,6 +3008,11 @@ Copied from dnd5e
   background-position: center;
   background-size: cover;
   margin-top: -25px;
+}
+
+.cof .skilltree .backdrop .lane.small {
+  background: url(../ui/bgSkillSmall.png);
+  background-size: 105% 106%;
 }
 
 .cof .inventory-list {

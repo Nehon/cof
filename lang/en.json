@@ -121,6 +121,7 @@
   "COF.ui.wealth": "Wealth",
   "COF.ui.inventory" : "Inventory",
   "COF.ui.accessories" : "Accessories",
+  "COF.ui.paths": "Paths",
 
   "COF.roll.success" : "Success",
   "COF.roll.critical" : "Critical",
@@ -197,7 +198,7 @@
   "COF.attributes.def.abbrev": "DEF",
   "COF.attributes.level.label": "Level",
   "COF.attributes.level.abbrev": "LVL",
-  "COF.attributes.nc.label": "Creature Level",
+  "COF.attributes.nc.label": "C. Level",
   "COF.attributes.nc.abbrev": "CL",
   "COF.attributes.hd.label": "Hit Dice",
   "COF.attributes.hd.abbrev": "HD",
@@ -422,6 +423,7 @@
   "ITEM.Unequip":"Unequip",
   "ITEM.Quantity":"Quantity",
   "ITEM.Link":"Link",
-  "ITEM.Roll":"Roll"
-  
+  "ITEM.Roll":"Roll",
+  "ITEM.RollDamage":"Roll Damage",
+  "ITEM.New":"New"
 }

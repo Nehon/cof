@@ -248,6 +248,15 @@ export const registerHandlebarsHelpers = function () {
         return result;
     });
 
+    Handlebars.registerHelper('getActions', function (items, start, end) {
+        let result = []        
+        for (let i = start; i <= end ; i++) {
+            result[i - start] = items[i];
+        }
+        return result;
+    });
+
+
     Handlebars.registerHelper('idFromKey', function (items, key) {        
         let item = items.find(item => item.data.key === key);        
         return item._id;

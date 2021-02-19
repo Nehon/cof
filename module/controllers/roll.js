@@ -194,8 +194,11 @@ export class CofRoll {
      * @private
      */
     static rollDamage(data, actor, event) {
-        const li = $(event.currentTarget).parents(".item");
-        let item = actor.getOwnedItem(li.data("itemId"));
+        let item = data;
+        if(event){
+            const li = $(event.currentTarget).parents(".item");
+            item = actor.getOwnedItem(li.data("itemId"));
+        }
         const action = {
             damageRoll: {
                 formula: item.data.data.dmg,
@@ -206,6 +209,7 @@ export class CofRoll {
         return CofRoll.rollDialog(actor, actor.token, item.data.name, item.data.img, action);
     }
 
+    
     /**
      *  Handles Hit Points Rolls
      * @param elt DOM element which raised the roll event

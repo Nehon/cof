@@ -1,0 +1,53 @@
+    <div class="flex1">
+        <!-- CATEGORY -->
+        <div class="row flexrow" style="margin-right:15px">
+            <div class="flex1 center label">
+                <span class="field-label">{{ localize 'COF.ui.category' }}</span>
+            </div>
+            <div class="flex2 center cell">
+                <select name="data.category" data-type="String" style="width:100%">
+                    {{#select data.category}}
+                        <option value="">{{localize "COF.None"}}</option>
+                        <option value="vivante">Vivante</option>
+                        <option value="humanoïde">Humanoïde</option>
+                        <option value="non-vivante">Non-vivante</option>
+                    {{/select}}
+                </select>
+
+            </div>
+        </div>
+        <!-- /CATEGORY -->
+        <!-- BOSS RANK -->
+        <div class="row flexrow" style="margin-right:15px">
+            <div class="flex1 center label">
+                <span class="field-label">{{ localize 'COF.ui.boss' }}</span>
+            </div>
+            <div class="flex1 center cell">
+                <select name="data.boss.rank" data-type="String" style="width:100%">
+                    {{#select data.boss.rank}}
+                        <option value="">{{localize "COF.None"}}</option>
+                        <option value="1">Remarquable</option>
+                        <option value="2">Supérieur</option>
+                        <option value="3">Majeur</option>
+                        <option value="4">Exceptionnel</option>
+                        <option value="5">Légendaire</option>
+                    {{/select}}
+                </select>
+            </div>
+            <div class="flex1 center cell">
+                <select name="data.boss.type" data-type="String" style="width:100%">
+                    {{#select data.boss.type}}
+                        <option value="">{{localize "COF.None"}}</option>
+                        <option value="rapide">Rapide</option>
+                        <option value="puissant">Puissant</option>
+                        <option value="berserk">Berserk</option>
+                        <option value="résistant">Résistant</option>
+                    {{/select}}
+                </select>
+
+            </div>
+        </div>
+        <!-- /BOSS RANK -->
+     
+    </div>
+

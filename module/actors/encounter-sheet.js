@@ -12,8 +12,8 @@ export class CofEncounterSheet extends CofActorSheet {
         return mergeObject(super.defaultOptions, {
             classes: ["cof", "sheet", "actor", "encounter"],
             template: System.templatesPath+"/actors/encounter/encounter-sheet.hbs",
-            width: 770,
-            height: 740,
+            width: 950,
+            height: 685,
             tabs: [{navSelector: ".sheet-tabs", contentSelector: ".sheet-body", initial: "stats"}],
             dragDrop: [{dragSelector: ".item-list .item", dropSelector: null}]
         });

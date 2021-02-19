@@ -150,8 +150,8 @@
   .sheet-body {
     overflow: hidden;
     font-family: $font-secondary;
-    font-size:1.1em;
-    line-height: 1.1;
+    font-size:1.2em;
+    line-height: 1.3;
     
     .form-fields{
       font-family: $font-primary;
@@ -231,6 +231,7 @@
           //border: 1px solid $colorTan;
           background: rgba(0, 0, 0, 0.05);
           font-family: $font-tertiary;
+          font-size: 0.9em;
         }
 
         .form-group {

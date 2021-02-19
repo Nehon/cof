@@ -1,0 +1,45 @@
+<div class="flexrow table-header no-wrap">
+    <div class="flex2 center rollable" data-rolling="data.stats" data-roll-type="attributes">
+        <div class="field-label ellipsis"><i class="fas fa-dice-d6"></i>&nbsp;{{ localize 'COF.stats.abbrev' }}</div>
+    </div>
+    <div class="flex1 center" style="margin-left:3px">
+        <div class="field-label">{{ localize 'COF.ui.value' }}</div>
+    </div>
+    <div class="flex1 center mod header">
+        <div class="field-label">{{ localize 'COF.ui.mod' }}</div>
+    </div>
+</div>
+{{#each actor.data.stats as |stat id|}}
+<div class="flexrow no-wrap">
+    <div class="flex2 label">
+        <div class="flexrow no-wrap">
+            <div class="flex1" title="Supérieur (2d20)" style="position:relative">
+                <a class="nice-checkbox" onclick="this.children[0].click()">
+                    <input type="checkbox" name="data.stats.{{id}}.superior" {{checked stat.superior}} style="display:none">
+                    {{#if stat.superior}}
+                        <img src="systems/cof/ui/check.svg" width="16" height="16">
+                    {{/if}}                    
+                </a>
+            </div>
+            <div class="flex8 center rollable no-wrap" data-rolling="data.stats.{{id}}" data-roll-type="skillcheck">
+                <div class="field-label no-wrap" title="{{ localize stat.label }}">
+                    <span style="margin-left:-9px;">{{ localize stat.abbrev }}</span>&nbsp;&nbsp;<i class="fas fa-dice-d20 roll-stat"></i>
+                </div>
+            </div>
+        </div>
+    </div>    
+    <div class="flex1 center cell readonly tooltip">
+        <input class="field-value" name="data.stats.{{id}}.value" readonly="true" type="text" value="{{stat.value}}" data-dtype="Number"/>
+        {{!-- {{info4 'left' (localize 'COF.stats.base.abbrev') stat.base (localize 'COF.stats.racial.abbrev') stat.racial (localize 'COF.attributes.bonus.abbrev') stat.bonus  (localize 'COF.ui.buff') stat.buff}} --}}
+    </div>
+    <div class="flex1 center cell  focus">
+        <input class="field-value" name="data.stats.{{id}}.mod" type="text" value="{{numberFormat stat.mod decimals=0 sign=true}}" data-dtype="Number"/>
+    </div>
+</div>
+{{/each}}
+<div class="flexrow no-wrap">
+    <div class="flex5">       
+    </div>    
+    <div class="flex1 mod footer">
+    </div>
+</div>

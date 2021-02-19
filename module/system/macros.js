@@ -306,7 +306,7 @@ export class Macros {
                 continue;
             }
             let rank = 0;
-            if (cap.data.pathRank != undefined) {
+            if (cap.data.pathIndex) {
                 rank = cap.data.pathRank;
                 if (effect.rank > rank || rank > effect.maxRank) {
                     continue;
