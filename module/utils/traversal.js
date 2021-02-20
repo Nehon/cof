@@ -150,7 +150,7 @@ export class Traversal {
     // Hostile is -1, Friendly is +1
     // optional exclude id.
     static getTokensForDisposition(disposition, excludeId = undefined) {
-        return canvas.tokens.placeables.filter(token => token.data.disposition === disposition && (token.data._id !== excludeId));
+        return canvas.tokens.placeables.filter(token => token.visible && token.data.disposition === disposition && (token.data._id !== excludeId));
     }
 
     static getTokenName(token) {
