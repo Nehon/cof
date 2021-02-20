@@ -9,6 +9,9 @@ Hooks.on('applyActiveEffect', (actor, change) => {
     if(change.effect.data.disabled){
         return;
     }
+    if(change.key.startsWith("dot")){
+        return;
+    }
     // effects that apply to stats trigger a mod recomputation
     const recomputeMods = change.key.startsWith('data.stats');
     const value = parseInt(change.value, 10);

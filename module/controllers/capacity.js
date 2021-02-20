@@ -85,12 +85,14 @@ export class Capacity {
             label: capacity.name,
             icon: capacity.img,
             duration: durationObj,
-            "flags.core.statusId" : capacity.data.key
+            flags:{
+                "core.statusId" : capacity.data.key
+            }
         }
         
         if(effect.resistanceFormula){
-            effectData["flags.resistanceFormula"] = effect.resistanceFormula;
-            effectData["flags.resistanceEffect"] = effect.resistanceEffect;            
+            effectData.flags.resistanceFormula = effect.resistanceFormula;
+            effectData.flags.resistanceEffect = effect.resistanceEffect;            
         }
 
         if(!changes.length){

@@ -174,9 +174,9 @@ export class CofActor extends Actor {
                 break;
         }
         let attributes = actorData.data.attributes;
-        attributes.init.value = attributes.init.base + attributes.init.buff;
-        attributes.def.value = attributes.def.base + attributes.def.buff;
-        attributes.dr.value = attributes.dr.base.value + attributes.dr.buff;
+        attributes.init.value = attributes.init.base + attributes.init.bonus + attributes.init.buff;
+        attributes.def.value = attributes.def.base + attributes.def.bonus + attributes.def.buff;
+        attributes.dr.value = attributes.dr.base.value + attributes.dr.bonus.value + attributes.dr.buff;
     }
 
     /* -------------------------------------------- */

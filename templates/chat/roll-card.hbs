@@ -1,7 +1,7 @@
 <h2>{{name}}</h2>
 {{#if (and global global.skill)}}
 <div class="flexrow flex-center message-skill-roll">
-<div class="flex1"><img style="border:1px solid #555" src="{{img}}" width="48" height="48" /></div>
+<div class="flex1"><img style="border:1px solid #555;background: #0005;" src="{{img}}" width="48" height="48" /></div>
 <h1 class="flex3 {{getClass global.skill}} tooltip" >{{global.skill.total}}    
     <span class="tooltiptext tooltip-bottom">{{safeString global.skill.result}}</span>
     <i class="fas overlay"></i>
@@ -16,7 +16,7 @@
 </div>
 </div>
 {{else}}
-<div class="center"><img style="border:1px solid #555" src="{{img}}" width="48" height="48" /></div>
+<div class="center"><img style="border:1px solid #555;background: #0005;" src="{{img}}" width="48" height="48" /></div>
 {{/if}}
 {{#if displayTargets}}
     <hr/>

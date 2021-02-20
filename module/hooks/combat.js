@@ -1,3 +1,6 @@
+import { CofRoll } from "../controllers/roll.js";
+import { Macros } from "../system/macros.js";
+import { Traversal } from "../utils/traversal.js";
 
  
 const updateCombattant = (combatant, combat, progress) => {
@@ -52,6 +55,32 @@ Hooks.on('updateCombat', (combat, snap, progress) => {
         combat.combatants.forEach(combatant =>{
             combatant.actor.updateForRound().then(()=>{ui.hotbar.render()});
         });
+    } 
+    if(combat.combatant) {
+        for (const effect of combat.combatant.actor.data.effects) {
+            if(effect.disabled){
+                continue;
+            }
+            for (const change of effect.changes) {
+                if(change.key != "dot"){
+                    continue;                    
+                }
+                const action = {
+                    label: effect.label,
+                    img: effect.icon,
+                    damageRoll:{
+                        formula: change.value,
+                        type: "damage"
+                    }
+                };                
+                let source = Traversal.findSourceToken(effect.flags.source);                
+                const target = Traversal.findSourceToken(combat.combatant.actor._id);
+                if(!source){
+                    source = target;
+                }
+                CofRoll.makeRoll(source.actor, source, [target], action);                
+            }            
+        } 
     }
 });
 

@@ -381,6 +381,9 @@
   "COF.message.hours": "hours",
   "COF.message.apply":"Apply",
   "COF.message.undefinedDuration":"Until removed",
+  "COF.message.looses":"looses",
+  "COF.message.recovers":"recovers",
+  
 
   "COF.weapon.skillmod": "Weapon attack modifier",
   "COF.weapon.dmg": "Weapon damage",

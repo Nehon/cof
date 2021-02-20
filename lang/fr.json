@@ -381,6 +381,8 @@
   "COF.message.hours": "heures",
   "COF.message.apply":"Appliquer",
   "COF.message.undefinedDuration":"Durée indéfinie",
+  "COF.message.looses":"perd",
+  "COF.message.recovers":"récupère",
 
   "data.attributes.mp.buff":"PM",
   "data.attributes.rp.buff":"PR",

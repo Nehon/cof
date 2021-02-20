@@ -95,6 +95,9 @@ const initStatusEffects = function () {
 
     // move "bleeding" in "frozen"'s place
     CONFIG.statusEffects[13] = duplicate(CONFIG.statusEffects[16]);
+    CONFIG.statusEffects[13].changes =[
+        { key: "dot", mode: 0, value: "1d6" }
+    ]
 
     // move "disease" in "shock"'s place
     CONFIG.statusEffects[14] = duplicate(CONFIG.statusEffects[17]);

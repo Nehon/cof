@@ -78,8 +78,7 @@
         <div class="skillParent">
             <div id="addSkill" class="flexrow item-list">                            
                  {{#each (getExtraCapacities actor.items 0 8) as |item id|}}
-                    {{#if item}}
-                        {{log item}}
+                    {{#if item}}                        
                         <div class="item-slot" data-slot="{{id}}" data-ref-id="{{item._id}}" data-item-type="capacity" data-pack="capacity">
                             <div class="action-menu extra-capacity-slot">                                
                                 <img  src="{{item.img}}" class="item interractable" data-item-id="{{item._id}}" draggable="true" data-desc-target="cap-description">

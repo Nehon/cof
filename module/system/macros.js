@@ -363,7 +363,9 @@ export class Macros {
                     change.value = value;
                 }
                 const effectKey = hasSkillRoll ? "effects" : "uncheckedEffects";
-                action[effectKey].set(effect.target, Capacity.makeActiveEffect(cap, effect, changes, duration));
+                let activeEffect = Capacity.makeActiveEffect(cap, effect, changes, duration)
+                activeEffect.flags.source = source.actor._id;
+                action[effectKey].set(effect.target, activeEffect);
             }
         }
         if (!activable) {
