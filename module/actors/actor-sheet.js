@@ -429,7 +429,10 @@ export class CofActorSheet extends ActorSheet {
     }
 
     findItemOrWeapon(li){
-        const id = li.find(".interractable").data("item-id");
+        if(!li.hasClass("interractable")){
+            li = li.find(".interractable");
+        }
+        const id = li.data("item-id");
         let item = this.actor.getOwnedItem(id);
         if(!item && this.actor.data.data.weapons){
             item = this.actor.data.data.weapons[id]
