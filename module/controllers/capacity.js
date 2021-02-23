@@ -108,14 +108,15 @@ export class Capacity {
                         // no changes yet let's use this effect
                         effectData.icon = ae.icon;
                         effectData.label = game.i18n.localize(ae.label);
-                        effectData["flags.core.statusId"] = ae.id;
-                        if(ae.changes) effectData.changes = duplicate(ae.changes);
+                        effectData.flags["core.statusId"] = ae.id;
+                        if(ae.changes) effectData.changes = duplicate(ae.changes);                        
                     } else {
                         // push standard effect changes 
                         for (const ch of ae.changes) {
                             effectData.changes.push(ch);
                         }
                     }
+                    if(ae.flags["core.overlay"]) effectData.flags["core.overlay"] = true;
                 } else {            
                     CONFIG.statusEffects.push({id:capacity.data.key, label:capacity.name, icon:capacity.img});
                 }

@@ -28,7 +28,7 @@ Hooks.once("ready", async () => {
     // UpdateUtils.updateSpecies();
     // await UpdateUtils.createEncounterAbilities();
     // await UpdateUtils.updateEncounters();
-    
+    await UpdateUtils.makeEncounters();
     UpdateUtils.createEffects();
     ui.hotbar.render();
     console.info("System Initialized.");

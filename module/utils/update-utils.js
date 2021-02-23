@@ -160,4 +160,64 @@ export class UpdateUtils {
             }
         });
     }
+
+    static async makeEncounters() {
+
+        let toDelete = []
+
+        game.actors.forEach(a => {
+            if(!a.data.folder){
+                toDelete.push(a._id);
+            } else {
+                console.log(a);
+            }
+        })
+        Actor.delete(toDelete);
+
+        // find folder
+        let folder = game.folders.find(f => f.name === "exp_encounters")         
+        if(folder){
+            // delete folder and content
+            folder.delete({deleteSubfolders: true, deleteContents: true})
+        }
+        // create folder        
+        folder = await Folder.create({
+            color: "",
+            name: "exp_encounters",
+            parent: null,
+            sorting: "a",
+            type: "Actor"
+        });
+        const encounters = await game.packs.get("cof.encounters");
+        let entities = await encounters.getContent();
+        let newEntities = [];
+        //let entity = entities[0];
+        entities.forEach(async entity => {           
+            entity.data.img = `modules/cof-plus/assets/images/${entity.data.data.key}.webp`;
+            entity.data.data.weapons = Object.values(entity.data.data.weapons);
+            for (const weapon of entity.data.data.weapons) {
+                weapon.critrange = "20";
+                weapon.img = "systems/cof/ui/icons/attack.jpg";
+            } 
+            entity.data.data.description = entity.data.data.description.replace("<h1>Description</h1>","");
+
+            // token
+            let token = entity.data.token;
+            token.img = `modules/cof-plus/assets/images/${entity.data.data.key}_token.webp`;
+            token.bar1 = {attribute: "attributes.hp"};
+            token.displayBars = 40;
+            token.displayName = 30;            
+            
+            entity.data.folder = folder._id; 
+            newEntities.push(entity.data);
+        });     
+        const created = await encounters.cls.create(newEntities);
+        console.log(created);
+        
+    
+        //enntityCollection
+
+        // move to folder
+        // 
+    }
 }

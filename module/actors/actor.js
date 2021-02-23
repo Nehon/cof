@@ -239,17 +239,55 @@ export class CofActor extends Actor {
         return items.find(i => i.type === "capacity" && i.data.key === key)
     }
 
-    applyDamage(value){
+    async applyDamage(value){
         const hp = this.data.data.attributes.hp;
         const newValue = Math.min(hp.value - value, hp.max);
-        this.update({
+        await this.update({
             "data.attributes.hp.value": newValue
         })
+        if( newValue <= 0 ) {            
+            let effect = duplicate(CONFIG.statusEffects[0]);
+            effect.duration = {rounds:128};            
+            effect.flags = {
+                core:{
+                    statusId: effect.flags["core.statusId"],
+                    overlay: effect.flags["core.overlay"],
+                }
+            }
+
+            effect.label = game.i18n.localize(effect.label);
+            await this.applyEffect(effect);
+        }
     }
 
-    applyEffect(effectData){
-        const alreadyAppliedeffects = this.effects.filter((e) => e.data.flags.core.statusId === effectData.flags.core.statusId);
+    async clearEffects(filter){
+        let remove = [];
+        
+        switch(filter){
+            case "all":
+                this.effects.forEach(e => remove.push(e.data._id));
+                break;
+            case "buff":
+                this.effects.forEach(e => {if(Traversal.isBuff(e.data)) remove.push(e.data._id);});
+                break;
+            case "debuff":
+                this.effects.forEach(e => {if(Traversal.isDebuff(e.data)) remove.push(e.data._id);});
+                break;
+            default:
+                this.effects.forEach(e => {if(e.data.flags["core.statusId"] === filter || e.data.flags.core.statusId === filter) remove.push(e.data._id);});
+        }        
+        
+        if(remove.length){
+            await this.deleteEmbeddedEntity("ActiveEffect", remove);
+        }
+    }
 
+    async _onDeath(){
+        await this.clearEffects("all");         
+    }
+
+    async applyEffect(effectData){
+        const alreadyAppliedeffects = this.effects.filter((e) => e.data.flags.core.statusId === effectData.flags.core.statusId);
 
         for (const alreadyApplied of alreadyAppliedeffects) {
             if(alreadyApplied.data.disabled){
@@ -268,14 +306,16 @@ export class CofActor extends Actor {
             const currentRound = game.combat.current.round;
             const startRound = alreadyApplied.data.duration.startRound;
             const duration = effectData.duration.rounds;
-            this.updateEmbeddedEntity("ActiveEffect", {
+            return this.updateEmbeddedEntity("ActiveEffect", {
                 _id: alreadyApplied.data._id, 
                 "duration.rounds": duration + currentRound - startRound
             });
-
-            return;            
         }
-        this.createEmbeddedEntity("ActiveEffect", effectData);
+        if( effectData.flags.core.statusId === "dead"){
+            await this._onDeath();            
+        }
+
+        await this.createEmbeddedEntity("ActiveEffect", effectData);
     }
 
     

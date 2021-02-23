@@ -378,7 +378,7 @@ export class CofRoll {
                 data[effectLabel] = duplicate(value);
 
                 data[effectLabel].tooltip = value.label;
-                const resist = CofRoll.rollResistance(value["flags.resistanceFormula"], sourceToken, target);
+                const resist = CofRoll.rollResistance(value.flags.resistanceFormula, sourceToken, target);
                 if (resist.resisted) {
                     data[effectLabel].resisted = true;
                     data[effectLabel].tooltip = `${value.label}<br>Resist.<br>${resist.result}`;
@@ -422,12 +422,22 @@ export class CofRoll {
             return resist;
         }
         let rollFormula = arr[0].trim();
+
+        let dice = "1d20";
+        let m = rollFormula.match(/(@target\.stats\.[^.]*).mod/);
+        if(m && m[1]){
+            const sup = eval(`${m[1]}.superior`.replace("@target","target.actor.data.data"));
+            if(sup){
+                dice = "2d20kh";
+            }
+        }
+
         let difficultyFormula = arr[1].trim();
         let modResult = new Roll(rollFormula, { target: target.actor.data.data });
         modResult.roll();
         let difficultyResult = new Roll(difficultyFormula, source.actor.data.data);
         difficultyResult.roll();
-        let roll = new CofSkillRoll("", "1d20", modResult.total, 0, difficultyResult.total, "20");
+        let roll = new CofSkillRoll("", dice, modResult.total, 0, difficultyResult.total, "20");
         const result = roll.getRollResult();
         resist.resisted = result.isSuccess;
         resist.result = result.result + ` > ${difficultyResult.total}`;
@@ -630,6 +640,7 @@ export class CofRoll {
             template: action.template ? action.template.data : undefined,
             targets: {}
         };
+       
         for (const target of targets) {
             this.makeTarget(results, target);
         }
@@ -685,6 +696,20 @@ export class CofRoll {
             }
         }
 
+        if(action.cleansing){
+            for (let [key, value] of action.cleansing) {
+                const trgs = CofRoll.getTargets(key, sourceToken);
+              
+                for (const trg of trgs) {         
+                    let result = results.targets[trg.data._id];
+                    if (!result) {
+                        result = CofRoll.makeTarget(results, trg);
+                    }   
+                    result.cleansing = value;
+               }
+            }
+            results.displayApply |= action.cleansing.size > 0;
+        }
 
         if (action.uncheckedEffects) {
             CofRoll.applyEffect(results, action, "uncheckedEffects", sourceToken);
@@ -746,7 +771,7 @@ export class CofRoll {
         return create ? CONFIG.ChatMessage.entityClass.create(messageData) : messageData;
     }
 
-    static handleApplyResultButton(message, html, data) {
+    static async handleApplyResultButton(message, html, data) {
         const flags = message.data.flags;
         if (!flags.rollResult) {
             return;
@@ -789,27 +814,30 @@ export class CofRoll {
                     if (flags.rollResult.global.damage.type === "damage") {
                         DefaultVFX.playRandomAttack(targetTokens[0]);
                     } else {
-                        DefaultVFX.playRandomHeal(source);
+                        DefaultVFX.playRandomHeal(targetTokens[0]);
                     }
                 }
             }
 
-            setTimeout(() => {
+            setTimeout(async () => {
                 for (const target of targetTokens) {
                     let data = targets[target.data._id];
                     if (data.damage) {
                         if (!data.skill || data.skill.isSuccess) {
-                            target.actor.applyDamage(data.damage.type === 'damage' ? data.damage.final : -data.damage.final);
+                            await target.actor.applyDamage(data.damage.type === 'damage' ? data.damage.final : -data.damage.final);
                         }
                     }
                     if (data.uncheckedEffects && !data.uncheckedEffects.resisted) {
-                        target.actor.applyEffect(data.uncheckedEffects);
+                        await target.actor.applyEffect(data.uncheckedEffects);
                     }
 
                     if (data.effects && !data.effects.resisted) {
                         if (!data.skill || data.skill.isSuccess) {
-                            target.actor.applyEffect(data.effects);
+                           await  target.actor.applyEffect(data.effects);
                         }
+                    }
+                    if(data.cleansing){
+                        await target.actor.clearEffects(data.cleansing);
                     }
                 }
             }, 300);

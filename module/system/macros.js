@@ -334,11 +334,23 @@ export class Macros {
             }
 
             if (effect.type === "damage" || effect.type === "heal") {
+                
                 const value = CofRoll.replaceSpecialAttributes(effect.value, actor, cap).formula;
                 action.damageRoll = {};
-                action.damageRoll.formula = new Roll(value, actor.data.data).formula;
-                action.damageRoll.type = effect.type;
                 action.damageRoll.target = effect.target.length ? effect.target : undefined;
+                if(effect.target === "selected"){
+                    const target = CofRoll.getTargets(effect.target, source)[0];
+                    if(target){
+                        action.damageRoll.formula = new Roll(value, mergeObject({target: target.actor.data.data}, actor.data.data)).formula;    
+                    } else {
+                        action.damageRoll.formula = new Roll(value, actor.data.data).formula;        
+                    }
+                } else {
+                    action.damageRoll.formula = new Roll(value, actor.data.data).formula;    
+                }
+                
+                action.damageRoll.type = effect.type;
+                
                 if (effect.resistanceFormula) {
                     action.damageRoll.resistanceFormula = effect.resistanceFormula;
                     action.damageRoll.resistanceEffect = effect.resistanceEffect;
@@ -366,6 +378,13 @@ export class Macros {
                 let activeEffect = Capacity.makeActiveEffect(cap, effect, changes, duration)
                 activeEffect.flags.source = source.actor._id;
                 action[effectKey].set(effect.target, activeEffect);
+            }
+
+            if (effect.type == 'cleanse') {
+                if(!action.cleansing){
+                    action.cleansing = new Map();
+                }
+                action.cleansing.set(effect.target, effect.value);
             }
         }
         if (!activable) {

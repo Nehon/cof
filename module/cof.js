@@ -23,6 +23,7 @@ import { overrideTokenRender } from "./hooks/tokenOverride.js";
 import { DefaultVFX } from "./visualFX/defaultVFX.js";
 
 
+
 // 0: {id: "dead", label: "EFFECT.StatusDead", icon: "icons/svg/skull.svg"}                             "Mort" -> ...
 // 1: {id: "unconscious", label: "EFFECT.StatusUnconscious", icon: "icons/svg/unconscious.svg"}         "Inconscient" -> need to be healed in the hour, else dead.
 // 2: {id: "sleep", label: "EFFECT.StatusAsleep", icon: "icons/svg/sleep.svg"}                          "Someil" -> no move, no action, Auto hit, critical damage -> awake after attack
@@ -60,12 +61,17 @@ import { DefaultVFX } from "./visualFX/defaultVFX.js";
 // "Surprise" "Surpris" -> no action, DEF-5 1 combat turn
 // "disarmed" "Désarmé" -> move action to get the weapon back systems/cof/ui/icons/status/drop-weapon.svg
 
-// Remove unused affects, adds missing effects, and add changes to each effect to conform to COF
+// Remove unused effects, adds missing effects, and add changes to each effect to conform to COF
 const initStatusEffects = function () {
     // TODO find a way to handle
     // sleep / paralysis: no move, no action, auto hit, auto crit
     // immobilized / downgrade: d12 instead of d20
     // Fire / Bleeding / Regenerate: Hot and Dot to be handled in the combat tracker
+
+    // Dead
+    CONFIG.statusEffects[0].changes = [{ key: "data.attributes.hp.value", mode: 5, value: 0 }]; // force hp to 0
+    //CONFIG.statusEffects[0].flags = {};
+    CONFIG.statusEffects[0].flags = {"core.overlay": true, "core.statusId":"dead"} // force overlay for "dead"
 
     // Stun
     CONFIG.statusEffects[3].changes = [{ key: "data.attributes.def.buff", mode: 2, value: -5 }];
@@ -102,6 +108,9 @@ const initStatusEffects = function () {
     // move "disease" in "shock"'s place
     CONFIG.statusEffects[14] = duplicate(CONFIG.statusEffects[17]);
 
+    // move "regen" in "corrode"'s place
+    CONFIG.statusEffects[15] = duplicate(CONFIG.statusEffects[20]);
+
     // move "downgrade" in "bleeding"'s place
     CONFIG.statusEffects[16] = duplicate(CONFIG.statusEffects[23]);
 
@@ -113,6 +122,23 @@ const initStatusEffects = function () {
 
     // cleanup the unused ones
     CONFIG.statusEffects.splice(18, 14);
+
+    
+    // setup types when relevant
+    CONFIG.statusEffects[1].flags = {"core.type": "debuff"} 
+    CONFIG.statusEffects[2].flags = {"core.type": "debuff"} 
+    CONFIG.statusEffects[3].flags = {"core.type": "debuff"} 
+    CONFIG.statusEffects[6].flags = {"core.type": "debuff"} 
+    CONFIG.statusEffects[8].flags = {"core.type": "debuff"} 
+    CONFIG.statusEffects[9].flags = {"core.type": "debuff"} 
+    CONFIG.statusEffects[11].flags = {"core.type": "debuff"} 
+    CONFIG.statusEffects[13].flags = {"core.type": "debuff"} 
+    CONFIG.statusEffects[14].flags = {"core.type": "debuff"} 
+    CONFIG.statusEffects[16].flags = {"core.type": "debuff"} 
+
+    CONFIG.statusEffects[7].flags = {"core.type": "buff"} 
+    CONFIG.statusEffects[15].flags = {"core.type": "buff"} 
+
 }
 
 Hooks.once("init", async function () {

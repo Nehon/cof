@@ -36,6 +36,34 @@ export class Traversal {
         return actor;
     }
 
+    static isBuff(effect){
+        if(effect.flags["core.type"] === "buff" || effect.flags.core.type === "buff"){
+            return true;
+        }
+        if(effect.changes){
+            for (const change of effect.changes) {
+                if(change.mode === 2 && parseInt(change.value,10) > 0){
+                    return true;
+                }
+            }
+        }
+        return false;
+    }
+
+    static isDebuff(effect){
+        if(effect.flags["core.type"] === "debuff" || effect.flags.core.type === "debuff"){
+            return true;
+        }
+        if(effect.changes){
+            for (const change of effect.changes) {
+                if(change.mode === 2 && parseInt(change.value,10) < 0){
+                    return true;
+                }
+            }
+        }
+        return false;
+    }
+
     // static async getEntity(id, type, pack) {
     //     let entity = null;
     //     // Target 1 - Compendium Link

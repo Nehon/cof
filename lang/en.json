@@ -97,6 +97,7 @@
   "COF.ui.effectValueFormula": "Effect value formula",
   "COF.ui.buffedAttribute": "Buffed Attribute",
   "COF.ui.buff": "Buff",
+  "COF.ui.cleanse": "Cleansing",
   "COF.ui.effectDuration": "Duration",
   "COF.ui.effectNbUsage": "Usage number",
   "COF.ui.frequency": "Frequency",
