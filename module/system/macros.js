@@ -2,6 +2,7 @@ import { CofRoll } from "../controllers/roll.js";
 import { CofItem } from "../items/item.js";
 import { Capacity } from "../controllers/capacity.js";
 import { Traversal } from "../utils/traversal.js";
+import { MacroDispatcher } from "./macroDispatcher.js";
 
 export class Macros {
 
@@ -392,6 +393,7 @@ export class Macros {
             return;
         }
 
+        await MacroDispatcher.onPrepareRoll(cap.data.key,source, action, cap);
         CofRoll.rollDialog(actor, source, cap.name, cap.img, action);
     }
 }

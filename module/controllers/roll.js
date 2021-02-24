@@ -747,6 +747,7 @@ export class CofRoll {
             results.hideFate = action.hideFate;
         }
 
+        await MacroDispatcher.onRoll(results.key, sourceToken, results, action);
         CofRoll.toMessage(results, actor);
         if (action.template) {
             action.template.delete();
@@ -756,7 +757,6 @@ export class CofRoll {
     static async toMessage(rollResult = {}, actor, { rollMode = null, create = true } = {}) {
         const rollOptionTpl = 'systems/cof/templates/chat/roll-card.hbs';
         const rollOptionContent = await renderTemplate(rollOptionTpl, rollResult);
-        console.log(rollResult);
 
         // Prepare chat data
         const messageData = {
@@ -838,8 +838,9 @@ export class CofRoll {
                     }
                     if(data.cleansing){
                         await target.actor.clearEffects(data.cleansing);
-                    }
+                    }                  
                 }
+                await MacroDispatcher.onApplyActive(flags.rollResult.key, source, flags.rollResult, targetTokens);
             }, 300);
 
             if (item) {

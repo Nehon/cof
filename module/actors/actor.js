@@ -3,6 +3,7 @@
  * @extends {Actor}
  */
 import { CofRoll } from "../controllers/roll.js";
+import { MacroDispatcher } from "../system/macroDispatcher.js";
 import {Stats} from "../system/stats.js";
 import { Traversal } from "../utils/traversal.js";
 
@@ -283,7 +284,8 @@ export class CofActor extends Actor {
     }
 
     async _onDeath(){
-        await this.clearEffects("all");         
+        await this.clearEffects("all");
+        Hooks.call("actorDeath", this);
     }
 
     async applyEffect(effectData){
@@ -479,10 +481,10 @@ export class CofActor extends Actor {
                 continue;
             }
             for (const key in cap.data.effects) {
-                const effect = cap.data.effects[key];               
+                const effect = cap.data.effects[key];     
                 if(effect.activable){
                    continue;
-                } 
+                }                 
                 if(effect.type == 'buff' && effect.target == 'self'){
                     const changes = Traversal.getChangesFromBuffValue(effect.value);                    
                     for (const change of changes) {
@@ -497,8 +499,9 @@ export class CofActor extends Actor {
                         const value = eval(change.key) + roll.total
                         Stats.setPath(actorData, change.key, value);
                     }                   
-                }
+                }               
             }
+            MacroDispatcher.onApplyPassive(cap.data.key, this, cap);
         }
     }
     

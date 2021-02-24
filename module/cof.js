@@ -239,11 +239,11 @@ Hooks.once("init", async function () {
 // all races
 
 //Type of resistance
-// RD                                                           // rd(5)
+// RD                                                           // -5 (ou 5)
 // def bonus                                                    // def(5)               // macro(<name>)
 // bonus for resistance test                                    // test(5)              // macro(<name>)
-// Halves (maybe multiplier?)                                   // x(0.5)
-// Immunity                                                     // immune
+// Halves (maybe multiplier?)                                   // *0.5
+// Immunity                                                     // *0
 // special test ( magic resistance : roll 1D6 > spell rank)     // misc(1d6>@cap.rank)  // macro(<name>)
 
 // Exemple:

@@ -1,4 +1,5 @@
-import {Traversal} from "../utils/traversal.js";
+import { MacroDispatcher } from "../system/macroDispatcher.js";
+import { Traversal } from "../utils/traversal.js";
 
 export class Capacity {
     /**
@@ -7,8 +8,8 @@ export class Capacity {
      * @private
      */
     static create(actor, event) {
-        const data = {name: "New Capacity", type: "capacity", data: {checked: true}};
-        return actor.createOwnedItem(data, {renderSheet: true}); // Returns one Entity, saved to the database
+        const data = { name: "New Capacity", type: "capacity", data: { checked: true } };
+        return actor.createOwnedItem(data, { renderSheet: true }); // Returns one Entity, saved to the database
     }
 
     static toggleCheck(actor, event, isUncheck) {
@@ -25,45 +26,50 @@ export class Capacity {
         capacities = capacities.map(c => {
             let cdata = duplicate(c);
             // if no rank, force it
-            if(!cdata.data.rank) cdata.data.rank = path.data.capacities.indexOf(c._id) +1;
+            if (!cdata.data.rank) cdata.data.rank = path.data.capacities.indexOf(c._id) + 1;
             // if no path, force it
-            if(!cdata.data.path) cdata.data.path = path.data.key;
+            if (!cdata.data.path) cdata.data.path = path.data.key;
             return cdata;
         });
-        const capacitiesKeys = capacities.map(c=>c.data.key);
+        const capacitiesKeys = capacities.map(c => c.data.key);
 
         // retrieve path's capacities already present in owned items
         const items = data.items.filter(i => i.type === "capacity" && capacitiesKeys.includes(i.data.key));
         const itemKeys = items.map(i => i.data.key);
         let pathRank = items.length;
 
-        if(isUncheck){
+        if (isUncheck) {
             const caps = capacities.filter(c => path.data.capacities.indexOf(c._id) >= path.data.capacities.indexOf(capId));
             const capsKeys = caps.map(c => c.data.key);
             // const caps = capacities.filter(c => c.data.rank >= capacity.data.rank);
             // REMOVE SELECTED CAPS
-            const toRemove = items.filter(i => capsKeys.includes(i.data.key)).map(i => i._id);
+            const capsToRemove = items.filter(i => capsKeys.includes(i.data.key));
+            for (const cap of capsToRemove) {
+                MacroDispatcher.onDeactivate(cap.data.key, actor, cap);
+            }
+            const toRemove = capsToRemove.map(i => i._id);
             pathRank -= toRemove.length;
             actor.deleteOwnedItem(toRemove);
-        }else {
+        } else {
             const caps = capacities.filter(c => path.data.capacities.indexOf(c._id) <= path.data.capacities.indexOf(capId));
             // const caps = capacities.filter(c => c.data.rank <= capacity.data.rank);
             const toAdd = caps.filter(c => !itemKeys.includes(c.data.key));
             pathRank += toAdd.length;
-            for (const item of toAdd) {
-               item.data.pathRank = pathRank;   
-               item.data.pathIndex = pathId;            
+            for (const cap of toAdd) {
+                cap.data.pathRank = pathRank;
+                cap.data.pathIndex = pathId;
+                MacroDispatcher.onActivate(cap.data.key, actor, cap);
             }
             actor.createOwnedItem(toAdd);
         }
 
         let updates = [];
-        updates.push({_id:path._id, data:{rank:pathRank}});
+        updates.push({ _id: path._id, data: { rank: pathRank } });
         for (const item of items) {
-            updates.push({_id:item._id, data:{pathRank: pathRank, pathIndex: pathId}});
+            updates.push({ _id: item._id, data: { pathRank: pathRank, pathIndex: pathId } });
         }
         actor.updateEmbeddedEntity('OwnedItem', updates);
-        
+
     }
 
     static makeActiveEffect(capacity, effect, changes, duration) {
@@ -78,75 +84,75 @@ export class Capacity {
             startRound: game.combat.current.round,
             startTurn: game.combat.current.turn
         } : {
-            rounds: duration,
-        };
+                rounds: duration,
+            };
 
         let effectData = {
             label: capacity.name,
             icon: capacity.img,
             duration: durationObj,
-            flags:{
-                "core.statusId" : capacity.data.key
+            flags: {
+                "core.statusId": capacity.data.key
             }
         }
-        
-        if(effect.resistanceFormula){
+
+        if (effect.resistanceFormula) {
             effectData.flags.resistanceFormula = effect.resistanceFormula;
-            effectData.flags.resistanceEffect = effect.resistanceEffect;            
+            effectData.flags.resistanceEffect = effect.resistanceEffect;
         }
 
-        if(!changes.length){
+        if (!changes.length) {
             return effectData;
         }
         effectData.changes = [];
         for (const change of changes) {
-            let ae = CONFIG.statusEffects.find(e => e.id === change.value ||  e.id === capacity.data.key);
-            if(!change.key || change.key.trim() ===""){
+            let ae = CONFIG.statusEffects.find(e => e.id === change.value || e.id === capacity.data.key);
+            if (!change.key || change.key.trim() === "") {
                 // Standard effects                
-                if (ae) {    
-                    if(!effectData.changes.length){
+                if (ae) {
+                    if (!effectData.changes.length) {
                         // no changes yet let's use this effect
                         effectData.icon = ae.icon;
                         effectData.label = game.i18n.localize(ae.label);
                         effectData.flags["core.statusId"] = ae.id;
-                        if(ae.changes) effectData.changes = duplicate(ae.changes);                        
+                        if (ae.changes) effectData.changes = duplicate(ae.changes);
                     } else {
                         // push standard effect changes 
                         for (const ch of ae.changes) {
                             effectData.changes.push(ch);
                         }
                     }
-                    if(ae.flags["core.overlay"]) effectData.flags["core.overlay"] = true;
-                } else {            
-                    CONFIG.statusEffects.push({id:capacity.data.key, label:capacity.name, icon:capacity.img});
+                    if (ae.flags["core.overlay"]) effectData.flags["core.overlay"] = true;
+                } else {
+                    CONFIG.statusEffects.push({ id: capacity.data.key, label: capacity.name, icon: capacity.img });
                 }
                 continue;
             }
             effectData.changes.push(change);
-            if(!ae){
-                CONFIG.statusEffects.push({id:capacity.data.key, label:capacity.name, icon:capacity.img});
+            if (!ae) {
+                CONFIG.statusEffects.push({ id: capacity.data.key, label: capacity.name, icon: capacity.img });
             }
-        }      
+        }
         return effectData;
     }
 
     static addActiveEffectChange(effectData, key, value) {
         effectData.changes.push({
-            key: key.replace('@','data.'),
+            key: key.replace('@', 'data.'),
             mode: 2,
             value: value
         });
         return effectData;
     }
 
-    static isActivable(capacity){
+    static isActivable(capacity) {
         for (const key in capacity.data.effects) {
             const effect = capacity.data.effects[key];
-            if(effect.activable){
+            if (effect.activable) {
                 return true;
-            }            
+            }
         }
-        return false;        
+        return false;
     }
 
 }
