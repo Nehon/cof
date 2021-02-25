@@ -5,6 +5,11 @@
 import {DataLoader} from "../data.js";
 import {UpdateUtils} from "../utils/update-utils.js";
 import {FXMasterOverride} from "../hooks/fxMasterOverrides.js";
+import { MacroDispatcher } from "../system/macroDispatcher.js";
+
+Hooks.once("canvasInit",async () => {        
+    await MacroDispatcher.init();
+})
 
 Hooks.once("ready", async () => {
     FXMasterOverride();

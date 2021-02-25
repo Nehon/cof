@@ -1,5 +1,4 @@
 import { CofRoll } from "../controllers/roll.js";
-import { Macros } from "../system/macros.js";
 import { Traversal } from "../utils/traversal.js";
 
  
@@ -40,17 +39,26 @@ const updateCombattant = (combatant, combat, progress) => {
 }
 
 Hooks.on('preUpdateCombat', (combat, snap, progress ) => {   
+    if(!game.user.isGM){
+        return;
+    }
     combat.combatants.forEach(combattant =>{
         updateCombattant(combattant, combat, progress);
     });
 });
 
 Hooks.on('createCombatant', (combat, snap, progress ) => {   
+    if(!game.user.isGM){
+        return;
+    }
     let actor = canvas.tokens.placeables.find((t) => t.data._id === snap.tokenId).actor;
     actor.updateForCombat().then(()=>{ui.hotbar.render()});
 });
 
-Hooks.on('updateCombat', (combat, snap, progress) => {  
+Hooks.on('updateCombat', (combat, snap, progress) => {
+    if(!game.user.isGM){
+        return;
+    }
     if(snap.round){
         combat.combatants.forEach(combatant =>{
             combatant.actor.updateForRound().then(()=>{ui.hotbar.render()});
@@ -84,17 +92,36 @@ Hooks.on('updateCombat', (combat, snap, progress) => {
     }
 });
 
-Hooks.on("CWCalendar.newDay", (time) => { 
+Hooks.on("updateOwnedItem", (actor) => {
+    if (game.user.isGM || game.user.data.character === actor._id){
+        ui.hotbar.render();
+    }
+});
+
+Hooks.on("CWCalendar.newDay", (time) => {
+    if(!game.user.isGM){
+        return;
+    } 
     game.actors.forEach((a) => {
-        a.updateForDay().then(() => ui.hotbar.render());
-    });   
+        a.updateForDay();
+    });  
+
+    canvas.tokens.placeables.forEach(t => {
+        if(!t.actor || t.data.actorLink){
+            return;
+        }
+        t.actor.updateForDay();
+    });
 });
 
 
 Hooks.on('deleteCombat', (combat, snap, progress) => {   
+    if(!game.user.isGM){
+        return;
+    }
     combat.combatants.forEach(combatant =>{
         let updates = [] 
-        combatant.actor.updateForCombat().then(()=>{ui.hotbar.render()});;
+        combatant.actor.updateForCombat();
         combatant.actor.effects.forEach(effect => {
             if(combat._id != effect.data.duration.combat ){
                 return;

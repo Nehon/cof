@@ -3,24 +3,26 @@ import { Traversal } from "../utils/traversal.js";
 
 export class MacroDispatcher {
 
+    static async init(){
+        this.compendium = game.packs.get("cof-plus.capacities-macros")
+        this.content = await this.compendium.getContent();
+    }
+
     static async findMacro(name) {
-        if(!game.macros.find){
+        if(!game.macros.find || !this.content){
             return;
         }
         // first search in game macros
         let macro = game.macros.find(m => m.data.name === name);
         if (macro) {
+            return macro;        
+        }
+        
+        macro = this.content.find(m => m.data.name === name);
+        if (macro) {
             return macro;
         }
-        // search in compendiums
-        const macroCompendiums = game.packs.filter(c => c.metadata.entity === "Macro");
-        for (const compendium of macroCompendiums) {
-            const content = await compendium.getContent();
-            macro = content.find(m => m.data.name === name);
-            if (macro) {
-                return macro;
-            }
-        }
+        
         return macro;
     }
 

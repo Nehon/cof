@@ -122,7 +122,7 @@ export class Capacity {
                             effectData.changes.push(ch);
                         }
                     }
-                    if (ae.flags["core.overlay"]) effectData.flags["core.overlay"] = true;
+                    if (ae.flags && ae.flags["core.overlay"]) effectData.flags["core.overlay"] = true;
                 } else {
                     CONFIG.statusEffects.push({ id: capacity.data.key, label: capacity.name, icon: capacity.img });
                 }
