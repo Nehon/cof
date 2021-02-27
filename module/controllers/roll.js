@@ -286,8 +286,15 @@ export class CofRoll {
         }
         const arr = formula.split(">");
         let result = arr[0].trim();
-        let difficulty = arr.length > 1 ? arr[1].trim() : undefined;
+        let uniqueRoll = false;
+        if(result.startsWith("unique")){
+            uniqueRoll = true;
+            result = result.replace("unique ", "");
+        }
 
+        let difficulty = arr.length > 1 ? arr[1].trim() : undefined;
+        
+       
         if (result.indexOf("@rank") >= 0) {
             const rank =  capacity.data.pathRank? capacity.data.pathRank:0;
             result = result.replace(/@rank/g, rank);
@@ -319,7 +326,7 @@ export class CofRoll {
 
         }
 
-        return { formula: result, superior: superior, difficulty: difficulty };
+        return { formula: result, superior: superior, difficulty: difficulty, uniqueRoll: uniqueRoll };
     }
 
     /* -------------------------------------------- */
@@ -649,7 +656,7 @@ export class CofRoll {
             results.fateValue = actor.data.data.attributes.fp.value;
             results.fateMax = actor.data.data.attributes.fp.max;
             let r = new CofSkillRoll(label, skillRoll.dice, skillRoll.mod, skillRoll.bonus, skillRoll.difficulty, skillRoll.critRange);
-            if (targets.length) {
+            if (targets.length && !skillRoll.uniqueRoll) {
                 for (const target of targets) {
                     let result;
                     let difficulty = target.actor.data.data.attributes.def.value;
@@ -664,28 +671,32 @@ export class CofRoll {
             } else {
                 results.global = {};
                 results.global.skill = r.getRollResult();
+                for (const target of targets) {
+                    const result = results.targets[target.data._id];
+                    result.skill = results.global.skill;
+                }
             }
         }
 
         if (dmgRoll) {
             const r = new CofDamageRoll(label, dmgRoll.formula, false, dmgRoll.type);
             const dmg = r.getRollResult();
-            if (!skillRoll) {
+            if (!skillRoll || skillRoll.uniqueRoll) {
                 // apply the dmg on each target
                 for (const target of targets) {
                     const result = results.targets[target.data._id];
                     result.damage = dmg;
-                    result.damage.final = dmg.total;
+                    result.damage.final = dmg.total;                    
                     CofRoll.computeDamageResistance(dmgRoll, result, sourceToken, target);
                 }
-                results.displayApply = true;
+                results.displayApply = !skillRoll || results.global.skill.isSuccess;
             } else {
                 // dmg roll for each target
                 for (const target of targets) {
                     const result = results.targets[target.data._id];
                     result.damage = r.getRollResult(result.skill.isCritical);
                     result.damage.final = result.damage.total;
-                    results.displayApply |= results.targets[target.data._id].skill.isSuccess;
+                    results.displayApply |= result.skill.isSuccess;
                     CofRoll.computeDamageResistance(dmgRoll, result, sourceToken, target);
                 }
             }
@@ -901,19 +912,16 @@ export class CofRoll {
             const rollResult = flags.rollResult;
             rollResult.displayApply = true;
             let entry = rollResult.global;
-            if (Object.keys(rollResult.targets).length) {
-                entry = rollResult.targets[Object.keys(rollResult.targets)[0]];
+            for(let key in rollResult.targets){
+                entry = rollResult.targets[key];
+                entry.skill.total += 10;
+                entry.skill.result += "+ 10";
+                if (entry.skill.total >= entry.skill.difficulty) {
+                    entry.skill.isSuccess = true;
+                }
+                rollResult.global = entry;
+                rollResult.hideFate = true;
             }
-
-            entry.skill.total += 10;
-            entry.skill.result += "+ 10";
-
-            if (entry.skill.total >= entry.skill.difficulty) {
-                entry.skill.isSuccess = true;
-            }
-
-            rollResult.global = entry;
-            rollResult.hideFate = true;
 
             CofRoll.toMessage(rollResult, actor);
 

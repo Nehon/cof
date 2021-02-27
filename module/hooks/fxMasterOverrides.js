@@ -121,9 +121,14 @@ export const FXMasterOverride = function () {
             .beginFill(0xFF0000)          
             .drawRect(0, 0, vidSprite.width, vidSprite.height)
             .endFill()            
-            .beginFill(0x000000)          
-            .drawRect((vidSprite.width - width) * 0.5, (vidSprite.height - height) * 0.5, width, height)
-            .endFill()
+            .beginFill(0x000000);
+            if(data.mask.shape){
+              pattern.drawCircle(vidSprite.width * data.mask.anchor.x , vidSprite.height * data.mask.anchor.y, width * 0.5);
+            } else {
+              pattern.drawRect((vidSprite.width - width) * 0.5, (vidSprite.height - height) * 0.5, width, height);
+            }
+
+            pattern.endFill()
             .lineStyle(vidSprite.width/20.0, 0x00000,1)
             .beginFill(0x000000,0.0)          
             .drawRect(0, 0, vidSprite.width, vidSprite.height)

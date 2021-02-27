@@ -242,6 +242,9 @@ export class CofActor extends Actor {
 
     async applyDamage(value){
         const hp = this.data.data.attributes.hp;
+        if (hp.value <= 0 && value > 0) {
+            return;
+        }
         const newValue = Math.min(hp.value - value, hp.max);
         await this.update({
             "data.attributes.hp.value": newValue
