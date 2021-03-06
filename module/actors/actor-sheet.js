@@ -12,22 +12,24 @@ import { CofItem } from "../items/item.js";
 import { MacroDispatcher } from "../system/macroDispatcher.js";
 
 export class CofActorSheet extends ActorSheet {
-
+    constructor(...args) {
+        super(...args);
+        this.resistanceDialogOpen = false;
+    }
 
     /** @override */
     getData(options) {
         let data = super.getData(options);
-        data.options.isGM = game.user.isGM;
+        data.options.isGM = game.user.isGM;       
+        data.options.resistanceDialogOpen = this.resistanceDialogOpen; 
         return data;
     }
 
     /** @override */
     activateListeners(html) {
-        super.activateListeners(html);
+        super.activateListeners(html);        
         this.isGM = game.user.isGM;
-        // Everything below here is only needed if the sheet is editable
-        //if (!this.options.editable) return;
-
+                        
         // Click to open
         html.find('.compendium-pack').dblclick(ev => {
             ev.preventDefault();
@@ -86,6 +88,11 @@ export class CofActorSheet extends ActorSheet {
         html.find('.rollable').click(ev => {
             ev.preventDefault();
             return this._onRoll(ev);
+        });
+
+        html.find('.edit-dr').click(ev => {
+            ev.preventDefault();
+            this._onEditDr(html);            
         });
 
         // Check/Uncheck capacities
@@ -407,11 +414,15 @@ export class CofActorSheet extends ActorSheet {
                         return;
                     }
                     
-                    if(item.dmg){                        
+                    if(item.hasOwnProperty("dmg")){                        
                         const data = this.getData().data;
                         data.weapons = Object.values(data.weapons);
-                        if(data.weapons.length == 1) data.weapons[0] = {"name":"", "mod":null, "dmg":null};
-                        else data.weapons.splice(id, 1);
+                        if(data.weapons.length == 1) {
+                            data.weapons[0] = {"name":"", "mod":null, "dmg":null};
+                        } else {
+                            const id = this.findId(li);
+                            data.weapons.splice(id, 1);
+                        }
                         this.actor.update({'data.weapons': data.weapons});                        
                     } else {
                         this.actor.deleteEmbeddedEntity("OwnedItem", item._id);
@@ -428,11 +439,15 @@ export class CofActorSheet extends ActorSheet {
         this.editItem(li);
     }
 
-    findItemOrWeapon(li){
+    findId(li){
         if(!li.hasClass("interractable")){
             li = li.find(".interractable");
         }
-        const id = li.data("item-id");
+        return li.data("item-id");
+    }
+
+    findItemOrWeapon(li){        
+        const id = this.findId(li)
         let item = this.actor.getOwnedItem(id);
         if(!item && this.actor.data.data.weapons){
             item = this.actor.data.data.weapons[id]
@@ -440,7 +455,7 @@ export class CofActorSheet extends ActorSheet {
         return item;
     }
 
-    async findItem(li){
+    async findItem(li){        
         const id = li.data("itemId");        
         let item = this.actor.getOwnedItem(id);
         if(item){
@@ -466,7 +481,7 @@ export class CofActorSheet extends ActorSheet {
 
     async editItem(li) {        
         const item = this.findItemOrWeapon(li);
-        if (item && !item.dmg) return item.sheet.render(true);
+        if (item && !item.hasOwnProperty("dmg")) return item.sheet.render(true);
         let weapon = duplicate(item);
         if(!weapon.img){
             weapon.img="systems/cof/ui/icons/red_31.jpg"
@@ -551,6 +566,11 @@ export class CofActorSheet extends ActorSheet {
         CofItem.logItem(item, actor);
     }
 
+    async _onEditDr(html){        
+        let dialog = html.find(".dr-dialog");
+        this.resistanceDialogOpen = !this.resistanceDialogOpen;
+        dialog.toggle();        
+    }
 
     /* -------------------------------------------- */
     /* DELETE EVENTS CALLBACKS                      */

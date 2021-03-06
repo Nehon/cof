@@ -38,3 +38,4 @@ Hooks.once("ready", async () => {
     ui.hotbar.render();
     console.info("System Initialized.");
 });
+ 

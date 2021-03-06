@@ -50,6 +50,35 @@ export class Traversal {
         return false;
     }
 
+    static mergeResistance(r1, r2){
+        let result = duplicate(r1);
+        for (const key in r2) {
+            
+            if(key === "ignored"){
+                continue;
+            }
+            if(key === "weaknesses"){
+                if(!r1[key] || r1[key]===""){
+                    result[key] = r2[key];
+                    continue;
+                }
+                const val1 =  r1[key] ? r1[key] : "";
+                result[key] = val1.endsWith(",")? val1 + r2[key] : val1 + "," + r2[key];
+                continue;
+            }
+            const val1 = "" + (r1[key] ? r1[key] : 0);
+            const val2 = "" + (r2[key] !== ""?r2[key]:0);
+            if(val2.trim().startsWith("*")){
+                result[key] = val2;
+            } else if(!val1.trim().startsWith("*")){
+                result[key] = parseInt(val1,10) + parseInt(val2,10) + "";
+            } else {
+                result[key] = val1;
+            }
+        }
+        return result;
+    }
+
     static isDebuff(effect){
         if(effect.flags["core.type"] === "debuff" || effect.flags.core.type === "debuff"){
             return true;

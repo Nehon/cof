@@ -98,7 +98,8 @@ export class CofRoll {
             damageRoll: {
                 formula: itemData.data.dmg,
                 type: "damage",
-                target: "selected"
+                target: "selected",
+                subType: itemData.data.dmgType
             }
         };
         return CofRoll.rollDialog(actor, actor.token, itemData.name, itemData.img, action);
@@ -312,6 +313,7 @@ export class CofRoll {
 
         const wRE = /@weapon\.([^+-\/*\s)(]*)/g
         const matches = [...result.matchAll(wRE)];
+        let subType;
         if (matches && matches.length) {
             const weapon = actor.items.find(i => i.data.data.subtype === "melee" && i.data.data.worn && i.data.data.properties.weapon);
             if (!weapon) {
@@ -323,10 +325,11 @@ export class CofRoll {
                     result = result.replace(match[i - 1], weapon.data.data[match[i]]);
                 }
             }
+            subType = weapon.data.data.dmgType;
 
         }
 
-        return { formula: result, superior: superior, difficulty: difficulty, uniqueRoll: uniqueRoll };
+        return { formula: result, superior: superior, difficulty: difficulty, uniqueRoll: uniqueRoll, subType: subType};
     }
 
     /* -------------------------------------------- */
@@ -451,7 +454,59 @@ export class CofRoll {
         return resist;
     }
 
+    static includesAny(weaknesses, types){
+        let pattern = weaknesses.replace(/^\s*,\s*/,"").replace(/\s*,\s*$/,"").replace(/\s*,\s*/g, "|");
+        pattern = `(${pattern.trim()})`;
+        
+        if(types.match(pattern)){
+            return true;
+        }
+        return false;
+    }
+
+    
+    static resolveDamage(damage, resistance){
+        let resist = {
+            resisted: false,
+            result: ""
+        };
+        let value = damage.final;
+        let res = duplicate(resistance);
+        for (const roll of damage.subRolls) {            
+            const types =  roll.subtype.split(",");
+            types.push("value");
+            for (const type of types) {
+                if(type === "value" && CofRoll.includesAny(res.weaknesses,roll.subtype)){
+                   continue;
+                }
+                const t  =type.trim();
+                const r = res[t];
+                if(!r || r === "0"){
+                    continue;
+                }
+                let total = roll.total * (damage.isCrit?2:1);
+                let diff = 0;
+                if(r.startsWith("*")){
+                   diff = total - Math.floor(Math.min(eval(`${total} ${r}`), total));
+                } else {
+                   let val = parseInt(r, 10);
+                   diff = Math.min(val, total);
+                   val -= diff;
+                   res[type] = `${val}`;
+                }
+                value -= diff;
+                resist.result += t !== "value"? `${t}(${diff}),`: `${diff},`;
+            }            
+        }
+        
+        resist.resisted = damage.final != value;
+        
+        damage.final = Math.max(0,value);
+        return resist;
+    }
+
     static computeDamageResistance(dmgRoll, result, sourceToken, target) {
+        result.damage.resist = CofRoll.resolveDamage(result.damage, target.actor.data.data.attributes.dr.value);
         if (!dmgRoll.resistanceFormula) {
             return;
         }
@@ -679,13 +734,13 @@ export class CofRoll {
         }
 
         if (dmgRoll) {
-            const r = new CofDamageRoll(label, dmgRoll.formula, false, dmgRoll.type);
+            const r = new CofDamageRoll(label, dmgRoll.formula, false, dmgRoll.type, dmgRoll.subType);
             const dmg = r.getRollResult();
             if (!skillRoll || skillRoll.uniqueRoll) {
                 // apply the dmg on each target
                 for (const target of targets) {
                     const result = results.targets[target.data._id];
-                    result.damage = dmg;
+                    result.damage = duplicate(dmg);
                     result.damage.final = dmg.total;                    
                     CofRoll.computeDamageResistance(dmgRoll, result, sourceToken, target);
                 }

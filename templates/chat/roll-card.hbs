@@ -73,11 +73,11 @@
             {{#if (and target.damage (or (or (not target.skill) target.skill.isSuccess) target.forceDisplay))}}
                 <h1 class="flex3 {{target.damage.type}} tooltip center flexend" ><span class="signed">{{target.damage.final}}</span>
                     <span class="tooltiptext tooltip-left">{{safeString target.damage.result}}
-                        {{#if target.damage.resist}}
+                        {{#if (and target.damage.resist target.damage.resist.resisted)}}
                             {{safeString "<br>Resist.<br>"}}{{safeString target.damage.resist.result}}
                         {{/if}}
                     </span>
-                    {{#if target.damage.resist}}
+                    {{#if (and target.damage.resist target.damage.resist.resisted)}}
                             <i class="overlay name" style="font-size:0.35em;margin-top: -18px; margin-left:4px; color:yellow;position: absolute;">RESIST</i> 
                     {{/if}}
                     <i class="overlay">{{localize "COF.attributes.hp.abbrev"}}</i>

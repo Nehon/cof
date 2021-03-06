@@ -50,11 +50,30 @@ export class CofActor extends Actor {
 
         attributes.hp.buff = 0;
         attributes.def.buff = 0;
-        attributes.init.buff = 0;
-        attributes.dr.buff = 0;
+        attributes.init.buff = 0;        
         attributes.rp.buff = 0;
         attributes.fp.buff = 0;
         attributes.mp.buff = 0;
+        attributes.dr.buff = { 
+            value : "0", 
+            weaknesses : "",
+            physic: "0",
+            bludgeoning: "0",
+            piercing: "0",
+            slashing: "0",
+            magic: "0",
+            fire: "0",
+            electricity: "0",
+            cold:"0",
+            acid: "0",
+            psychic: "0",
+            poison: "0",
+            desease: "0",
+            bleeding: "0",
+            holy: "0",
+            silver: "0",
+            cursed: "0",
+        },
 
         attacks.melee.buff = 0;
         attacks.ranged.buff = 0;
@@ -177,7 +196,7 @@ export class CofActor extends Actor {
         let attributes = actorData.data.attributes;
         attributes.init.value = attributes.init.base + attributes.init.bonus + attributes.init.buff;
         attributes.def.value = attributes.def.base + attributes.def.bonus + attributes.def.buff;
-        attributes.dr.value = attributes.dr.base.value + attributes.dr.bonus.value + attributes.dr.buff;
+        attributes.dr.value = Traversal.mergeResistance(Traversal.mergeResistance(attributes.dr.base, attributes.dr.bonus), attributes.dr.buff);        
     }
 
     /* -------------------------------------------- */
@@ -434,7 +453,7 @@ export class CofActor extends Actor {
 
         attributes.fp.base = 3 + stats.cha.mod;
         attributes.fp.max = attributes.fp.base + attributes.fp.bonus + attributes.fp.buff;
-        attributes.dr.value = attributes.dr.base.value + attributes.dr.bonus.value + attributes.dr.buff;
+        attributes.dr.value = Traversal.mergeResistance(Traversal.mergeResistance(attributes.dr.base, attributes.dr.bonus), attributes.dr.buff);        
         attributes.rp.max = attributes.rp.base + attributes.rp.bonus + attributes.rp.buff;
         attributes.hp.max = attributes.hp.base + stats.con.mod * lvl + attributes.hp.bonus + attributes.hp.buff;
 
@@ -496,11 +515,23 @@ export class CofActor extends Actor {
                             continue;
                         }                    
                         let formula = CofRoll.replaceSpecialAttributes(change.value, this, cap).formula;
+                        
                         const roll = new Roll(formula, actorData.data);
                         roll.roll();
                         const data = actorData.data;
-                        const value = eval(change.key) + roll.total
-                        Stats.setPath(actorData, change.key, value);
+                        if( !change.key.startsWith("data.attributes.dr")){
+                            const value = eval(change.key) + roll.total
+                            Stats.setPath(actorData, change.key, value);
+                        } else {
+                            const sign = formula.substring(0,1);
+                            if(sign === "*"){
+                                Stats.setPath(actorData, change.key, `${sign}${roll.total}`);
+                            } else {
+                                const oldValue = parseInt(eval(`${change.key}`),10);
+                                const value = eval(`${oldValue} ${sign} ${roll.total}`);
+                                Stats.setPath(actorData, change.key, `${value}` );
+                            }
+                        }
                     }                   
                 }               
             }

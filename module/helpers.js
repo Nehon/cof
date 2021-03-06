@@ -84,6 +84,21 @@ export const registerHandlebarsHelpers = function () {
         return accum;
     });
 
+    Handlebars.registerHelper('getDRKeys', function (object) {
+        let keys = [];
+        for (const key in object) {
+            if(key === "weaknesses" || key === "value" || key === "ignored"){
+                continue;
+            }
+            keys.push(key);
+        }
+        return keys;
+    });
+    
+    
+    Handlebars.registerHelper('getAttribute', function (object, attribute) {
+        return object[attribute];
+    });
 
     Handlebars.registerHelper('getClass', function (skillRoll) {
         if (skillRoll.isCritical) {

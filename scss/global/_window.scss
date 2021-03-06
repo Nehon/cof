@@ -150,7 +150,9 @@
 }
 
 // foundry overrides
-
+.editor-content{
+  min-height:100px;
+}
 
 #token-hud .status-effects {
   grid-template-columns: 33px 33px 33px 33px;

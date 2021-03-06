@@ -191,6 +191,34 @@ export class UpdateUtils {
         const encounters = await game.packs.get("cof.encounters");
         let entities = await encounters.getContent();
         let newEntities = [];
+
+        const ranged = ["arc", "lancer", "javelot", "arbalète", "fronde", "flèche"];
+        const magic = ["attaque magique", "foudre", "boule de feu"];
+
+        const resistanceMap = {
+           "armes saintes": "holy,",
+           "magie": "magic,",
+           "Armes magiques": "magic",
+           "argent": "silver,",
+           "armes contondantes": "bludgeoning,",
+           "argent ou feu": "silver,fire,",
+           "tranchant": "slashing,",
+        }
+
+        // "arc, lancer, javelot, arbalète, fronde, flèche" -> distance
+        //    - "Arc" -> equipenment?
+        // "attaque magique, foudre, boule de feu" -> magique
+        // autre -> melee
+        //    - "épéé" -> equipenment?
+        //    - "Hache" -> equipenment?
+
+        /////////////////////////
+        //  TODO (voie des créatures élémentaires)
+        /////////////////////////
+        //  adjust Souffle range (10 below big, 20 for enormous, 30 for colossal)
+        //  adjust "explosion finale" range (3m small, 5m medium, 10m big, 20m enormous, 30m colossal)
+        /////////////////////////
+
         //let entity = entities[0];
         entities.forEach(async entity => {           
             entity.data.img = `modules/cof-plus/assets/images/${entity.data.data.key}.webp`;
@@ -198,6 +226,14 @@ export class UpdateUtils {
             for (const weapon of entity.data.data.weapons) {
                 weapon.critrange = "20";
                 weapon.img = "systems/cof/ui/icons/attack.jpg";
+                if(ranged.includes(weapon.name.toLowerCase())){
+                    entity.data.data.attacks.ranged.base = weapon.mod;
+                } else if (magic.includes(weapon.name.toLowerCase())){
+                    entity.data.data.attacks.magic.base = weapon.mod;
+                } else if(weapon.mod) {
+                    entity.data.data.attacks.melee.base = weapon.mod;
+                }
+                //console.log(weapon.name, entity.data.name);
             } 
             entity.data.data.description = entity.data.data.description.replace("<h1>Description</h1>","");
 
@@ -206,7 +242,15 @@ export class UpdateUtils {
             token.img = `modules/cof-plus/assets/images/${entity.data.data.key}_token.webp`;
             token.bar1 = {attribute: "attributes.hp"};
             token.displayBars = 40;
-            token.displayName = 30;            
+            token.displayName = 30;          
+            
+            // dr
+            let baseDR = entity.data.data.attributes.dr.base;
+            if(baseDR.ignored!='') {                
+                baseDR.weaknesses = resistanceMap[baseDR.ignored];
+                console.log(baseDR.weaknesses, baseDR.ignored);
+            } 
+            delete baseDR.ignored;
             
             entity.data.folder = folder._id; 
             newEntities.push(entity.data);

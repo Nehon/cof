@@ -267,9 +267,16 @@ export class CofItemSheet extends ItemSheet {
                         var type = $("input[name='type']:checked").val();
                         switch (type) {
                             case "buffedAttribute":
-                                const stat = html.find("#stat").val();
+                                let stat = html.find("#stat").val();
                                 let value = html.find('#value').val();
-                                if (!value.startsWith("+") && !value.startsWith("-")) {
+                                if(stat === "data.attributes.dr.buff.value"){
+                                   const m = value.match(/(\w*)\((.*)\)/);
+                                   if(m){
+                                       stat = stat.replace("value", m[1]);
+                                       value = m[2];
+                                   }
+                                } 
+                                if (!value.startsWith("+") && !value.startsWith("-") && !value.startsWith("*")) {
                                     value = `+${value}`;
                                 }
                                 data.data.effects[key].value += `${stat}(${value}),`;
@@ -293,21 +300,56 @@ export class CofItemSheet extends ItemSheet {
         }, { classes: ["cof", "dialog"] });
         d.render(true);
     }
+
+    makeAoeObject(aoe){
+        const m = aoe? aoe.match(/([^(]*)\((.*)\)\s*(.*$)/): undefined;
+        if (!m) {
+            return {
+                type: "circle",
+                minRange: "10",
+                maxRange: "10",
+                minDistance: "0",
+                maxDistance: "0",
+                angle: "0",
+                targets:"all"            
+            };
+        }        
+        const args = m[2].split(",");
+        let targets = "all";
+        if(m[3] === "enemies"){
+            targets = "enemies";
+        } else if(m[3] === "allies"){
+            targets = "allies";            
+        }
+        let values = [{ min: 10, max: 10 }, { min: 0, max: 0 }, { min: 0, max: 0 }];        
+        for (let i = 0; i < args.length; i++) {
+            const arg = args[i];
+            const range = arg.split("-");
+            let entry = values[i];
+            entry.min = range[0];
+            entry.max = entry.min;
+            if (range.length > 1) {
+                entry.max = range[1];
+            }
+        }
+
+        return  {
+            type: m[1],
+            minRange: values[0].min,
+            maxRange: values[0].max,
+            minDistance: values[1].min,
+            maxDistance: values[1].max,
+            angle:values[2].min,
+            targets: targets    
+        };
+    }
+
     async _onEditAOE(ev) {
         ev.preventDefault();
         const li = $(ev.currentTarget);
         const key = li.data("key");
         const data = duplicate(this.item.data);
-
-        const rollOptionContent = await renderTemplate('systems/cof/templates/dialogs/aoe-edit-dialog.hbs', {
-            type: "circle",
-            minRange: "10",
-            maxRange: "10",
-            minDistance: "0",
-            maxDistance: "0",
-            angle: "0",
-            targets:"all"            
-        });
+        const rollOptionContent = await renderTemplate('systems/cof/templates/dialogs/aoe-edit-dialog.hbs', this.makeAoeObject(data.data.aoe));
         let d = new Dialog({
             title: "Buff",
             content: rollOptionContent,

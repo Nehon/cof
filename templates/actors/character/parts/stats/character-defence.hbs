@@ -31,19 +31,20 @@
 {{#if (isEnabled "useDamageResistance")}}
 <div class="flexrow no-wrap"  style="margin-left:15px">
     <div class="flex2 center dark-silver">
-        <span class="field-label"><i class="fas fa-user-shield"></i>&nbsp;{{ localize 'COF.attributes.dr.abbrev' }}</span>
+        <span class="field-label"><i class="fas fa-user-shield"></i>&nbsp;{{ localize 'COF.attributes.dr.abbrev' }}&nbsp;&nbsp;<i class="fas fa-pencil-alt edit-dr" style="z-index:6;position:absolute;margin-left:210px;"></i></span>
     </div>
     <div class="flex1 center cell">
-        <input class="field-value" name="data.attributes.dr.base.value" type="text" value="{{actor.data.attributes.dr.base.value}}" placeholder="Base" data-dtype="Number"/>
+        <input class="field-value" name="data.attributes.dr.base.value" type="text" value="{{actor.data.attributes.dr.base.value}}" placeholder="Base" data-dtype="String"/>
     </div>
     <div class="flex1 center cell">
-        <input class="field-value" name="data.attributes.dr.bonus.value" type="text" value="{{actor.data.attributes.dr.bonus.value}}" placeholder="Bonus" data-dtype="Number"/>
+        <input class="field-value" name="data.attributes.dr.bonus.value" type="text" value="{{actor.data.attributes.dr.bonus.value}}" placeholder="Bonus" data-dtype="String"/>
     </div>
     <div class="flex1 center cell readonly tooltip focus">
-        <input class="field-value" name="data.attributes.dr.value" readonly="true" type="text" value="{{actor.data.attributes.dr.value}}" placeholder="Value" data-dtype="Number"/>
-        {{info 'left' (localize 'COF.stats.base.abbrev') actor.data.attributes.dr.base.value (localize 'COF.attributes.bonus.abbrev') actor.data.attributes.dr.bonus.value  (localize 'COF.ui.buff') actor.data.attributes.dr.buff}}
+        <input class="field-value" name="data.attributes.dr.value.value" readonly="true" type="text" value="{{actor.data.attributes.dr.value.value}}" placeholder="Value" data-dtype="String"/>
+        {{info 'left' (localize 'COF.stats.base.abbrev') actor.data.attributes.dr.base.value (localize 'COF.attributes.bonus.abbrev') actor.data.attributes.dr.bonus.value  (localize 'COF.ui.buff') actor.data.attributes.dr.buff.value}}
     </div>
 </div>
+{{> "systems/cof/templates/dialogs/resistance-dialog.hbs"}}
 {{/if}}
 <div class="flexrow no-wrap">
     <div class="flex4"></div>    

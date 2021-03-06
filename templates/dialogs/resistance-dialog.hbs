@@ -1,0 +1,45 @@
+<div class="dr-dialog" {{#if (not options.resistanceDialogOpen)}}style="display:none"{{/if}}>
+    <div>Weaknesses</div>
+    <div class="flexrow">
+        <input type="text" class="flex2" style="background: rgba(255, 255, 255, 0.5);" id="weakness" name="data.attributes.dr.base.weaknesses" value="{{data.attributes.dr.base.weaknesses}}">
+        <select onchange="weakness.value += this.value+', '" class="flex1" style="background: #555;color: #fff;">
+            <option value="">{{localize "COF.ui.add"}}</option>
+            <option value="physic">{{localize "COF.dr.physic"}}</option>
+            <option value="bludgeoning">{{localize "COF.dr.bludgeoning"}}</option>
+            <option value="piercing">{{localize "COF.dr.piercing"}}</option>
+            <option value="slashing">{{localize "COF.dr.slashing"}}</option>
+            <option value="magic">{{localize "COF.dr.magic"}}</option>
+            <option value="fire">{{localize "COF.dr.fire"}}</option>
+            <option value="ice">{{localize "COF.dr.ice"}}</option>
+            <option value="water">{{localize "COF.dr.water"}}</option>
+            <option value="electicity">{{localize "COF.dr.electicity"}}</option>
+            <option value="acid">{{localize "COF.dr.acid"}}</option>
+            <option value="psychic">{{localize "COF.dr.psychic"}}</option>
+            <option value="poison">{{localize "COF.dr.poison"}}</option>
+            <option value="desease">{{localize "COF.dr.desease"}}</option>
+            <option value="bleeding">{{localize "COF.dr.bleeding"}}</option>
+            <option value="holy">{{localize "COF.dr.holy"}}</option>
+            <option value="silver">{{localize "COF.dr.silver"}}</option>
+            <option value="cursed">{{localize "COF.dr.cursed"}}</option>
+            <option value="adamantium">{{localize "COF.dr.adamantium"}}</option>        
+        </select>
+    </div>
+
+    <div>Detail</div>
+    <div class="flexrow">
+        <div></div>
+        <div class="center">Base</div>        
+        <div class="center mod header">Value</div>    
+    </div>
+    {{#each (getDRKeys data.attributes.dr.value) as |key id|}}
+        <div class="flexrow">
+            <div class="center dark-silver"><span class="field-label">{{localize (concat "COF.dr." key)}}</span></div>
+            <div class="center cell"><input class="field-value" type="text" name="data.attributes.dr.base.{{key}}" value="{{getAttribute ../data.attributes.dr.base key}}" tabindex={{add id 100}}></div>
+            <div class="center cell focus"><input class="field-value readonly" readonly type="text" value="{{getAttribute ../data.attributes.dr.value key}}" tabindex={{add id 115}}></div>    
+        </div>
+    {{/each}}
+    <div class="flexrow">
+        <div></div>
+        <div class="mod footer"></div>        
+    </div>
+</div>

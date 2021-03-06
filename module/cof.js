@@ -21,6 +21,7 @@ import { Macros } from "./system/macros.js";
 import { overrides079Bugs } from "./overridesBugs.js";
 import { overrideTokenRender } from "./hooks/tokenOverride.js";
 import { DefaultVFX } from "./visualFX/defaultVFX.js";
+import { CofRoll } from "./controllers/roll.js";
 
 
 
@@ -210,33 +211,47 @@ Hooks.once("init", async function () {
     // Register Handlebars helpers
     registerHandlebarsHelpers();
 
+ //   console.log("includesAny",CofRoll.includesAny("slashing,magic,physic", "magic,slashing"));
+
 });
 
 // types of DM
-// Physic
-// Bludgeoning
-// Piercing
-// Slashing
+// physic
+// bludgeoning
+// piercing
+// slashing
 // magic
 // fire
 // ice
-// électricity
+// electricity
 // acid
-// Psychic
+// psychic
 // poison
 // desease
 // bleeding
 // holy
 // silver
 // cursed
+// adamantium
+//
+// for weapons there is a specific field where you can set its damage type separated by comas
+// ie: physic, bludgeoning
+// you can also specify this in the damage roll like
+// ie: 1d8 + 5 + fire{1d6}
+// "fire" will replace, the default damage type but only for the 1d6
+// you can also use several types like
+// ie: 1d8 + 5 + magic,fire{1d6}
 
 // Types of creature
-// humanoide
+// humanoid
 // undead
 // demons
 // elementals
 // summoned creatures
 // all races
+
+
+// global RD  - reduce all damage
 
 //Type of resistance
 // RD                                                           // -5 (ou 5)
@@ -252,12 +267,12 @@ Hooks.once("init", async function () {
 // ou perçant de 5 points. Il est immunisé
 // au DM d’électricité et d’acide.
 
-//-> Bludgeoining {RD:5}
+//-> Bludgeoning {RD:5}
 //-> Piercing {RD:5}
 //-> electricity [Immunity]
 //-> acid [Immunity]
 
-// Damage types are handled like tags added to an item or a cpaacity. example:  Physic piercing
+// Damage types are handled like function added to the damage rool of an item or a capacity. example: piercing(1d6+4) + fire(1d6)
 // Creature type are handled like tags added to an actor. example: humanoid high_elf 
 // an actor can have a global RD (all damage) or resistance to specific damage
 // for each type of damage/affliction the actor has a resistance entry.

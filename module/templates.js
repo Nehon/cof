@@ -51,6 +51,8 @@ export const preloadHandlebarsTemplates = async function () {
 
         // DIALOGS
         "systems/cof/templates/dialogs/parts/roll-dmg-fields.hbs",
+        "systems/cof/templates/dialogs/resistance-dialog.hbs",
+
 
         // ITEMS PROPERTIES
         "systems/cof/templates/items/parts/properties/item-properties.hbs",

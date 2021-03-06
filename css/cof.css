@@ -404,6 +404,10 @@ strong {
   border-color: transparent transparent #555 transparent;
 }
 
+.editor-content {
+  min-height: 100px;
+}
+
 #token-hud .status-effects {
   grid-template-columns: 33px 33px 33px 33px;
   width: 132px;
@@ -1275,9 +1279,10 @@ Copied from dnd5e
   box-shadow: 0px 2px 5px 1px rgba(0, 0, 0, 0.5);
 }
 
-.cof.actor .window-content > form .wrap .roll-stat {
+.cof.actor .window-content > form .wrap .roll-stat, .cof.actor .window-content > form .wrap .edit-dr {
   text-shadow: 0px 3px 10px black;
   color: white;
+  cursor: pointer;
 }
 
 .cof.actor .window-content > form .wrap .mod {
@@ -1379,6 +1384,31 @@ Copied from dnd5e
   left: -1px;
   width: 89px;
   top: -7px;
+}
+
+.cof.actor .window-content > form .wrap .dr-dialog {
+  position: absolute;
+  background: url("../ui/parchemin1.png");
+  z-index: 1;
+  padding: 5px;
+  border: 1px solid #000;
+  border-radius: 3px;
+  -webkit-box-shadow: 0px 4px 10px 2px rgba(0, 0, 0, 0.7);
+  box-shadow: 0px 4px 10px 2px rgba(0, 0, 0, 0.7);
+  left: 99%;
+  top: 99px;
+  width: 270px;
+}
+
+.cof.actor .window-content > form .wrap .dr-dialog::after {
+  content: "";
+  position: absolute;
+  top: 58%;
+  right: 100%;
+  margin-top: -3px;
+  border-width: 11px;
+  border-style: solid;
+  border-color: transparent #2f2f2f transparent transparent;
 }
 
 .cof.actor .window-content > form .wrap .header .header-background {

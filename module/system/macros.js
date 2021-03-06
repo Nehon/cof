@@ -248,15 +248,13 @@ export class Macros {
         }
         if (type === "cone") {
             needAdjust = true;
-        }
-        const gridSize = game.scenes.viewed.data.grid;
-        const x = source.x + gridSize * 0.5;
-        const y = source.y + gridSize * 0.5;
+        }       
+        const center = source.center;
         const template = MeasuredTemplate.create({
             t: type,
             user: game.user._id,
-            x: x,
-            y: y,
+            x: center.x,
+            y: center.y,
             direction: 0,
             angle: values[2].min,
             distance: values[0].max,
@@ -336,7 +334,8 @@ export class Macros {
 
             if (effect.type === "damage" || effect.type === "heal") {
                 
-                const value = CofRoll.replaceSpecialAttributes(effect.value, actor, cap).formula;
+                const preRoll = CofRoll.replaceSpecialAttributes(effect.value, actor, cap);
+                const value = preRoll.formula;
                 action.damageRoll = {};
                 action.damageRoll.target = effect.target.length ? effect.target : undefined;
                 if(effect.target === "selected"){
@@ -351,10 +350,14 @@ export class Macros {
                 }
                 
                 action.damageRoll.type = effect.type;
+                action.damageRoll.subType = preRoll.subType;
                 
                 if (effect.resistanceFormula) {
                     action.damageRoll.resistanceFormula = effect.resistanceFormula;
                     action.damageRoll.resistanceEffect = effect.resistanceEffect;
+                }
+                if(cap.data.spell){
+                    action.damageRoll.subType= action.damageRoll.subtype ? `${action.damageRoll.subtype},magic` : "magic";
                 }
                 continue;
             }
