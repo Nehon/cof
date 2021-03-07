@@ -145,6 +145,16 @@ export class Traversal {
         return changes;
     }
 
+    static getDotHotChanges(effect){        
+        let changes=[];
+        changes.push({
+            key: effect.type,
+            mode: 5,
+            value: effect.value
+        });                    
+        return changes;
+    }
+
     static async getAllEntitiesOfType(type, pack) {
         const compendium = await game.packs.get(pack).getContent();
         const ingame = game.items.filter(item => item.type === type);

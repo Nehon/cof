@@ -99,6 +99,8 @@
   "COF.ui.buffedAttribute": "Buffed Attribute",
   "COF.ui.buff": "Buff",
   "COF.ui.cleanse": "Cleansing",
+  "COF.ui.dot": "Damage over time",
+  "COF.ui.hot": "Heal over time",
   "COF.ui.effectDuration": "Duration",
   "COF.ui.effectNbUsage": "Usage number",
   "COF.ui.frequency": "Frequency",

@@ -73,10 +73,7 @@ export class Capacity {
     }
 
     static makeActiveEffect(capacity, effect, changes, duration) {
-        if (effect.type != 'buff') {
-            return undefined
-        }
-
+        
         const durationObj = game.combat ? {
             combat: game.combat._id,
             rounds: duration,

@@ -362,13 +362,13 @@ export class Macros {
                 continue;
             }
 
-            if (effect.type == 'buff') {
+            if (effect.type === 'buff' || effect.type === 'hot' || effect.type === 'dot') {
                 let duration = 0;
                 if (effect.duration) {
                     const durationFormula = CofRoll.replaceSpecialAttributes(effect.duration, actor, cap).formula;
                     duration = new Roll(durationFormula, actor.data.data).roll().total;
-                }
-                let changes = Traversal.getChangesFromBuffValue(effect.value);
+                }                
+                let changes = effect.type === 'buff'?Traversal.getChangesFromBuffValue(effect.value) : Traversal.getDotHotChanges(effect);
                 for (let change of changes) {
                     if (!change.key || change.key.trim() === "") {
                         continue;

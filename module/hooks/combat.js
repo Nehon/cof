@@ -70,15 +70,15 @@ Hooks.on('updateCombat', (combat, snap, progress) => {
                 continue;
             }
             for (const change of effect.changes) {
-                if(change.key != "dot"){
+                if(change.key !== "dot" && change.key !== "hot"){
                     continue;                    
                 }
                 const action = {
                     label: effect.label,
                     img: effect.icon,
                     damageRoll:{
-                        formula: change.value,
-                        type: "damage"
+                        formula: `${change.value}`,
+                        type: change.key ==="dot" ? "damage": "heal"
                     }
                 };                
                 let source = Traversal.findSourceToken(effect.flags.source);                
