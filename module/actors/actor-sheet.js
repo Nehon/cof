@@ -425,7 +425,24 @@ export class CofActorSheet extends ActorSheet {
                         }
                         this.actor.update({'data.weapons': data.weapons});                        
                     } else {
-                        this.actor.deleteEmbeddedEntity("OwnedItem", item._id);
+                        switch (item.data.type) {
+                            case "capacity":
+                                return this.actor.deleteOwnedItem(item._id);
+                                // return Capacity.removeFromActor(this.actor, event, entity);
+                                break;
+                            case "path":
+                                return Path.removeFromActor(this.actor, {}, item);
+                                break;
+                            case "profile":
+                                return Profile.removeFromActor(this.actor, {}, item);
+                                break;
+                            case "species":
+                                return Species.removeFromActor(this.actor, {}, item);
+                                break;
+                            default: {
+                                return this.actor.deleteOwnedItem(itemId);
+                            }
+                        }
                     }
                 }
             },

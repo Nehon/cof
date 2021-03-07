@@ -23,13 +23,15 @@ export class CofSkillRoll {
         if (diff) {
             rollResult.isSuccess = r.total >= diff;
             rollResult.difficulty = diff;
+            rollResult.isTenOver = r.total >= diff + 10;
         }
 
         let diceResult = r.result;
         if (r.terms[0].results) {
             const result = r.terms[0].results.find(r => r.active).result;
             rollResult.isCritical = ((result >= this._critrange.split("-")[0]) || result == 20);
-            rollResult.isFumble = (result == 1);
+            rollResult.isMoreThanFifteen = result >= 15; 
+            rollResult.isFumble = (result == 1);            
             diceResult = Traversal.rollResultToString(r);
             if(rollResult.isCritical) rollResult.isSuccess = true;
             if(rollResult.isFumble) rollResult.isSuccess = false;

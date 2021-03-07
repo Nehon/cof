@@ -39,6 +39,7 @@
                 {{#each (getPaths actor.items) as |path id|}}
                     <div class="flex2">
                         <div class="item-slot path-slot" data-slot="{{id}}" data-ref-id="{{path._id}}" data-item-type="path" data-pack="path">
+                            {{log path.data}}
                             <div class="action-menu path-slot {{#if path.data.rank}}active{{/if}}">
                                 <img  src="{{path.img}}" class="interractable" data-item-id="{{path._id}}" data-desc-target="cap-description">
                             </div>

@@ -19,7 +19,7 @@ export class Path {
             title: "Supprimer la voie ?",
             content: `<p>Etes-vous sûr de vouloir supprimer la voie ${entity.name} ?</p>`,
             yes: () => {
-                let items = actor.items.filter(item => item.data.type === "capacity" && item.data.data.path === pathData.data.key).map(c => c.data._id);
+                let items = actor.items.filter(item => item.data.type === "capacity" && item.data.data.pathIndex === pathData._id).map(c => c.data._id);
                 items.push(entity._id);
                 return actor.deleteOwnedItem(items);
             },

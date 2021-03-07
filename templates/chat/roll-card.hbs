@@ -5,6 +5,10 @@
 <h1 class="flex3 {{getClass global.skill}} tooltip" >{{global.skill.total}}    
     <span class="tooltiptext tooltip-bottom">{{safeString global.skill.result}}</span>
     <i class="fas overlay"></i>
+    <div class="extra-info">
+    {{#if global.skill.isTenOver}}<div>+10</div>{{/if}}
+    {{#if global.skill.isMoreThanFifteen}}<div>15-20</div>{{/if}}
+    </div>
 </h1>
 <div class="flex1">
     {{#if (not hideFate)}}

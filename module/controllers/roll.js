@@ -615,7 +615,7 @@ export class CofRoll {
             dice: dice,
             useDmgRoll: dmgRoll !== undefined,
             dmgFormula: dmgRoll ? dmgRoll.formula : "",
-            dmgBonus: 0,
+            dmgBonus: actor.data.data.globalDmgBonus?actor.data.data.globalDmgBonus:0,
             type: type,
             dmgCustomFormula: "",
         });
@@ -643,8 +643,13 @@ export class CofRoll {
                         let dmgCustomFormula = html.find("#dmgCustomFormula").val();
                         let dmgBaseFormula = html.find("#dmgFormula").val();
                         let dmgFormula = (dmgCustomFormula) ? dmgCustomFormula : dmgBaseFormula;
-                        if (dmgBonus > 0) dmgFormula = dmgFormula.concat('+', dmgBonus);
-                        else if (dmgBonus < 0) dmgFormula = dmgFormula.concat(' ', dmgBonus);
+                        if(dmgBonus && dmgBonus !== "0"){
+                            dmgBonus = dmgBonus.trim();
+                            if (!dmgBonus.startsWith("+") && !dmgBonus.startsWith("-") && !dmgBonus.startsWith("*")){
+                                dmgBonus= `+ ${dmgBonus}`;
+                            }
+                            dmgFormula = `${dmgFormula} ${dmgBonus}`;
+                        }                        
 
                         if (targetType && targetType.startsWith("selected") && !targets.length) {
                             // retry to find targets

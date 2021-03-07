@@ -141,6 +141,7 @@
       "common": {
         "description": "",
         "globalRollBonus" : 0,
+        "globalDmgBonus" : null,
         "attributes": {
           "hp": {
             "key" : "hp",

@@ -20,10 +20,10 @@ export class CofDamageRoll {
             r.roll();
             roll.total = r._total;
             roll.result = Traversal.rollResultToString(r);
-            const sign =roll.sign? `${roll.sign} `: '';
+            const sign = roll.sign? `${roll.sign}`: '';
             diceResult += diceResult === "" ? `${roll.result}` : `${sign} ${roll.result} `;
             diceFormula += diceFormula === "" ? `${roll.formula}` : `${sign} ${roll.formula} `;
-            total += roll.total;
+            total += roll.total * (sign==="-"?-1:1);
         }        
         
         if (crit) {
@@ -42,8 +42,17 @@ export class CofDamageRoll {
     }
 
     parseRolls(str){
-        let re = new RegExp(/\s*([\+\-\*])*\s*\b([^{|^\+|^\-|^\*]+)*({([^}]*)\})*/g)
         let rolls = [];
+        if(!str.includes("{")){
+            rolls.push({
+                sign: "+",
+                subtype: this._defaulSubtype,
+                formula: str
+            })
+            return rolls;
+        }
+        let re = new RegExp(/\s*([\+\-\*])*\s*\b([^{|^\+|^\-|^\*]+)*({([^}]*)\})*/g)
+        
         let result = re.exec(str);
         while(result !==null && result.index<str.length) {
             

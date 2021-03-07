@@ -210,6 +210,7 @@
   "COF.attributes.sc.label": "Spellcasting",
   "COF.attributes.sc.abbrev": "SPELL",
   "COF.globalRollBonus": "All tests",
+  "COF.globalDmgBonus": "All damage",
 
   "COF.attacks.label": "ATTACKS",
   "COF.attacks.name.abbrev" : "Name",
@@ -407,6 +408,7 @@
   "data.attacks.ranged.superior":"RANGED_SUP",
   "data.attacks.magic.superior":"MAGIC_SUP",
   "data.globalRollBonus":"TESTS",
+  "data.globalDmgBonus":"DMG",
   "data.stats.str.buff":"STR",
   "data.stats.con.buff":"CON",
   "data.stats.dex.buff":"DEX",

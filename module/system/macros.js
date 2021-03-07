@@ -56,7 +56,7 @@ export class Macros {
                     },
 
                     damageRoll: {
-                        formula: itemData.data.dmg,
+                        formula: `${itemData.data.dmg}` ,
                         type: "damage",
                         target: "selected"
                     }
@@ -375,7 +375,11 @@ export class Macros {
                     }
                     const valueFormula = CofRoll.replaceSpecialAttributes(change.value, actor, cap).formula;
                     let value = 0;
-                    try { value = new Roll(valueFormula, actor.data.data).roll().total; } catch (e) { }
+                    if (change.key !== "data.globalDmgBonus" && effect.type === 'buff'){
+                        try { value = new Roll(valueFormula, actor.data.data).roll().total; } catch (e) { }
+                    } else {
+                        value = valueFormula;
+                    }
                     change.value = value;
                 }
                 const effectKey = hasSkillRoll ? "effects" : "uncheckedEffects";

@@ -210,6 +210,7 @@
   "COF.attributes.sc.label": "Incantation",
   "COF.attributes.sc.abbrev": "INCANT",
   "COF.globalRollBonus": "Tous les tests",
+  "COF.globalDmgBonus": "Tous les dommages",
 
   "COF.attacks.label": "ATTAQUES",
   "COF.attacks.name.abbrev" : "Nom",
@@ -403,6 +404,7 @@
   "data.attacks.ranged.superior":"DIST_SUP",
   "data.attacks.magic.superior":"MAGIE_SUP",
   "data.globalRollBonus":"TESTS",
+  "data.globalDmgBonus":"DMG",
   "data.stats.str.buff":"FOR",
   "data.stats.con.buff":"CON",
   "data.stats.dex.buff":"DEX",
